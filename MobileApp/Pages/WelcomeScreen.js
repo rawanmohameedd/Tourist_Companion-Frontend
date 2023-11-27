@@ -1,77 +1,77 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
-import {StyleSheet, ImageBackground, Image, Button, View} from 'react-native';
+import { StyleSheet, ImageBackground, Image, Button, View, Pressable, Text} from 'react-native';
 
-export default function WelcomeApp({navigation}) {
-    return (
+export default function WelcomeApp({ navigation }) {
+  return (
     <>
-        <View style={styles.container}>
+      <View style={styles.container}>
         <Image style={styles.image} source={require('../Images/Logo.png')} />
-        <View style={styles.buttonContainer}>
-            <Button
-            style={styles.button} 
-            title="Sign in"
-            titleStyle={styles.buttonText}
-            color="#E2C07C"
-            />
-            <View style={styles.buttonSpacer} />
-            <Button
-            title="Create Tourist account" 
-            titleStyle={styles.buttonText}
-            color="#E2C07C" 
-            onPress={() => navigation.navigate('Sign up as Tour')}
-            />
-            <View style={styles.buttonSpacer} />
-            <Button
-            title="Create Tour guide account"
-            titleStyle={styles.buttonText}
-            color="#E2C07C" 
-            onPress={() => navigation.navigate('Sign up as Tour guide')}
-            />
-        </View>
-        </View>
+          <Pressable
+          onPress={()=> navigation.navigate('Sign in')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign in </Text>
+            </Pressable>
+            
+          <Pressable
+          onPress={()=> navigation.navigate('Sign up as Tour')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Create tourist account </Text>
+            </Pressable>
+          
+          <Pressable
+          onPress={() => navigation.navigate('Sign up as Tour guide')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 18,fontWeight: 'bold'}]}> Create tour guide account </Text>
+            </Pressable>
+
+      </View>
     </>
-    );
+  );
 }
+
 const styles = StyleSheet.create({
-    container: {
+  container: {
     backgroundColor: 'black',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    },
-    bgImage:{
-        flex:1,
-        justifyContent:'center',
-    },
-    title: {
+  },
+  title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
     color: 'white',
-    },
-    image: {
+  },
+  image: {
     width: 300,
     height: 200,
-    marginTop:0,
+    marginTop: 0,
     marginBottom: 16,
-    resizeMode:'contain',
-    },
-    buttonContainer: {
+    resizeMode: 'contain',
+  },
+  buttonContainer: {
     height: 200,
     width: 300,
     marginBottom: 16,
-    },
-    buttonText: {
+  },
+  buttontext: {
     color: 'black',
-    },
-    button: {
+    
+  },
+  button: {
+    height: 50,
+    width: 250,
     padding: 10,
-    borderRadius: 500,
-    },
-    buttonSpacer: {
-    height: 16,
-    },
-});
+    borderRadius: 300,
+    margin: 5,
+    color:"#E2C07C",
+    backgroundColor: '#E2C07C',
+    flexDirection: 'row',
+    justifyContent: 'center',
 
+  },
+  buttonSpacer: {
+    height: 16,
+  },
+});
