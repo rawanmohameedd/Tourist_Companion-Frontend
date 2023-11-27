@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {StyleSheet, TextInput, ScrollView, Button, View} from 'react-native';
-import Footer from '../Components/Footer';
+import {StyleSheet, TextInput, ScrollView, Button, View, Pressable ,Text} from 'react-native';
 
 export default function EnterEmailIN({navigation}) {
     const [Email, OnChangeEmail] = useState('');
@@ -25,26 +24,30 @@ export default function EnterEmailIN({navigation}) {
             secureTextEntry={true}
         />
         <View style={styles.buttonContainer}>
-            <Button title="Sign in" 
-            color="#512B81" 
-            onPress={() => navigation.navigate('Home Page')}/>
+            
+            <Pressable
+            onPress={()=> navigation.navigate('Home Page')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign in </Text>
+            </Pressable>
 
-            <View style={styles.buttonSpacer} />
-            <Button 
-            title="Don't have an account yet?" 
-            color="#512B81" 
-            onPress={() => navigation.navigate('Sign up as Tour')}
-            />
+            <Pressable
+            onPress={()=> navigation.navigate('Sign up as Tour')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Don't have an account yet? </Text>
+            </Pressable>
 
-            <View style={styles.buttonSpacer} />
-            <Button 
-            title="Forget your password?" 
-            color="#512B81" 
-            onPress={() => navigation.navigate('Forget your Password')}
-            />
+            <Pressable
+            onPress={()=> navigation.navigate('Forget your Password')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Forgot your password? </Text>
+            </Pressable>
+            
+
+            
         </View>
         </ScrollView>
-        <Footer/>
+        
     </View>
     );
 }
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#4477CE',
+    backgroundColor: 'black',
     },
     input: {
     marginBottom: 16,
@@ -67,6 +70,22 @@ const styles = StyleSheet.create({
     buttonContainer: {
     marginBottom: 16,
     },
+    buttontext: {
+        color: 'black',
+        
+      },
+    button: {
+        height: 50,
+        width: 250,
+        padding: 10,
+        borderRadius: 300,
+        margin: 5,
+        color:"#E2C07C",
+        backgroundColor: '#E2C07C',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    
+      },
     buttonSpacer: {
     height: 16,
     },
