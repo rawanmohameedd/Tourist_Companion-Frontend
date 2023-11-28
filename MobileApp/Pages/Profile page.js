@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image , Pressable} from 'react-native';
 
 export default function ProfilePage  () {
   return (
@@ -10,6 +10,11 @@ export default function ProfilePage  () {
       />
       <Text style={styles.name}>John Doe</Text>
       <Text style={styles.bio}>Nationality</Text>
+      <Pressable
+          
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign out </Text>
+            </Pressable>
     </View>
   );
 };
@@ -35,4 +40,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'gray',
   },
+  buttontext: {
+    color: 'black',
+    
+  },
+  button: {
+    height: 50,
+    width: 250,
+    padding: 10,
+    borderRadius: 300,
+    margin: 5,
+    color:"#E2C07C",
+    backgroundColor: '#E2C07C',
+    flexDirection: 'row',
+    justifyContent: 'center',
+
+  }
 });

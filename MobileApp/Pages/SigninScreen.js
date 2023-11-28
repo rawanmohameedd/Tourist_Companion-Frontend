@@ -13,7 +13,7 @@ export default function EnterEmailIN({navigation}) {
             style={styles.input}
             value={Email}
             onChangeText={OnChangeEmail}
-            placeholder={'Mobile number or Email'}
+            placeholder={'mobile number or Email'}
             keyboardType='email-address'
         />
         <TextInput
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#121212',
     },
     input: {
     marginBottom: 16,
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     backgroundColor: '#ffffff',
+    textAlign: 'center',
     },
     buttonContainer: {
     marginBottom: 16,

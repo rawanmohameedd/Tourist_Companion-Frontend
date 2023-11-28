@@ -31,7 +31,7 @@ export default function WelcomeApp({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: '#121212',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

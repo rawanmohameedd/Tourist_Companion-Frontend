@@ -4,7 +4,7 @@
 import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
 
-import Footer from '../Components/Footer';
+
 
 export default function EnterEmailUPT({navigation}) {
     const [FirstName, OnChangeFirstName] = useState('');
@@ -21,38 +21,38 @@ export default function EnterEmailUPT({navigation}) {
             style={styles.input}
             value={FirstName}
             onChangeText={OnChangeFirstName}
-            placeholder={'Enter your First Name'}
+            placeholder={'First Name'}
         />
         <TextInput
             style={styles.input}
             value={LastName}
             onChangeText={OnChangeLastName}
-            placeholder={'Enter your Last Name'}
+            placeholder={'Last Name'}
         />
         <TextInput
             style={styles.input}
             value={PhoneNumber}
             onChangeText={OnChangePhoneNumber}
-            placeholder={'Enter your phone number'}
+            placeholder={'Phone number'}
             keyboardType="phone-pad"
         />
         <TextInput
             style={styles.input}
             value={Birthday}
             onChangeText={OnChangeBirthday}
-            placeholder={'Enter your Date of birth'}
+            placeholder={'Date of birth'}
         />
         <TextInput
             style={styles.input}
             value={Email}
             onChangeText={OnChangeEmail}
-            placeholder={'Enter your Email'}
+            placeholder={'Email address'}
             keyboardType="email-address"
         />
         <TextInput
             style={styles.input}
             onChangeText={OnChangePassword}
-            placeholder={'Enter your Password'}
+            placeholder={'Password'}
             value={Password}
             secureTextEntry={true}
         />
@@ -75,7 +75,6 @@ export default function EnterEmailUPT({navigation}) {
             <Text style={styles.text}>Continue with Facebook</Text>
             </Pressable>
         </ScrollView>
-        <Footer/>
     </View>
     );
 }
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#4477CE',
+    backgroundColor: '#121212',
     },
     input: {
     marginBottom: 16,
