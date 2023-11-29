@@ -6,23 +6,24 @@ export default function WelcomeApp({ navigation }) {
     <>
       <View style={styles.container}>
         <Image style={styles.image} source={require('../Images/Logo.png')} />
-          <Pressable
-          onPress={()=> navigation.navigate('Sign in')}
-            style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign in </Text>
-            </Pressable>
-            
-          <Pressable
-          onPress={()=> navigation.navigate('Sign up as Tour')}
-            style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Create tourist account </Text>
-            </Pressable>
           
           <Pressable
-          onPress={() => navigation.navigate('Sign up as Tour guide')}
+            onPress={()=> navigation.navigate('Sign in')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign in </Text>
+          </Pressable>
+          
+          <Pressable
+            onPress={()=> navigation.navigate('Sign up as a tourist')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Create tourist account </Text>
+          </Pressable>
+          
+          <Pressable
+            onPress={() => navigation.navigate('Sign up as a tour guide')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 18,fontWeight: 'bold'}]}> Create tour guide account </Text>
-            </Pressable>
+          </Pressable>
 
       </View>
     </>
@@ -56,8 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   buttontext: {
-    color: 'black',
-    
+    color: 'black',  
   },
   button: {
     height: 50,

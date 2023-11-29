@@ -39,11 +39,11 @@ export default function App() {
         headerTitleAlign:'center',
       }}>
         <Stack.Screen options={{headerShown: false}} name="Welcome" component={WelcomeApp} />
-        <Stack.Screen name="Sign up as Tour" component={EnterEmailUPT} />
+        <Stack.Screen name="Sign up as a tourist" component={EnterEmailUPT} />
         <Stack.Screen name="Sign in" component={EnterEmailIN}  />
         <Stack.Screen name="Home Page" component={HomeTab} />
         <Stack.Screen name="Forget your Password" component={ForgetPasswordPage} />
-        <Stack.Screen name="Sign up as Tour guide" component={EnterEmailUPTG} />
+        <Stack.Screen name="Sign up as a tour guide" component={EnterEmailUPTG} />
         <Stack.Screen name="Museum Visit" component={VisitTour} />
         <Stack.Screen name="Museum Info" component={InfoTour} />
       </Stack.Navigator>

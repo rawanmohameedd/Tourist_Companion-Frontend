@@ -9,13 +9,14 @@ import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'r
 export default function EnterEmailUPT({navigation}) {
     const [FirstName, OnChangeFirstName] = useState('');
     const [LastName, OnChangeLastName] = useState('');
+    const [Nationality, OnChangeNationality] = useState('');
     const [PhoneNumber, OnChangePhoneNumber] = useState('');
     const [Birthday, OnChangeBirthday] = useState('');
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
 
     return (
-    <View style={styles.container}>
+        <View style={styles.container}>
         <ScrollView keyboardDismissMode="on-drag">
         <TextInput
             style={styles.input}
@@ -23,12 +24,21 @@ export default function EnterEmailUPT({navigation}) {
             onChangeText={OnChangeFirstName}
             placeholder={'First Name'}
         />
+
         <TextInput
             style={styles.input}
             value={LastName}
             onChangeText={OnChangeLastName}
             placeholder={'Last Name'}
         />
+
+        <TextInput
+            style={styles.input}
+            value={Nationality}
+            onChangeText={OnChangeNationality}
+            placeholder={'Nationality'}
+        />
+
         <TextInput
             style={styles.input}
             value={PhoneNumber}
@@ -36,12 +46,14 @@ export default function EnterEmailUPT({navigation}) {
             placeholder={'Phone number'}
             keyboardType="phone-pad"
         />
+
         <TextInput
             style={styles.input}
             value={Birthday}
             onChangeText={OnChangeBirthday}
             placeholder={'Date of birth'}
         />
+
         <TextInput
             style={styles.input}
             value={Email}
@@ -49,6 +61,7 @@ export default function EnterEmailUPT({navigation}) {
             placeholder={'Email address'}
             keyboardType="email-address"
         />
+
         <TextInput
             style={styles.input}
             onChangeText={OnChangePassword}
@@ -56,24 +69,32 @@ export default function EnterEmailUPT({navigation}) {
             value={Password}
             secureTextEntry={true}
         />
-        <Pressable style={styles.buttonContainer} 
-        onPress={() => navigation.navigate('Home Page')}>
-            <Text style={styles.text}>Sign up</Text>
-            </Pressable>
-            <Pressable style={styles.buttonContainer} >
+
+        <Pressable
+            onPress={()=> navigation.navigate('Home page')}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
+        </Pressable>
+
+
+        <Pressable style={styles.button}>
             <Image
-            style={styles.icons}
-            resizeMode={'contain'}
-            source={require('../Images/Google-Logo.png')}/>
-            <Text style={styles.text}>Continue with Google</Text>
-            </Pressable>
-            <Pressable style={styles.buttonContainer} >
+                style={styles.icons}
+                resizeMode={'contain'}
+                source={require('../Images/Google-Logo.png')}
+            />
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Google </Text>
+        </Pressable>
+        
+        <Pressable style={styles.button}>
             <Image
-            style={styles.icons}
-            resizeMode={'contain'}
-            source={require('../Images/facebook-logo.png')}/>
-            <Text style={styles.text}>Continue with Facebook</Text>
-            </Pressable>
+                style={styles.icons}
+                resizeMode={'contain'}
+                source={require('../Images/facebook-logo.png')}
+            />
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Facebook </Text>
+        </Pressable>
+
         </ScrollView>
     </View>
     );
@@ -99,19 +120,40 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     height: 45,
     width: 350,
-    backgroundColor: '#512B81',
+    backgroundColor: '#E2C07C',
     flexDirection: 'row',
     justifyContent: 'center',
     },
-    text: {
+    text:
+    {
     textAlign: 'center',
     color:'white',
     fontSize:20,
     fontWeight:'bold',
     },
-    icons: {
+
+    icons: 
+    {
         height:30,
         width:40,
+    },
+
+    buttontext: 
+    {
+        color: 'black',  
+    },
+
+    button: 
+    {
+        height: 50,
+        width: 350,
+        padding: 10,
+        borderRadius: 300,
+        margin: 5,
+        color:"#E2C07C",
+        backgroundColor: '#E2C07C',
+        justifyContent: 'center',
+        flexDirection: 'row',
     },
 });
 

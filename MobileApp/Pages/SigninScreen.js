@@ -1,24 +1,64 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView, Button, View, Pressable ,Text} from 'react-native';
+import * as SecureStore from "expo-secure-store";
 
 export default function EnterEmailIN({navigation}) {
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
+    const [pending, OnPending] = useState(false);
 
+    const server = "http://192.168.1.14:3000"
+    function EmailHandler(vaLue) {
+        return OnChangeEmail(vaLue);
+    }
+    function PasswordHandler(vaLue) {
+        return OnChangePassword(vaLue);
+    }
+    async function signin() {
+        OnPending(true);
+        fetch(server + "/Signin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+            email: Email,
+            password: Password,
+            roleid: 1,
+        }),
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then(async (response) => {
+            if (response.email) {
+                await SecureStore.setItemAsync("token", response.token);
+                OnPending(false);
+                navigation.navigate("Home Page", {
+                token: response.token,
+            });
+            } else {
+                OnPending(false);
+                alert(response.message);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+    
     return (
     <View style={styles.container}>
         <ScrollView keyboardDismissMode="on-drag">
         <TextInput
             style={styles.input}
             value={Email}
-            onChangeText={OnChangeEmail}
-            placeholder={'mobile number or Email'}
+            onChangeText={EmailHandler}
+            placeholder={'Email'}
             keyboardType='email-address'
         />
         <TextInput
             style={styles.input}
-            onChangeText={OnChangePassword}
+            onChangeText={PasswordHandler}
             placeholder={'Password'}
             value={Password}
             secureTextEntry={true}
@@ -26,13 +66,13 @@ export default function EnterEmailIN({navigation}) {
         <View style={styles.buttonContainer}>
             
             <Pressable
-            onPress={()=> navigation.navigate('Home Page')}
+            onPress={signin}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign in </Text>
             </Pressable>
 
             <Pressable
-            onPress={()=> navigation.navigate('Sign up as Tour')}
+            onPress={()=> navigation.navigate('Welcome')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Don't have an account yet? </Text>
             </Pressable>
