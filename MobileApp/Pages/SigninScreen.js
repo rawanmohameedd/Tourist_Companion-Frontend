@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-import {StyleSheet, TextInput, ScrollView, Button, View, Pressable ,Text} from 'react-native';
+import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-native';
 import * as SecureStore from "expo-secure-store";
+import server from "../elserver";
 
 export default function EnterEmailIN({navigation}) {
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
     const [pending, OnPending] = useState(false);
 
-    const server = "http://192.168.1.14:3000"
     function EmailHandler(vaLue) {
         return OnChangeEmail(vaLue);
     }
@@ -17,13 +17,12 @@ export default function EnterEmailIN({navigation}) {
     }
     async function signin() {
         OnPending(true);
-        fetch(server + "/Signin", {
+        fetch(server + "/signin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
             email: Email,
             password: Password,
-            roleid: 1,
         }),
         })
         .then((res) => {

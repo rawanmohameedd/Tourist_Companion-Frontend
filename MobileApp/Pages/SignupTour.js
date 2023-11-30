@@ -1,77 +1,124 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-useless-escape */
-
 import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
-
-
+import server from '../elserver';
 
 export default function EnterEmailUPT({navigation}) {
+    const [Username, onchangeUsername]= useState('');
+    const [Email, OnChangeEmail] = useState('');
     const [FirstName, OnChangeFirstName] = useState('');
     const [LastName, OnChangeLastName] = useState('');
     const [Nationality, OnChangeNationality] = useState('');
-    const [PhoneNumber, OnChangePhoneNumber] = useState('');
     const [Birthday, OnChangeBirthday] = useState('');
-    const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
+    const [Pending, OnPending] = useState(false);
 
+    const usernameHandler = (value) => {
+        onchangeUsername(value);
+    };
+    const emailhandler = (value) => {
+        OnChangeEmail(value);
+    };
+    const first_Namehandler = (value) => {
+        OnChangeFirstName(value);
+    };
+    const last_Namehandler = (value) => {
+        OnChangeLastName(value);
+    };
+    const nationalityhandler = (value) => {
+        OnChangeNationality(value);
+    };
+    const birthdayhandler = (value) => {
+        OnChangeBirthday(value);
+    };
+    const passwordhandler = (value) => {
+        OnChangePassword(value);
+    };
+    
+    const valid = () => {
+        return true;
+    };
+    const signupTour = () => {
+        if (valid()) {
+            OnPending(true);
+            fetch(server + "/signupTourist", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                tour_username: Username,
+                email: Email,
+                first_name: FirstName,
+                last_name:LastName,
+                nationality:Nationality,
+                birthday:Birthday,
+                password: Password,
+            }),
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((res) => {
+                OnPending(false);
+                alert(res.message);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+    };
     return (
         <View style={styles.container}>
         <ScrollView keyboardDismissMode="on-drag">
         <TextInput
             style={styles.input}
+            value={Username}
+            onChangeText={usernameHandler}
+            placeholder={'Username'}
+        />
+        <TextInput
+            style={styles.input}
+            value={Email}
+            onChangeText={emailhandler}
+            placeholder={'Email address'}
+            keyboardType="email-address"
+        />
+        <TextInput
+            style={styles.input}
             value={FirstName}
-            onChangeText={OnChangeFirstName}
+            onChangeText={first_Namehandler}
             placeholder={'First Name'}
         />
 
         <TextInput
             style={styles.input}
             value={LastName}
-            onChangeText={OnChangeLastName}
+            onChangeText={last_Namehandler}
             placeholder={'Last Name'}
         />
 
         <TextInput
             style={styles.input}
             value={Nationality}
-            onChangeText={OnChangeNationality}
+            onChangeText={nationalityhandler}
             placeholder={'Nationality'}
         />
 
         <TextInput
             style={styles.input}
-            value={PhoneNumber}
-            onChangeText={OnChangePhoneNumber}
-            placeholder={'Phone number'}
-            keyboardType="phone-pad"
-        />
-
-        <TextInput
-            style={styles.input}
             value={Birthday}
-            onChangeText={OnChangeBirthday}
+            onChangeText={birthdayhandler}
             placeholder={'Date of birth'}
         />
 
         <TextInput
             style={styles.input}
-            value={Email}
-            onChangeText={OnChangeEmail}
-            placeholder={'Email address'}
-            keyboardType="email-address"
-        />
-
-        <TextInput
-            style={styles.input}
-            onChangeText={OnChangePassword}
+            onChangeText={passwordhandler}
             placeholder={'Password'}
             value={Password}
             secureTextEntry={true}
         />
 
         <Pressable
-            onPress={()=> navigation.navigate('Home page')}
+            onPress={signupTour}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>
