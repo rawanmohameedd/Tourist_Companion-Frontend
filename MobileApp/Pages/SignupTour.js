@@ -45,16 +45,16 @@ export default function EnterEmailUPT({navigation}) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                 tour_username: Username,
-                email: Email,
-                first_name: FirstName,
-                last_name:LastName,
-                nationality:Nationality,
-                birthday:Birthday,
-                password: Password,
+                emailT: Email,
+                first_nameT: FirstName,
+                last_nameT:LastName,
+                nationalityT:Nationality,
+                birthdayT:Birthday,
+                passwordT: Password,
             }),
         })
             .then((response) => {
-                navigation.navigate("Home Page")
+                navigation.navigate("Sign in")
                 return response.json();
             })
             .then((res) => {

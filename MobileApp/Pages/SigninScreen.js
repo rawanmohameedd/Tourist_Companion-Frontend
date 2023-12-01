@@ -29,7 +29,7 @@ export default function EnterEmailIN({navigation}) {
             return res.json();
         })
         .then(async (response) => {
-            if (response.email) {
+            if (response.emailtg) {
                 await SecureStore.setItemAsync("token", response.token);
                 OnPending(false);
                 navigation.navigate("Home Page", {
