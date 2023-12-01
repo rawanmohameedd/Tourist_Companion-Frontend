@@ -15,9 +15,9 @@ export default function EnterEmailIN({navigation}) {
     function PasswordHandler(vaLue) {
         return OnChangePassword(vaLue);
     }
-    async function signin() {
+    const signin = async()=> {
         OnPending(true);
-        fetch(server + "/signin", {
+        fetch(server+"/signin", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -42,6 +42,9 @@ export default function EnterEmailIN({navigation}) {
         })
         .catch((error) => {
             console.log(error);
+            console.log(server + "/signin");
+            console.log("Received sign-in request:", Email, Password);
+            alert("Network request failed. Please try again later.");
         });
     }
     
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
     buttontext: {
         color: 'black',
         
-      },
+    },
     button: {
         height: 50,
         width: 250,
@@ -125,7 +128,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     
-      },
+    },
     buttonSpacer: {
     height: 16,
     },
