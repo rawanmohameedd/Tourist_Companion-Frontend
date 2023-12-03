@@ -7,20 +7,29 @@ import { Ionicons } from '@expo/vector-icons';
 import EnterEmailUPT from './Pages/SignupTour';
 import EnterEmailUPTG from './Pages/SignupTourguide';
 import WelcomeApp from './Pages/WelcomeScreen';
-import Home from './Pages/HomeScreenTour';
+import HomeT from './Pages/Tourist/HomeScreenTour';
 import EnterEmailIN from './Pages/SigninScreen';
 import ForgetPasswordPage from './Pages/ForgetPasswordScreen';
 import ProfilePage from './Pages/Profile page';
-import VisitTour from './Pages/MuseumsVisitTour';
-import InfoTour from './Pages/MusemsInfoTour';
-
+import VisitTour from './Pages/Tourist/MuseumsVisitTour';
+import GridComponent from './Pages/Tourist/MusemsInfoTour';
+import HomeTG from './Pages/Tour guide/HomeScreenTourguide';
 const Stack = createNativeStackNavigator();
 const Tab= createBottomTabNavigator();
 
-const HomeTab =()=>{
+const HomeTabT =()=>{
   return(
     <Tab.Navigator >
-      <Tab.Screen name=" Home " component={Home} options={{headerShown: false}} />
+      <Tab.Screen name=" Home " component={HomeT} options={{headerShown: false}} />
+      <Tab.Screen name=" Profile  " component={ProfilePage} options={{headerShown: false}}/>
+    </Tab.Navigator>
+  );
+};
+
+const HomeTabTG =()=>{
+  return(
+    <Tab.Navigator >
+      <Tab.Screen name=" Home " component={HomeTG} options={{headerShown: false}} />
       <Tab.Screen name=" Profile  " component={ProfilePage} options={{headerShown: false}}/>
     </Tab.Navigator>
   );
@@ -41,11 +50,12 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="Welcome" component={WelcomeApp} />
         <Stack.Screen name="Sign up as a tourist" component={EnterEmailUPT} />
         <Stack.Screen name="Sign in" component={EnterEmailIN}  />
-        <Stack.Screen name="Home Page" component={HomeTab} />
+        <Stack.Screen name="Home Page" component={HomeTabT} />
+        <Stack.Screen name="Home Page tourguide" component={HomeTabTG} />
         <Stack.Screen name="Forget your Password" component={ForgetPasswordPage} />
         <Stack.Screen name="Sign up as a tour guide" component={EnterEmailUPTG} />
         <Stack.Screen name="Museum Visit" component={VisitTour} />
-        <Stack.Screen name="Museum Info" component={InfoTour} />
+        <Stack.Screen name="Museum Info" component={GridComponent} />
       </Stack.Navigator>
     </NavigationContainer>
   );

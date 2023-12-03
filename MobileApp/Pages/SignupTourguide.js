@@ -59,7 +59,7 @@ export default function EnterEmailUPTG({navigation}) {
             }),
         })
             .then((response) => {
-                navigation.navigate("Sign in")
+                navigation.navigate("Home Page tourguide")
                 return response.json();
             })
             .then((res) => {

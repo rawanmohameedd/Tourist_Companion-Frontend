@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet } from 'react-native';
 
-export default function Home  ({navigation}){
+export default function HomeT ({navigation}){
     return (
         <View style={styles.gridContainer}>
             <Pressable style={styles.gridItem}>

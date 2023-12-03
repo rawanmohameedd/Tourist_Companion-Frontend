@@ -54,7 +54,7 @@ export default function EnterEmailUPT({navigation}) {
             }),
         })
             .then((response) => {
-                navigation.navigate("Sign in")
+                navigation.navigate("Home Page")
                 return response.json();
             })
             .then((res) => {

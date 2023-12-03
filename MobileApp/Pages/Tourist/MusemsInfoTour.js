@@ -11,32 +11,32 @@ import {
 const data = [
   {
     id: "1",
-    imageSource: require("../Images/Egyption-museums.jpg"),
+    imageSource: require("../../Images/Egyption-museums.jpg"),
     caption: "The Egyptian museum"
   },
   {
     id: "2",
-    imageSource: require("../Images/grand-egyprion-museum.jpg"),
+    imageSource: require("../../Images/grand-egyprion-museum.jpg"),
     caption: "The Grand Egyptian Museum"
   },
   {
     id: "3",
-    imageSource: require("../Images/Pyramids.jpg"),
+    imageSource: require("../../Images/Pyramids.jpg"),
     caption: "Pyramids"
   },
   {
     id: "4",
-    imageSource: require("../Images/National-musuem-og-civilization.jpg"),
+    imageSource: require("../../Images/National-musuem-og-civilization.jpg"),
     caption: "The National Museum of Egyptian Civilization"
   },
   {
     id: "5",
-    imageSource: require("../Images/Nubia-museum.jpg"),
+    imageSource: require("../../Images/Nubia-museum.jpg"),
     caption: "Nubia Museum"
   },
   {
     id: "6",
-    imageSource: require("../Images/Coptic-museum.jpg"),
+    imageSource: require("../../Images/Coptic-museum.jpg"),
     caption: "The Coptic Museum"
   }
 ];
