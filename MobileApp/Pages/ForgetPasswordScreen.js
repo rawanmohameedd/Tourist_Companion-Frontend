@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, Alert, Pressable, StyleSheet} from 'react-native';
-import Footer from '../Components/Footer';
 
 const ForgetPasswordPage = () => {
     const [viewMenu, setViewMenu] = useState(false);
@@ -19,7 +18,7 @@ const ForgetPasswordPage = () => {
         {!viewMenu && (
         <TextInput
             style={styles.input}
-            placeholder="Enter your email you want to send verification code for"
+            placeholder="Enter your E-mail"
             value={email}
             onChangeText={text => setEmail(text)}
         />
@@ -27,23 +26,27 @@ const ForgetPasswordPage = () => {
         <Pressable
         style={styles.buttonContainer}
         onPress={() => setViewMenu(!viewMenu)}>
-        <Text style={styles.buttonText}>
+        <Text style={[styles.button, {fontSize: 20,fontWeight: 'bold'}]}>
             {viewMenu ? 'Want to use Email' : 'Want to use Mobile Number'}
         </Text>
         </Pressable>
-        {viewMenu && (
-        <TextInput
-            style={styles.input}
-            value={phoneNumber}
-            onChangeText={text => setPhoneNumber(text)}
-            placeholder="Enter your phone number"
-            keyboardType="phone-pad"
-        />
+
+            {viewMenu && (
+            <TextInput
+                style={styles.input}
+                value={phoneNumber}
+                onChangeText={text => setPhoneNumber(text)}
+                placeholder="Enter your phone number"
+                keyboardType="phone-pad"
+                />
         )}
-        <View style={styles.submitButton}>
-        <Button color="#512B81" title="Submit" onPress={handleForgetPassword} />
-        </View>
-        <Footer/>
+
+        <Pressable
+                onPress={handleForgetPassword}
+                style={styles.button}>
+                <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Submit </Text>
+        </Pressable>
+
     </View>
     );
 };
@@ -52,27 +55,26 @@ export default ForgetPasswordPage;
 
 const styles = StyleSheet.create({
     container: {
+    backgroundColor: '#121212',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#4477CE',
     },
     buttonContainer: {
     margin: 16,
     paddingTop: 6,
     height: 45,
     width: 350,
-    backgroundColor: '#512B81',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
     },
-    buttonText: {
+    buttontext: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
     },
     input: {
     marginBottom: 16,
@@ -82,8 +84,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: 350,
     },
-    submitButton: {
-    marginVertical: 16,
-    width: 200,
-    },
+    button: {
+        height: 50,
+        width: 250,
+        padding: 10,
+        borderRadius: 300,
+        margin: 10,
+        backgroundColor: '#E2C07C',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        textAlign: 'center',
+      },
+
 });

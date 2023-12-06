@@ -1,22 +1,20 @@
 import React from 'react';
 import { StyleSheet, ImageBackground, Image, Button, View, Pressable, Text} from 'react-native';
 
-export default function WelcomeApp({ navigation }) {
+export default function Search ({ navigation }) {
   return (
     <>
       <View style={styles.container}>
-        <Image style={styles.image} source={require('../Images/Logo.png')} />
-          
+
+            <TextInput
+            style={styles.input}
+            onChangeText={Search}
+            placeholder={'Enter username'}
+            />
+
           <Pressable
-            onPress={()=> navigation.navigate('Sign in as a tourist')}
             style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue as a tourist </Text>
-          </Pressable>
-          
-          <Pressable
-            onPress={() => navigation.navigate('Sign in as a tourguide')}
-            style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 18,fontWeight: 'bold'}]}> Continue as a tourguide </Text>
+            <Text style={[styles.buttontext, {fontSize: 18,fontWeight: 'bold'}]}> Search </Text>
           </Pressable>
 
       </View>

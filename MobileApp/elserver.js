@@ -1,2 +1,2 @@
-const server = "http://192.168.1.14:3000"
+const server = "http://192.168.191.206:3000"
 export default server;

@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image , Pressable} from 'react-native';
 
-export default function ProfilePage  () {
+export default function ProfilePageT  ( {navigation} ) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../Images/download.jpg')} // Replace with your own image path
+        source={require('../../Images/download.jpg')} // Replace with your own image path
         style={styles.profilePicture}
       />
       <Text style={styles.name}>John Doe</Text>
       <Text style={styles.bio}>Nationality</Text>
       <Pressable
-          
+            onPress={()=> navigation.navigate('Welcome')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign out </Text>
             </Pressable>

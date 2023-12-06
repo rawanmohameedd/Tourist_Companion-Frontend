@@ -1,17 +1,16 @@
 import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
-import server from '../elserver'
+import server from '../../elserver';
 
-export default function EnterEmailUPTG({navigation}) {
-    const [Username, onchangeUsername] = useState('');
+export default function EnterEmailUPT({navigation}) {
+    const [Username, onchangeUsername]= useState('');
     const [Email, OnChangeEmail] = useState('');
     const [FirstName, OnChangeFirstName] = useState('');
     const [LastName, OnChangeLastName] = useState('');
-    const [NationalID, OnChangeNationalID] = useState('');
+    const [Nationality, OnChangeNationality] = useState('');
     const [Birthday, OnChangeBirthday] = useState('');
-    const [SpokenLanguages, OnChangeSpokenLanguages] = useState('');
     const [Password, OnChangePassword] = useState('');
-    const [Pending, OnPending]= useState(false);
+    const [Pending, OnPending] = useState(false);
 
     const usernameHandler = (value) => {
         onchangeUsername(value);
@@ -25,14 +24,11 @@ export default function EnterEmailUPTG({navigation}) {
     const last_Namehandler = (value) => {
         OnChangeLastName(value);
     };
-    const nationalidhandler = (value) => {
-        OnChangeNationalID(value);
+    const nationalityhandler = (value) => {
+        OnChangeNationality(value);
     };
     const birthdayhandler = (value) => {
         OnChangeBirthday(value);
-    };
-    const spokenlanghandler = (value) => {
-        OnChangeSpokenLanguages(value);
     };
     const passwordhandler = (value) => {
         OnChangePassword(value);
@@ -41,25 +37,24 @@ export default function EnterEmailUPTG({navigation}) {
     const valid = () => {
         return true;
     };
-    const signupTourguide = () => {
+    /*const signupTour = () => {
         if (valid()) {
             OnPending(true);
             fetch(server + "/signupTourist", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                tourguide_username: Username,
-                emailTG: Email,
-                first_nameTG: FirstName,
-                last_nameTG:LastName,
-                nationalidTG:NationalID,
-                birthdayTG:Birthday,
-                spoken_langTG:SpokenLanguages,
-                passwordTG: Password,
+                tour_username: Username,
+                emailT: Email,
+                first_nameT: FirstName,
+                last_nameT:LastName,
+                nationalityT:Nationality,
+                birthdayT:Birthday,
+                passwordT: Password,
             }),
         })
             .then((response) => {
-                navigation.navigate("Home Page tourguide")
+                navigation.navigate("Home Tourist")
                 return response.json();
             })
             .then((res) => {
@@ -70,10 +65,9 @@ export default function EnterEmailUPTG({navigation}) {
                 console.log(error);
             });
         }
-    };
-
+    };*/
     return (
-    <View style={styles.container}>
+        <View style={styles.container}>
         <ScrollView keyboardDismissMode="on-drag">
         <TextInput
             style={styles.input}
@@ -94,31 +88,28 @@ export default function EnterEmailUPTG({navigation}) {
             onChangeText={first_Namehandler}
             placeholder={'First Name'}
         />
+
         <TextInput
             style={styles.input}
             value={LastName}
             onChangeText={last_Namehandler}
             placeholder={'Last Name'}
         />
+
         <TextInput
             style={styles.input}
-            value={NationalID}
-            onChangeText={nationalidhandler}
-            placeholder={'National ID'}
+            value={Nationality}
+            onChangeText={nationalityhandler}
+            placeholder={'Nationality'}
         />
-        <TextInput
-            style={styles.input}
-            value={SpokenLanguages}
-            onChangeText={spokenlanghandler}
-            placeholder={'Spoken Languages (use commas between languages)'}
-        />
+
         <TextInput
             style={styles.input}
             value={Birthday}
             onChangeText={birthdayhandler}
             placeholder={'YYYY-MM-DD'}
         />
-        
+
         <TextInput
             style={styles.input}
             onChangeText={passwordhandler}
@@ -128,7 +119,7 @@ export default function EnterEmailUPTG({navigation}) {
         />
 
         <Pressable
-            onPress={signupTourguide}
+            onPress={()=>navigation.navigate('Home Tourguide')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>
@@ -138,7 +129,7 @@ export default function EnterEmailUPTG({navigation}) {
             <Image
                 style={styles.icons}
                 resizeMode={'contain'}
-                source={require('../Images/Google-Logo.png')}
+                source={require('../../Images/Google-Logo.png')}
             />
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Google </Text>
         </Pressable>
@@ -147,7 +138,7 @@ export default function EnterEmailUPTG({navigation}) {
             <Image
                 style={styles.icons}
                 resizeMode={'contain'}
-                source={require('../Images/facebook-logo.png')}
+                source={require('../../Images/facebook-logo.png')}
             />
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Facebook </Text>
         </Pressable>
@@ -159,7 +150,7 @@ export default function EnterEmailUPTG({navigation}) {
 
 const styles = StyleSheet.create({
     container: {
-    paddingTop: 50,
+    paddingTop: 150,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -177,20 +168,24 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     height: 45,
     width: 350,
-    backgroundColor: '#512B81',
+    backgroundColor: '#E2C07C',
     flexDirection: 'row',
     justifyContent: 'center',
     },
-    text: {
+    text:
+    {
     textAlign: 'center',
     color:'white',
     fontSize:20,
     fontWeight:'bold',
     },
-    icons: {
+
+    icons: 
+    {
         height:30,
         width:40,
     },
+
     buttontext: 
     {
         color: 'black',  

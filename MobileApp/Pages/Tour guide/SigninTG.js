@@ -15,9 +15,9 @@ export default function EnterEmailIN({navigation}) {
     function PasswordHandler(vaLue) {
         return OnChangePassword(vaLue);
     }
-    const signin = async()=> {
+  /*  async function signin (){
         OnPending(true);
-        fetch(server+"/signin", {
+        fetch(server+"/signinTourguide", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -32,7 +32,7 @@ export default function EnterEmailIN({navigation}) {
             if (response.email) {
                 await SecureStore.setItemAsync("token", response.token);
                 OnPending(false);
-                navigation.navigate("Home Page", {
+                navigation.navigate("Home Tourguide", {
                 token: response.token,
             });
             } else {
@@ -41,12 +41,13 @@ export default function EnterEmailIN({navigation}) {
             }
         })
         .catch((error) => {
+            console.log(response)
             console.log(error);
-            console.log(server + "/signin");
+            console.log(server + "/signinTourguide");
             console.log("Received sign-in request:", Email, Password);
             alert("Network request failed. Please try again later.");
         });
-    }
+    }*/
     
     return (
     <View style={styles.container}>
@@ -68,13 +69,13 @@ export default function EnterEmailIN({navigation}) {
         <View style={styles.buttonContainer}>
             
             <Pressable
-            onPress={signin}
+            onPress={()=>navigation.navigate('Home Tourguide')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign in </Text>
             </Pressable>
 
             <Pressable
-            onPress={()=> navigation.navigate('Welcome')}
+            onPress={()=> navigation.navigate('Sign up as a tour guide')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Don't have an account yet? </Text>
             </Pressable>

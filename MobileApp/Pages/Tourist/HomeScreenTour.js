@@ -5,15 +5,17 @@ export default function HomeT ({navigation}){
     return (
         <View style={styles.gridContainer}>
             <Pressable style={styles.gridItem}>
-            <Text style={styles.gridText}>Find a guide</Text>
+                <Text style={styles.gridText}>Find a guide</Text>
             </Pressable>
+
             <Pressable style={styles.gridItem}
-            onPress={() => navigation.navigate('Museum Info')}>
-            <Text style={styles.gridText}>Museums Information</Text>
+                onPress={() => navigation.navigate('Museum Info')}>
+                <Text style={styles.gridText}>Museums Information</Text>
             </Pressable>
+
             <Pressable style={styles.gridItem}
-            onPress={() => navigation.navigate('Museum Visit')}>
-            <Text style={styles.gridText}>Museums visit</Text>
+                onPress={() => navigation.navigate('Museum Visit')}>
+                <Text style={styles.gridText}>Museums visit</Text>
             </Pressable>
         </View>
         );
