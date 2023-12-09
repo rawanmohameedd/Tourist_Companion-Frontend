@@ -1,36 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image , Pressable , ScrollView} from 'react-native';
+import Table from './profiletable';
 
 export default function ProfilePageTG  ({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.container}>
         <Image
-        source={require('../../Images/download.jpg')} // Replace with your own image path
+        source={require('../../Images/pp.jpg')} // Replace with your own image path
         style={styles.profilePicture}
         />
-        <Text style={styles.name}>John Doe</Text>
-        <Text style={styles.bio}>Nationality</Text>
+        <Text style={styles.name}>Mark Maher</Text>
+        <Text style={styles.bio}>Egyptian</Text>
       </View>
 
     <View style={styles.Hcontainer}>
+        <Text style={styles.vhistory}>Visit history</Text>
         <ScrollView keyboardDismissMode="on-drag">
-          <Text style={styles.vhistory}>Visit history</Text>
-          <Text style={styles.users}>  Daniel                           5/5</Text>
-          <Text style={styles.users}>  Rawan                            4/5</Text>
-          <Text style={styles.users}>  Omar                             5/5</Text>
-          <Text style={styles.users}>  Tawfik                           3/5</Text>
-          <Text style={styles.users}>  Habiba                           2/5</Text>
-          <Text style={styles.users}>  Daniel                           5/5</Text>
-          <Text style={styles.users}>  Rawan                            4/5</Text>
-          <Text style={styles.users}>  Omar                             5/5</Text>
-          <Text style={styles.users}>  Tawfik                           3/5</Text>
-          <Text style={styles.users}>  Habiba                           2/5</Text>
-          <Text style={styles.users}>  Daniel                           5/5</Text>
-          <Text style={styles.users}>  Rawan                            4/5</Text>
-          <Text style={styles.users}>  Omar                             5/5</Text>
-          <Text style={styles.users}>  Tawfik                           3/5</Text>
-          <Text style={styles.users}>  Habiba                           2/5</Text>
+          <Table style={styles.historytable}>
+
+          </Table>
         </ScrollView>
       </View>
 
@@ -74,7 +63,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   vhistory:{
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
     alignSelf: 'center',
@@ -83,6 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     backgroundColor: '#6e706f',
+    borderRadius: 10,
     width: 400,
     height: 450,
     marginTop: 70,
@@ -105,16 +95,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   avgrating:{
-    height: 50,
-    width: 150,
+    height: '7%',
+    width: '50%',
     fontWeight:'bold',
     fontSize:20,
     padding: 10,
     borderRadius: 300,
     marginTop: 10,
     textAlign:'center',
+    textAlignVertical: 'center',
     backgroundColor: '#6e706f',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  historytable: {
+    borderColor: 'black',
+    borderWidth: '1',
+
   },
 });

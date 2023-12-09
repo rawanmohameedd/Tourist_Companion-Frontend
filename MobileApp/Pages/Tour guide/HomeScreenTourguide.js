@@ -57,6 +57,7 @@ export default function HomeT ({navigation}){
 
         },
         gridText: {
+        //flex: 1,
         fontSize: 30,
         textAlignVertical:'center',
         textAlign: 'center',
