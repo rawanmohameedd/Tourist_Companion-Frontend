@@ -24,7 +24,6 @@ export default function ProfilePageTG  ({navigation}) {
       </View>
 
     <Text style={styles.avgrating}>Rating: 4.78/5 </Text>
-      
 
     <View style={styles.container}>
       <Pressable
