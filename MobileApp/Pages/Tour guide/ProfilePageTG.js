@@ -110,6 +110,5 @@ const styles = StyleSheet.create({
   historytable: {
     borderColor: 'black',
     borderWidth: '1',
-
   },
 });
