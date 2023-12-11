@@ -2,9 +2,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-native';
 import * as SecureStore from "expo-secure-store";
-import server from "../elserver";
+//import server from "../elserver";
 
-export default function EnterEmailIN({navigation}) {
+export default function SigninTG({navigation}) {
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
     const [pending, OnPending] = useState(false);
@@ -75,7 +75,7 @@ export default function EnterEmailIN({navigation}) {
             </Pressable>
 
             <Pressable
-            onPress={()=> navigation.navigate('Sign up as a tour guide')}
+            onPress={()=>navigation.navigate('Sign up as a tour guide')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Don't have an account yet? </Text>
             </Pressable>

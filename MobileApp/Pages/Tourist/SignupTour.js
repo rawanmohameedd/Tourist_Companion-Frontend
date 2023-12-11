@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
 import server from '../../elserver';
 
-export default function EnterEmailUPT({navigation}) {
+export default function SignupT({navigation}) {
     const [Username, onchangeUsername]= useState('');
     const [Email, OnChangeEmail] = useState('');
     const [FirstName, OnChangeFirstName] = useState('');
@@ -119,7 +119,7 @@ export default function EnterEmailUPT({navigation}) {
         />
 
         <Pressable
-            onPress={()=>navigation.navigate('Home Tourguide')}
+            onPress={()=>navigation.navigate('Home Tourist')}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>

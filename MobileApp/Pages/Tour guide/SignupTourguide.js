@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
 import server from '../../elserver'
 
-export default function EnterEmailUPTG({navigation}) {
+export default function SignupTG({navigation}) {
     const [Username, onchangeUsername] = useState('');
     const [Email, OnChangeEmail] = useState('');
     const [FirstName, OnChangeFirstName] = useState('');

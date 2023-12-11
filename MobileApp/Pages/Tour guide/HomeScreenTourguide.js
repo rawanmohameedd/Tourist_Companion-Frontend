@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet , Image , ImageBackground} from 'react-native';
 
-export default function HomeT ({navigation}){
+export default function HomeTabTG ({navigation}){
     return (
         <View style={styles.gridContainer}>
             <Pressable style={styles.button}>
@@ -26,7 +26,7 @@ export default function HomeT ({navigation}){
             </Pressable>
 
             <Pressable style={styles.button}
-                onPress={() => navigation.navigate('Museum Visit')}>
+                onPress={() => navigation.navigate('Museum Visit TG')}>
                 <ImageBackground 
                 style={styles.icons}
                 resizeMode={'contain'}

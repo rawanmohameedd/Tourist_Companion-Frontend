@@ -6,31 +6,27 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import EnterEmailUPT from './Pages/Tourist/SignupTour';
-import EnterEmailUPTG from './Pages/Tour guide/SignupTourguide';
+import signupT from './Pages/Tourist/SignupTour';
+import signupTG from './Pages/Tour guide/SignupTourguide';
 import WelcomeApp from './Pages/WelcomeScreen';
 import HomeT from './Pages/Tourist/HomeScreenTour';
-import EnterEmailIN from './Pages/Tourist/SigninT';
+import signinT from './Pages/Tourist/SigninT';
 import ForgetPasswordPage from './Pages/ForgetPasswordScreen';
 import VisitTour from './Pages/Tourist/MuseumsVisitTour';
+import VisitTG from './Pages/Tour guide/MuseumsVisitTG';
 import GridComponent from './Pages/Tourist/MusemsInfoTour';
 import HomeTG from './Pages/Tour guide/HomeScreenTourguide';
 import ProfilePageT from './Pages/Tourist/ProfilePageT';
 import ProfilePageTG from './Pages/Tour guide/ProfilePageTG';
+import signinTG from './Pages/Tour guide/SigninTG';
 const Stack = createNativeStackNavigator();
 const Tab= createBottomTabNavigator();
 
 const HomeTabT =()=>{
   return(
-    <View style={styles.container}>
-
-    <Tab.Navigator
-      screenOptions={({
-      tabBarInactiveTintColor: 'gray',
-      tabBarActiveTintColor: 'blue',
-      })}>
-    <Tab.Screen 
-        name="HomeT" 
+    <Tab.Navigator style={styles.tabbar}>
+      <Tab.Screen 
+        name=" HomeT " 
         component={HomeT} 
         options={{
           headerShown: false,
@@ -41,14 +37,12 @@ const HomeTabT =()=>{
             source={require('./Images/home.png')}
             style={{width: 25, height: 25}}
             />
-            
-
           ),
+        }} 
         
-        }} />
-
+        />
       <Tab.Screen 
-        name="Profile" 
+        name=" Profile" 
         component={ProfilePageT} 
         options={{
           headerShown: false,
@@ -61,8 +55,8 @@ const HomeTabT =()=>{
             />
           ),
         }}/>
-    </Tab.Navigator>
-    </View>    
+
+    </Tab.Navigator>  
   );
 };
 
@@ -118,14 +112,15 @@ export default function App() {
         headerTitleAlign:'center',
       }}>
         <Stack.Screen options={{headerShown: false}} name= "Welcome" component={WelcomeApp} />
-        <Stack.Screen name="Sign up as a tourist" component={EnterEmailUPT} />
-        <Stack.Screen name="Sign up as a tour guide" component={EnterEmailUPTG} />
-        <Stack.Screen name="Sign in as a tourist" component={EnterEmailIN}  />
-        <Stack.Screen name="Sign in as a tourguide" component={EnterEmailIN}  />
+        <Stack.Screen name="Sign up as a tourist" component={signupT} />
+        <Stack.Screen name="Sign up as a tour guide" component={signupTG} />
+        <Stack.Screen name="Sign in as a tourist" component={signinT}  />
+        <Stack.Screen name="Sign in as a tourguide" component={signinTG}  />
         <Stack.Screen name="Home Tourist" component={HomeTabT} options={{headerShown: false}} />
         <Stack.Screen name="Home Tourguide" component={HomeTabTG} options={{headerShown: false}}/>
         <Stack.Screen name="Forget your Password" component={ForgetPasswordPage} />
         <Stack.Screen name="Museum Visit" component={VisitTour} />
+        <Stack.Screen options={{headerTitle:'Museum visit'}} name="Museum Visit TG" component={VisitTG} />
         <Stack.Screen name="Museum Info" component={GridComponent} />
       </Stack.Navigator>
     </NavigationContainer>

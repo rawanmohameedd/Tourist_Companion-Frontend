@@ -8,7 +8,7 @@ export default function VisitTour  (){
         <Pressable style={[styles.item]}> 
             <ImageBackground source={(require('./../../Images/track.png'))} resizeMode="contain" style={styles.image}>
                 
-                <Text style={styles.text}>Track your guide</Text>
+                <Text style={styles.text}>Track your tourists</Text>
 
             </ImageBackground>  
         </Pressable> 

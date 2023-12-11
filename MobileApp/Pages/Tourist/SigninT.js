@@ -4,7 +4,7 @@ import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-na
 import * as SecureStore from "expo-secure-store";
 import server from "../../elserver";
 
-export default function EnterEmailIN({navigation}) {
+export default function SigninT({navigation}) {
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
     const [pending, OnPending] = useState(false);

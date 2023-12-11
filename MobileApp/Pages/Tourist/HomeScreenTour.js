@@ -1,21 +1,38 @@
 import React from 'react';
-import { View, Pressable, Text, StyleSheet } from 'react-native';
+import { View, Pressable, Text, StyleSheet , Image , ImageBackground} from 'react-native';
 
-export default function HomeT ({navigation}){
+export default function HomeTabT ({navigation}){
     return (
         <View style={styles.gridContainer}>
-            <Pressable style={styles.gridItem}>
-                <Text style={styles.gridText}>Find a guide</Text>
+            <Pressable style={styles.button}>
+                <ImageBackground 
+                    style={styles.icons}
+                    resizeMode={'contain'}
+                    source={require('../../Images/findtg.jpg')}>
+                    <Text style={styles.gridText}>Find a guide</Text>
+                    </ImageBackground>
             </Pressable>
 
-            <Pressable style={styles.gridItem}
+            <Pressable style={styles.button}
                 onPress={() => navigation.navigate('Museum Info')}>
-                <Text style={styles.gridText}>Museums Information</Text>
+                <ImageBackground 
+                    style={styles.icons}
+                    resizeMode={'contain'}
+                    source={require('../../Images/info.jpg')}>
+                    <Text style={styles.gridText}>Museums Information</Text>
+                </ImageBackground>
+                    
+                
             </Pressable>
 
-            <Pressable style={styles.gridItem}
+            <Pressable style={styles.button}
                 onPress={() => navigation.navigate('Museum Visit')}>
-                <Text style={styles.gridText}>Museums visit</Text>
+                <ImageBackground 
+                style={styles.icons}
+                resizeMode={'contain'}
+                source={require('../../Images/visit.jpg')}>
+                <Text style={styles.gridText}>Museum visit</Text>
+            </ImageBackground>
             </Pressable>
         </View>
         );
@@ -25,18 +42,35 @@ export default function HomeT ({navigation}){
         gridContainer: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        backgroundColor: '#121212',
 
         },
-        gridItem: {
-        flex: 1,
-        backgroundColor: 'lightblue',
+        button: {
+        //flex: 1,
+        backgroundColor: '#121212',
         alignItems: 'center',
         justifyContent: 'center',
+        //height: 275,
+        //width: 410,
+        borderRadius: 10,
 
         },
         gridText: {
-        fontSize: 16,
+        //flex: 1,
+        fontSize: 30,
+        textAlignVertical:'center',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        textShadowColor: 'white',
+        textShadowRadius: 10,
+        },
+        icons:{
+        height: 275,
+        width: 400,
+        borderRadius:100,
+        justifyContent: 'center',
+        alignContent: 'center',
         },
         });
 
