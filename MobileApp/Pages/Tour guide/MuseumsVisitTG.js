@@ -6,7 +6,7 @@ export default function VisitTour  (){
     <View style={styles.container}>
     <View style={styles.top}>
         <Pressable style={[styles.item]}> 
-            <ImageBackground source={(require('./../../Images/findtg.jpg'))} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={(require('./../../Images/track.jpg'))} resizeMode="cover" style={styles.image}>
             <Image source={(require('./../../Images/track.png'))} resizeMode='cover'>
                 
                 </Image> 
@@ -16,7 +16,7 @@ export default function VisitTour  (){
            
         </Pressable> 
         <Pressable style={[styles.item]}> 
-            <ImageBackground source={(require('./../../Images/visit.jpg'))} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={(require('./../../Images/monumentlabel.jpg'))} resizeMode="cover" style={styles.image}>
                 <Image source={(require('./../../Images/monument.png'))} resizeMode='contain' style={styles.data}>
                 
                 </Image> 
@@ -26,22 +26,11 @@ export default function VisitTour  (){
         </Pressable>
     </View>
     <View style={styles.buttom}>
-        <Pressable style={[styles.item]}> 
-            
 
-            <ImageBackground source={(require('./../../Images/findtg.jpg'))} resizeMode="cover" style={styles.imagelow}>
-                <Image source={(require('./../../Images/tgdata.png'))} resizeMode='center' style={styles.data}>
-                
-                </Image> 
-                <Text style={styles.text}>Tourguide data</Text>
-
-            </ImageBackground>  
-
-        </Pressable> 
 
         <Pressable style={[styles.item]}> 
 
-        <ImageBackground source={(require('./../../Images/visit.jpg')) } resizeMode='cover' style={styles.imagelow}>
+        <ImageBackground source={(require('./../../Images/room.jpg')) } resizeMode='cover' style={styles.imagelow}>
             <Image source={(require('./../../Images/crowd.png'))} resizeMode='center' style={styles.data}>
                 
                 </Image> 
@@ -68,14 +57,15 @@ top: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: -85,
+    marginBottom: -95,
 
 },
 buttom: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -85,
+    marginTop: -95,
+    width: 850,
 
 },
 item: {
@@ -97,8 +87,13 @@ image: {
 text:{
 flex: 1,
 textAlign: 'center',
-color: 'black',
+color: 'white',
+textAlignVertical: 'bottom',
 fontWeight: 'bold',
+fontSize: 17,
+textShadowColor:'black',
+textShadowRadius: 5,
+marginBottom: 20.
 
 },
 imagelow: {

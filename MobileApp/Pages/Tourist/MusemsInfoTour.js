@@ -1,5 +1,6 @@
 import React from "react";
 import { View, FlatList, Pressable, Image, Text, StyleSheet,ImageBackground} from "react-native";
+import infoPage from "./../infopage"
 
 const data = [
   {
@@ -34,9 +35,10 @@ const data = [
   }
 ];
 
-const renderItem = ({item}) => {
+const renderItem = ({item, navigation}) => {
   return (
-    <Pressable style={styles.item}>
+    <Pressable style={styles.item} onPress={() => navigation.navigate('Info page')}>
+      
       <ImageBackground 
         style={styles.image}
         resizeMode={'contain'}
@@ -48,7 +50,22 @@ const renderItem = ({item}) => {
   );
 };
 
-const GridComponent = () => {
+
+const GridComponent = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <FlatList
+        style={styles.component}
+        data={data}
+        renderItem={(item) => renderItem({ ...item, navigation })}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.contentContainer}
+      />
+    </View>
+  );
+};
+
+/*const GridComponent = ({navigation}) => {
   return (
     <View style={styles.container}>
       <FlatList
@@ -60,7 +77,7 @@ const GridComponent = () => {
       />
     </View>
   );
-};
+};*/
 
 const styles = StyleSheet.create({
   container: {
