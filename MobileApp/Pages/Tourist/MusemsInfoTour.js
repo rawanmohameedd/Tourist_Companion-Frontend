@@ -1,18 +1,11 @@
 import React from "react";
-import {
-  View,
-  FlatList,
-  Pressable,
-  Image,
-  Text,
-  StyleSheet
-} from "react-native";
+import { View, FlatList, Pressable, Image, Text, StyleSheet,ImageBackground} from "react-native";
 
 const data = [
   {
     id: "1",
-    imageSource: require("../../Images/Egyption-museums.jpg"),
-    caption: "The Egyptian museum"
+    imageSource: require("../../Images/National-musuem-og-civilization.jpg"),
+    caption: "The National Museum of Egyptian Civilization"
   },
   {
     id: "2",
@@ -26,13 +19,13 @@ const data = [
   },
   {
     id: "4",
-    imageSource: require("../../Images/National-musuem-og-civilization.jpg"),
-    caption: "The National Museum of Egyptian Civilization"
+    imageSource: require("../../Images/Egyption-museums.jpg"),
+    caption: "The Egyptian museum"
   },
   {
     id: "5",
     imageSource: require("../../Images/Nubia-museum.jpg"),
-    caption: "Nubia Museum"
+    caption: "Nubian Museum"
   },
   {
     id: "6",
@@ -41,13 +34,16 @@ const data = [
   }
 ];
 
-const renderItem = ({ item }) => {
+const renderItem = ({item}) => {
   return (
-    <Pressable
-      style={styles.item}
-    >
-      <Image source={item.imageSource} style={styles.image} />
-      <Text style={styles.caption}>{item.caption}</Text>
+    <Pressable style={styles.item}>
+      <ImageBackground 
+        style={styles.image}
+        resizeMode={'contain'}
+        source={item.imageSource}
+      >
+        <Text style={styles.caption}> {item.caption} </Text>
+      </ImageBackground>  
     </Pressable>
   );
 };
@@ -56,7 +52,8 @@ const GridComponent = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
+        style={styles.component}
+        data={data} 
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.contentContainer}
@@ -67,30 +64,44 @@ const GridComponent = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff"
+    flex:1,
+    backgroundColor: "#121212"
   },
   contentContainer: {
     alignItems: "center",
     justifyContent: "center"
   },
   item: {
-    flex: 1,
-    aspectRatio: 1,
-    margin: 10,
-    alignItems: "center"
+    width: '100%',
+    height: 'auto',
+    margin: 5,
+    alignItems: "center",
+    verticalAlign: 'middle',
+
   },
   image: {
+    width: 400,
+    height: 210,
+    resizeMode: "contain",
     flex: 1,
-    width: 50,
-    height: 50,
-    resizeMode: "cover"
+
   },
   caption: {
-    marginTop: 5,
-    fontSize: 16,
-    fontWeight: "bold"
-  }
+    //marginTop: 1,
+    fontSize: 25,
+    fontWeight: "bold",
+    color: 'white',
+    textAlign: 'right',
+    textAlignVertical: 'bottom',
+    flex: 1,
+    textShadowColor: 'black',
+    textShadowRadius: 20,
+
+  },
+  component:{
+    backgroundColor: '#121212',
+  },
+
 });
 
 export default GridComponent;

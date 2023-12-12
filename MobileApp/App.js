@@ -40,8 +40,7 @@ const HomeTabT =()=>{
             />
           ),
         }} 
-        
-        />
+      />
 
       <Tab.Screen 
         name=" Search " 
@@ -50,12 +49,11 @@ const HomeTabT =()=>{
           headerShown: false,
           tabBarLabel: 'Search',
           tabBarIcon: ({color,size})=>( 
-            <Ionicons name="search" color={color} size={size} />
-  
+            <Ionicons name="search" color={color} size={size}/>
           ),
         }} 
-        
-        />
+      />
+
       <Tab.Screen 
         name=" Profile" 
         component={ProfilePageT} 
@@ -69,10 +67,8 @@ const HomeTabT =()=>{
             style={{width: 25, height: 25}}
             />
           ),
-        }}/>
-
-
-
+        }}
+      />
     </Tab.Navigator>  
   );
 };

@@ -1,21 +1,26 @@
 import React from 'react';
-import { View, Pressable, Text, StyleSheet , ImageBackground} from 'react-native';
+import { View, Pressable, Text, StyleSheet , ImageBackground,Image} from 'react-native';
 
 export default function VisitTour  (){
     return(
     <View style={styles.container}>
     <View style={styles.top}>
         <Pressable style={[styles.item]}> 
-            <ImageBackground source={(require('./../../Images/track.png'))} resizeMode="contain" style={styles.image}>
+            <ImageBackground source={(require('./../../Images/findtg.jpg'))} resizeMode="cover" style={styles.image}>
+            <Image source={(require('./../../Images/track.png'))} resizeMode='cover'>
                 
+                </Image> 
                 <Text style={styles.text}>Track your tourists</Text>
 
-            </ImageBackground>  
+            </ImageBackground> 
+           
         </Pressable> 
         <Pressable style={[styles.item]}> 
-            <ImageBackground source={(require('./../../Images/monument.png'))} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={(require('./../../Images/visit.jpg'))} resizeMode="cover" style={styles.image}>
+                <Image source={(require('./../../Images/monument.png'))} resizeMode='contain' style={styles.data}>
                 
-            <Text style={styles.text}>Read monument labels</Text>
+                </Image> 
+                <Text style={styles.text}>Read monument labels</Text>
 
             </ImageBackground>  
         </Pressable>
@@ -23,19 +28,25 @@ export default function VisitTour  (){
     <View style={styles.buttom}>
         <Pressable style={[styles.item]}> 
             
-            <Text style={styles.text}>Tourguide data</Text>
 
-            <ImageBackground source={(require('./../../Images/tgdata.png'))} resizeMode="contain" style={styles.imagelow}>
+            <ImageBackground source={(require('./../../Images/findtg.jpg'))} resizeMode="cover" style={styles.imagelow}>
+                <Image source={(require('./../../Images/tgdata.png'))} resizeMode='center' style={styles.data}>
                 
+                </Image> 
+                <Text style={styles.text}>Tourguide data</Text>
+
             </ImageBackground>  
 
         </Pressable> 
 
         <Pressable style={[styles.item]}> 
-        <Text style={styles.text}>Crowded rooms</Text>
 
-        <ImageBackground source={(require('./../../Images/crowd.png')) } resizeMode='center' style={styles.imagelow}>
+        <ImageBackground source={(require('./../../Images/visit.jpg')) } resizeMode='cover' style={styles.imagelow}>
+            <Image source={(require('./../../Images/crowd.png'))} resizeMode='center' style={styles.data}>
                 
+                </Image> 
+            <Text style={styles.text}>Crowded rooms</Text>
+
         </ImageBackground>  
                 
 
@@ -79,15 +90,15 @@ image: {
     alignItems:'center',
     alignSelf: 'center',
     alignContent: 'center',
-    height: '95%',
+    height: '100%',
     width: '100%',
 
 },
 text:{
 flex: 1,
 textAlign: 'center',
-marginBottom: 0,
-color: 'white',
+color: 'black',
+fontWeight: 'bold',
 
 },
 imagelow: {
@@ -96,8 +107,11 @@ imagelow: {
     alignContent: 'center',
     alignItems: 'center',
     verticalAlign: 'bottom',
-    height: '95%',
+    height: '100%',
     width: '100%',
-
    },
+data: {
+    height: '80%',
+    width: '80%',
+},
 });

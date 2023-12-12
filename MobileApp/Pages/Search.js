@@ -1,15 +1,20 @@
-import React from 'react';
+
+import React,{useState} from 'react'
 import { StyleSheet, ImageBackground, Image, Button, View, Pressable, Text, TextInput} from 'react-native';
 
 export default function Search ({ navigation }) {
+  const [username, setusername] = useState(null);
   return (
     <>
       <View style={styles.container}>
+
+
         <View style={styles.searchContainer}>
             <TextInput
             style={styles.input}
             onChangeText={Search}
             placeholder={'Enter username'}
+            value={username}
             />
         </View>
 
