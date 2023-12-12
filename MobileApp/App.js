@@ -19,6 +19,7 @@ import HomeTG from './Pages/Tour guide/HomeScreenTourguide';
 import ProfilePageT from './Pages/Tourist/ProfilePageT';
 import ProfilePageTG from './Pages/Tour guide/ProfilePageTG';
 import signinTG from './Pages/Tour guide/SigninTG';
+import Search from './Pages/Search';
 const Stack = createNativeStackNavigator();
 const Tab= createBottomTabNavigator();
 
@@ -41,6 +42,20 @@ const HomeTabT =()=>{
         }} 
         
         />
+
+      <Tab.Screen 
+        name=" Search " 
+        component={Search} 
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Search',
+          tabBarIcon: ({color,size})=>( 
+            <Ionicons name="search" color={color} size={size} />
+  
+          ),
+        }} 
+        
+        />
       <Tab.Screen 
         name=" Profile" 
         component={ProfilePageT} 
@@ -55,6 +70,8 @@ const HomeTabT =()=>{
             />
           ),
         }}/>
+
+
 
     </Tab.Navigator>  
   );
@@ -78,7 +95,21 @@ const HomeTabTG =()=>{
           ),
         }} 
         
-        />
+      />
+
+      <Tab.Screen 
+        name=" Search " 
+        component={Search} 
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Search',
+          tabBarIcon: ({color,size})=>( 
+            <Ionicons name="search" color={color} size={size} />
+  
+          ),
+        }} 
+        
+      />
       <Tab.Screen 
         name=" Profile" 
         component={ProfilePageTG} 
@@ -118,6 +149,7 @@ export default function App() {
         <Stack.Screen name="Sign in as a tourguide" component={signinTG}  />
         <Stack.Screen name="Home Tourist" component={HomeTabT} options={{headerShown: false}} />
         <Stack.Screen name="Home Tourguide" component={HomeTabTG} options={{headerShown: false}}/>
+        <Stack.Screen name="Search" component={Search} options={{headerShown: false}}/>
         <Stack.Screen name="Forget your Password" component={ForgetPasswordPage} />
         <Stack.Screen name="Museum Visit" component={VisitTour} />
         <Stack.Screen options={{headerTitle:'Museum visit'}} name="Museum Visit TG" component={VisitTG} />
