@@ -1,22 +1,33 @@
 import React,{useState} from 'react';
-import { View, Pressable, Text, StyleSheet , Image , ImageBackground, TouchableOpacity} from 'react-native';
+import { View, Pressable, Text, StyleSheet , Image , ImageBackground, TouchableOpacity, ScrollView} from 'react-native';
 import Table from './ticketstable';
 
 
 export default function Infopage({ navigation }) {
 
 
-    const [containerVisible, setContainerVisible] = useState(false);
-  
-    const handlePress = () => {
+    const [TcontainerVisible, setTContainerVisible] = useState(false);
+    const [IcontainerVisible, setIContainerVisible] = useState(false);
+    const [McontainerVisible, setMContainerVisible] = useState(false);
+
+
+    const ThandlePress = () => {
       // Toggle the visibility of the container
-      setContainerVisible(!containerVisible);
+      setTContainerVisible(!TcontainerVisible);
+    };
+    const IhandlePress = () => {
+      // Toggle the visibility of the container
+      setIContainerVisible(!IcontainerVisible);
+    };
+    const MhandlePress = () => {
+      // Toggle the visibility of the container
+      setMContainerVisible(!McontainerVisible);
     };
   
     return (
         <>
         <View style={styles.container}>
-        <View style={styles.imagecontainer}>
+          <View style={styles.imagecontainer}>
             <ImageBackground 
                 style={styles.image}
                 resizeMode={'contain'}
@@ -24,26 +35,54 @@ export default function Infopage({ navigation }) {
 
                 <Text style={styles.caption}> Grand Egyptian museum </Text>
             </ImageBackground>  
-        </View>
+          </View>
 
 
-        <View style={{ flex: 1, justifyContent: 'left', alignItems: 'left' , width: 390 }}>
+          <View style={{ flex: 1, justifyContent: 'left', alignItems: 'left' , width: 390 }}>
 
-            <TouchableOpacity onPress={handlePress}>
-                <Text style={{ fontSize: 25, color: 'white' , borderBottomColor: 'white' , borderBottomWidth: 2}}>Tickets prices</Text>
+              <TouchableOpacity onPress={ThandlePress}>
+                  <Text style={{ fontSize: 25, color: 'white' , borderBottomColor: 'white' , borderBottomWidth: 2}}>Tickets prices</Text>
+              </TouchableOpacity>
+  
+              {TcontainerVisible && (
+                  <View style={{ marginTop: 10, padding: 10}}>
+                      <Table style={styles.historytable}>
+
+                      </Table>
+                 </View>
+          
+              )}
+          </View>
+
+          <View style={{ flex: 1, justifyContent: 'left', alignItems: 'left' , width: 390 , marginTop: -300}}>
+
+            <TouchableOpacity onPress={IhandlePress}>
+                <Text style={{ fontSize: 25, color: 'white' , borderBottomColor: 'white' , borderBottomWidth: 2}}>Museum info</Text>
             </TouchableOpacity>
   
-            {containerVisible && (
-                <View style={{ marginTop: 20, padding: 10}}>
-                    <Table style={styles.historytable}>
-
-                    </Table>
+            {IcontainerVisible && (
+                <View style={{ marginTop: 10, padding: 10}}>
+                    <Text style={{color:'white'}}> The grand Egyptian museum is now open for visitors, it contains hundreds of monuments and rooms, it opens at 9 am and closes at 5 pm </Text>
                 </View>
+          
             )}
+          </View>
+
+          <View style={{ flex: 1, justifyContent: 'left', alignItems: 'left' , width: 390 , marginTop: -300}}>
+
+            <TouchableOpacity onPress={MhandlePress}>
+                <Text style={{ fontSize: 25, color: 'white' , borderBottomColor: 'white' , borderBottomWidth: 2}}>Map</Text>
+            </TouchableOpacity>
+  
+            {McontainerVisible && (
+                <View style={{ marginTop: 10, padding: 10}}>
+                  <Image source={require('../Images/gemmap.png')} style={{width:400, height: 250}}/>
+                </View>
+          
+            )}
+          </View>
+
       </View>
-        
-      </View>
-        
         </>
     
 
