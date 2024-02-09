@@ -1,20 +1,106 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image , Pressable , ScrollView} from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image , Pressable , ScrollView, Alert} from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+import server from '../../elserver';
 import Table from './profiletable';
 
 export default function ProfilePageTG  ({navigation}) {
+
+  const [profileData, setProfileData] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    fetchToken();
+  }, []);
+
+  const fetchToken = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("token");
+      setToken(token);
+      fetchProfileData(token);
+    } catch (error) {
+      console.error("Error fetching token:", error.message);
+    }
+  };
+
+  const fetchProfileData = async (token) => {
+    try {
+      if (!token) {
+        return;
+      }
+
+      const response = await fetch(server + "/ProfileTG", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      setProfileData(data);
+
+      if (data && data.profile_phototg) {
+        fetchProfilePhoto(data.profile_phototg, token);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error.message);
+    }
+  };
+
+  const fetchProfilePhoto = async (photoUrl, token) => {
+    try {
+      const response = await fetch(server + "/uploadTG", {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          image: photoUrl
+        })
+      });
+      const photoData = await response.json();
+      setProfilePhoto(photoData);
+    } catch (error) {
+      console.error("Error fetching profile photo:", error.message);
+    }
+  };
+
+  const handleSignOut = () => {
+    Alert.alert(
+      "Sign Out",
+      "Are you sure you want to sign out?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => signOut() }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const signOut = () => {
+    navigation.navigate('Welcome');
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.container}>
-        <Image
-        source={require('../../Images/pp.jpg')} // Replace with your own image path
-        style={styles.profilePicture}
-        />
-        <Text style={styles.name}>Mark Maher</Text>
-        <Text style={styles.bio}>Egyptian</Text>
-      </View>
+      {profileData &&
+        <>
+          <View style={styles.container}>
+            <Image
+              source={{ uri: profilePhoto }} 
+              style={styles.profilePicture}
+            />
+            <Text style={styles.name}>{profileData.first_nametg} {profileData.last_nametg}</Text>
+            <Text style={styles.bio}>{profileData.emailtg}</Text>
+            <Text style={styles.bio}>{profileData.tourguide_username}</Text>
+            <Text style={styles.bio}>{profileData.emailtg}</Text>
+          </View>
 
-    <View style={styles.Hcontainer}>
+          <View style={styles.Hcontainer}>
         <Text style={styles.vhistory}>Visit history</Text>
         <ScrollView keyboardDismissMode="on-drag">
           <Table style={styles.historytable}>
@@ -24,15 +110,16 @@ export default function ProfilePageTG  ({navigation}) {
       </View>
 
     <Text style={styles.avgrating}>Rating: 4.78/5 </Text>
-
-    <View style={styles.container}>
-      <Pressable
-            onPress={()=> navigation.navigate('Welcome')}
-            style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign out </Text>
+          <View style={styles.buttonContainer}>
+            <Pressable
+              onPress={handleSignOut}
+              style={styles.button}>
+              <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
             </Pressable>
+          </View>
+        </>
+      }
     </View>
-  </View>
   );
 };
 

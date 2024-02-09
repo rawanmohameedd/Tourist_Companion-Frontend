@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-native';
 import * as SecureStore from "expo-secure-store";
@@ -15,38 +14,40 @@ export default function SigninT({navigation}) {
     function PasswordHandler(vaLue) {
         return OnChangePassword(vaLue);
     }
-    const signin = async()=> {
+
+    // Fetch Sign in request
+    const signin = async () => {
         OnPending(true);
-        fetch(server+"/signin", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-            email: Email,
-            password: Password,
-        }),
-        })
-        .then((res) => {
-            return res.json();
-        })
-        .then(async (response) => {
-            if (response.email) {
-                await SecureStore.setItemAsync("token", response.token);
-                OnPending(false);
-                navigation.navigate("Home Page", {
-                token: response.token,
+        try {
+            const response = await fetch(server + "/signinT", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    emailT: Email,
+                    passwordT: Password,
+                }),
             });
+            const data = await response.json();
+            if (data) {
+                console.log(data)
+                await SecureStore.setItemAsync("token", data.token);
+                OnPending(false);
+                navigation.navigate('Home Tourist', {
+                    token: data.token,
+                });
             } else {
                 OnPending(false);
-                alert(response.message);
+                alert(data.message);
             }
-        })
-        .catch((error) => {
-            console.log(error);
-            console.log(server + "/signin");
+        } catch (error) {
+            console.error("Network request failed:", error);
+            console.log(server + "/signinT");
             console.log("Received sign-in request:", Email, Password);
             alert("Network request failed. Please try again later.");
-        });
-    }
+            OnPending(false);
+        }
+    };
+    
     
     return (
     <View style={styles.container}>

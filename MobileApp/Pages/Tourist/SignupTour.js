@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
+import * as SecureStore from "expo-secure-store";
 import server from '../../elserver';
 
 export default function SignupT({navigation}) {
@@ -34,38 +35,41 @@ export default function SignupT({navigation}) {
         OnChangePassword(value);
     };
     
-    const valid = () => {
-        return true;
-    };
-    /*const signupTour = () => {
-        if (valid()) {
-            OnPending(true);
-            fetch(server + "/signupTourist", {
+    const signup = async () => {
+        OnPending(true);
+        try {
+            const response = await fetch(server + "/signupT", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                tour_username: Username,
-                emailT: Email,
-                first_nameT: FirstName,
-                last_nameT:LastName,
-                nationalityT:Nationality,
-                birthdayT:Birthday,
-                passwordT: Password,
-            }),
-        })
-            .then((response) => {
-                navigation.navigate("Home Tourist")
-                return response.json();
-            })
-            .then((res) => {
-                OnPending(false);
-                alert(res.message);
-            })
-            .catch((error) => {
-                console.log(error);
+                    tour_username: Username,
+                    emailT: Email,
+                    first_nameT: FirstName,
+                    last_nameT:LastName,
+                    nationalityT:Nationality,
+                    birthdayT:Birthday,
+                    passwordT: Password,
+                }),
             });
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+                await SecureStore.setItemAsync("token", data.token);
+                OnPending(false);
+                navigation.navigate('Home Tourist', {
+                    token: data.token,
+                });
+            } else {
+                OnPending(false);
+                alert(data.message || "Signup failed");
+            }
+        } catch (error) {
+            console.error("Network request failed:", error);
+            alert("Network request failed. Please try again later.");
+            OnPending(false);
         }
-    };*/
+    };
+    
     return (
         <View style={styles.container}>
         <ScrollView keyboardDismissMode="on-drag">
@@ -119,7 +123,7 @@ export default function SignupT({navigation}) {
         />
 
         <Pressable
-            onPress={()=>navigation.navigate('Home Tourist')}
+            onPress={signup}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>

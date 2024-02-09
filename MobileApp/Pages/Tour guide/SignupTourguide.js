@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
+import * as SecureStore from "expo-secure-store";
 import server from '../../elserver'
 
 export default function SignupTG({navigation}) {
@@ -38,39 +39,43 @@ export default function SignupTG({navigation}) {
         OnChangePassword(value);
     };
     
-    const valid = () => {
-        return true;
-    };
-    const signupTourguide = () => {
-        if (valid()) {
-            OnPending(true);
-            fetch(server + "/signupTourist", {
+    const signup = async () => {
+        OnPending(true);
+        try {
+            const response = await fetch(server + "/signupTG", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                tourguide_username: Username,
-                emailTG: Email,
-                first_nameTG: FirstName,
-                last_nameTG:LastName,
-                nationalidTG:NationalID,
-                birthdayTG:Birthday,
-                spoken_langTG:SpokenLanguages,
-                passwordTG: Password,
-            }),
-        })
-            .then((response) => {
-                navigation.navigate("Home Page tourguide")
-                return response.json();
-            })
-            .then((res) => {
-                OnPending(false);
-                alert(res.message);
-            })
-            .catch((error) => {
-                console.log(error);
+                    tourguide_username: Username,
+                    emailTG: Email,
+                    first_nameTG: FirstName,
+                    last_nameTG: LastName,
+                    nationalidTG: NationalID,
+                    birthdayTG: Birthday,
+                    spoken_langTG: SpokenLanguages,
+                    passwordTG: Password,
+                })
             });
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+                await SecureStore.setItemAsync("token", data.token);
+                OnPending(false);
+                navigation.navigate('Home Tourguide', {
+                    token: data.token,
+                });
+            } else {
+                OnPending(false);
+                alert(data.message || "Signup failed");
+            }
+        } catch (error) {
+            console.error("Network request failed:", error);
+            alert("Network request failed. Please try again later.");
+            OnPending(false);
         }
     };
+    
+    
 
     return (
     <View style={styles.container}>
@@ -128,7 +133,7 @@ export default function SignupTG({navigation}) {
         />
 
         <Pressable
-            onPress={()=>navigation.navigate('Home Tourguide')}
+            onPress={signup}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>
