@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-native';
 import * as SecureStore from "expo-secure-store";
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from "../../elserver";
 
-export default function SigninT({navigation}) {
+export default function SigninT() {
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
     const [pending, OnPending] = useState(false);
@@ -14,6 +15,7 @@ export default function SigninT({navigation}) {
     function PasswordHandler(vaLue) {
         return OnChangePassword(vaLue);
     }
+    const navigation = useNavigation();
 
     // Fetch Sign in request
     const signin = async () => {
@@ -32,7 +34,11 @@ export default function SigninT({navigation}) {
                 console.log(data)
                 await SecureStore.setItemAsync("token", data.token);
                 OnPending(false);
-                navigation.navigate('Home Tourist', {
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [{ name:'Home Tourist'}]
+                    }), {
                     token: data.token,
                 });
             } else {

@@ -8,13 +8,11 @@ const Table = () => {
         <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>foreign adult</Text></View>
         <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Egyptian adult</Text></View>
         <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Egyptian student</Text></View>
-        <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Egyptian elder</Text></View>
       </View>
       <View style={styles.rowe}>
         <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>300 $</Text></View>
         <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>150 EGP</Text></View>
         <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>50 EGP</Text></View>
-        <View style={{width:'25%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>60 EGP</Text></View>
       </View>
       
     </View>
@@ -23,8 +21,8 @@ const Table = () => {
 
 const styles = StyleSheet.create({
   table: {
-    borderWidth: 1,
-    borderColor: '#6e706f',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   rowo: {
     flexDirection: 'row',
