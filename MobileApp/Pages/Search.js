@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, View, Pressable, Text, Image } from 'react-native';
+import { StyleSheet, TextInput, View, Pressable, Text, Image, ScrollView } from 'react-native';
 import server from '../elserver';
 
 export default function Search({ navigation }) {
@@ -10,7 +10,7 @@ export default function Search({ navigation }) {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(server+`/byUsername/${username}`);
+      const response = await fetch(server + `/byUsername/${username}`);
       if (response.status === 400) {
         // Handle the case when there are no matching users
         setSearchResult(null); 
@@ -23,20 +23,23 @@ export default function Search({ navigation }) {
         const data = await response.json();
         setSearchResult(data);
         setError('');
-
       }
     } catch (error) {
       console.error('Error fetching search:', error.message);
       setError('Failed to fetch search results');
     }
   };
-  
 
   const clearSearchResult = () => {
     setSearchResult(null);
   };
 
-  const handleResultPress = (user) => {
+  const handleResultPressTourist = (user) => {
+    console.log('Pressed:', user);
+    navigation.navigate('ProfilePageT', { user: user });
+  };
+  const handleResultPressTourguide = (user) => {
+    navigation.navigate('SearchPageTG', { tourGuide: user });
     console.log('Pressed:', user);
   };
 
@@ -54,40 +57,36 @@ export default function Search({ navigation }) {
         <Text style={[styles.buttontext, { fontSize: 18, fontWeight: 'bold' }]}>Search</Text>
       </Pressable>
       {searchResult && (searchResult.tourists.length > 0 || searchResult.tourGuides.length > 0) ? (
-        <View style={styles.resultContainer}>
-        
-          {searchResult.tourists.map((tourist, index) => (
-            <Pressable key={index} onPress={() => handleResultPress(tourist)} style={styles.resultItem}> 
-            
-            <View style={styles.userInfoContainer}>
-            <Image 
-            source={tourist.profile_photot ? { uri: tourist.profile_photot } : require('../Images/home.png')} 
-            style={styles.profileImage} 
-          />
-          <Text style={styles.resultText}>
-                {tourist.tour_username}, Tourist
-              </Text>
-              </View>
+        <ScrollView>
+          <View style={styles.resultContainer}>
+            {searchResult.tourists.map((tourist, index) => (
+              <Pressable key={index} onPress={() => handleResultPressTourist(tourist)} style={styles.resultItem}> 
+                <View style={styles.userInfoContainer}>
+                  <Image 
+                    source={tourist.profile_photot ? { uri: `${server}/${tourist.profile_photot}` } : require('../Images/home.png')} 
+                    style={styles.profileImage} 
+                  />
+                  <Text style={styles.resultText}>
+                    {tourist.tour_username}, Tourist
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+            {searchResult.tourGuides.map((tourGuide, index) => (
+              <Pressable key={index} onPress={() => handleResultPressTourguide(tourGuide)} style={styles.resultItem}>
+                <View style={styles.userInfoContainer}>
+                  <Image source={tourGuide.profile_phototg ? { uri: `${server}/${tourGuide.profile_phototg}` } : require('../Images/home.png')} style={styles.profileImage} />  
+                  <Text style={styles.resultText}>
+                    {tourGuide.tourguide_username}, Tour guide
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+            <Pressable onPress={clearSearchResult}>
+              <Text style={styles.clearButton}>Clear Search</Text>
             </Pressable>
-          ))}
-
-
-          {searchResult.tourGuides.map((tourGuide, index) => (
-            <Pressable key={index} onPress={() => handleResultPress(tourGuide)} style={styles.resultItem}>
-            <View style={styles.userInfoContainer}>
-            <Image source={tourGuide.profile_phototg ? { uri: tourGuide.profile_phototg } : require('../Images/home.png')} style={styles.profileImage} />  
-            <Text style={styles.resultText}>
-            {tourGuide.tourguide_username}, Tour guide
-            </Text>
-            </View>
-            </Pressable>
-          ))}
-
-
-          <Pressable onPress={clearSearchResult}>
-            <Text style={styles.clearButton}>Clear Search</Text>
-          </Pressable>
-        </View>
+          </View>
+        </ScrollView>
       ) : (
         <Text style={styles.noUserText}>No user found</Text>
       )}

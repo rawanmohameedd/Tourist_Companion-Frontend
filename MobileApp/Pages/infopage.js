@@ -31,6 +31,8 @@ export default function Infopage({ route }) {
         }
         const data = await response.json();
         setMuseum(data.value);
+        console.log(`${server}/${museum.musuem_image}`)
+        console.log(`${server}/${museum.map}`)
       } catch (error) {
         console.error('Error fetching museum:', error.message);
       }
@@ -48,7 +50,7 @@ export default function Infopage({ route }) {
               <ImageBackground
                 style={styles.image}
                 resizeMode={'contain'}
-                source={{ uri: museum.musuem_image }}>
+                source={{ uri: `${server}/${museum.musuem_image}` }}>
                 <Text style={styles.caption}>{museum.museum_name}</Text>
               </ImageBackground>
             </View>
@@ -56,6 +58,7 @@ export default function Infopage({ route }) {
             <TouchableOpacity onPress={ThandlePress} style={styles.touchable}>
               <Text style={styles.heading}>Tickets prices</Text>
             </TouchableOpacity>
+            <View style={styles.line} />
             {TcontainerVisible && (
               <View style={styles.infoContainer}>
                 <Text style={styles.infoText}>Tourist Ticket: {museum.ticket_tourist}</Text>
@@ -67,6 +70,7 @@ export default function Infopage({ route }) {
             <TouchableOpacity onPress={IhandlePress} style={styles.touchable}>
               <Text style={styles.heading}>Museum Info</Text>
             </TouchableOpacity>
+            <View style={styles.line} />
             {IcontainerVisible && (
               <View style={styles.infoContainer}>
                 <Text style={styles.infoText}>{museum.museinfo}</Text>
@@ -76,10 +80,11 @@ export default function Infopage({ route }) {
             <TouchableOpacity onPress={MhandlePress} style={styles.touchable}>
               <Text style={styles.heading}>Map</Text>
             </TouchableOpacity>
+            <View style={styles.line} />
             {McontainerVisible && (
               <View style={styles.infoContainer}>
                 <Image
-                  source={{ uri: museum.map }}
+                  source={{ uri: `${server}/${museum.map}` }}
                   style={{ width: '100%', height: 250, resizeMode: 'cover' }}
                 />
               </View>
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   heading: {
-    fontSize: 25,
+    fontSize: 30,
     color: 'white',
     borderBottomColor: 'white',
     borderBottomWidth: 2,
@@ -138,5 +143,10 @@ const styles = StyleSheet.create({
   touchable: {
     width: '100%',
     alignItems: 'flex-start',
+  },
+  line: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    marginBottom: 10,
   },
 });

@@ -21,6 +21,7 @@ import ProfilePageTG from './Pages/Tour guide/ProfilePageTG';
 import signinTG from './Pages/Tour guide/SigninTG';
 import Search from './Pages/Search';
 import Infopage from './Pages/infopage';
+import SearchProfileTG from './Pages/Tour guide/ProfileSearchTG';
 const Stack = createNativeStackNavigator();
 const Tab= createBottomTabNavigator();
 
@@ -152,7 +153,9 @@ export default function App() {
         <Stack.Screen options={{headerTitle:'Museum visit'}} name="Museum Visit TG" component={VisitTG} />
         <Stack.Screen name="Museum Info" component={GridComponent} />
         <Stack.Screen options={{headerShown: false}} name="Info page" component={Infopage} />
-      </Stack.Navigator>
+      <Stack.Screen name="ProfilePageT" component={ProfilePageT}/>
+      <Stack.Screen name="SearchPageTG" component={ProfilePageTG}/>
+        </Stack.Navigator>
     </NavigationContainer>
   );
 }
