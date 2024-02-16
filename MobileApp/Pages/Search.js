@@ -36,10 +36,10 @@ export default function Search({ navigation }) {
 
   const handleResultPressTourist = (user) => {
     console.log('Pressed:', user);
-    navigation.navigate('ProfilePageT', { user: user });
+    navigation.navigate('SearchPageT', { user: user });
   };
   const handleResultPressTourguide = (user) => {
-    navigation.navigate('SearchPageTG', { tourGuide: user });
+    navigation.navigate('SearchPageTG', { user: user });
     console.log('Pressed:', user);
   };
 

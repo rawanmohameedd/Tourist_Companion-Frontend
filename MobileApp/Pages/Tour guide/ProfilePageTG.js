@@ -6,14 +6,11 @@ import * as ImagePicker from 'expo-image-picker'
 import server from '../../elserver';
 import Table from './profiletable';
 
-export default function ProfilePageTG  ({navigation,route}) {
+export default function ProfilePageTG  ({navigation}) {
 
   const [profileData, setProfileData] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [token, setToken] = useState(null);
-
-  // const {user}=route.params.user
-  // console.log(user)
 
   useEffect(() => {
     fetchToken();
@@ -45,6 +42,7 @@ export default function ProfilePageTG  ({navigation,route}) {
       const data = await response.json();
       setProfileData(data);
 
+    
       if (data && data.profile_phototg) {
         setProfilePhoto(`${server}/${data.profile_phototg}`);
         console.log(profilePhoto)
@@ -71,6 +69,7 @@ export default function ProfilePageTG  ({navigation,route}) {
 
   const signOut = () => {
     navigation.navigate('Welcome');
+    console.log("User is out")
   };
 
   const handleUploadPhoto = async () => {
@@ -136,8 +135,8 @@ export default function ProfilePageTG  ({navigation,route}) {
             </View>
             
             <View style={styles.Hcontainer}>
-            <Text style={styles.vhistory}>Visit history</Text>
             <ScrollView keyboardDismissMode="on-drag">
+            <Text style={styles.vhistory}>Visit history</Text>
             <Table style={styles.historytable}>
             
             </Table>
@@ -149,13 +148,14 @@ export default function ProfilePageTG  ({navigation,route}) {
             <Pressable
             onPress={handleSignOut}
             style={styles.button}>
-            <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Connect </Text>
+            <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
             </Pressable>
             </View>
             <View style={styles.buttonContainer}>
             <Pressable
-            style={styles.button}>
-            <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Give a rate </Text>
+            style={styles.button}
+            onPress={handleUploadPhoto}>
+            <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Upload Photo </Text>
             </Pressable>
             </View>
             

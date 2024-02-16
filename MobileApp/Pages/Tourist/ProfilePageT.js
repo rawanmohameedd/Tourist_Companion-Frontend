@@ -4,13 +4,12 @@ import server from '../../elserver';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function ProfilePageTG({ navigation, route }) {
+export let role = "not tourist"
+export default function ProfilePageTG({ navigation }) {
   const [profileData, setProfileData] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [token, setToken] = useState(null);
 
-  // const {user}=route.params
-  // console.log(user)
   useEffect(() => {
     fetchToken();
   }, []);
@@ -39,13 +38,14 @@ export default function ProfilePageTG({ navigation, route }) {
       });
       const data = await response.json();
       setProfileData(data);
+      console.log(data)
 
       if (data && data.profile_photot) {
         setProfilePhoto(`${server}/${data.profile_photot}`);
         console.log(profilePhoto)
 
       }
-
+      role = "tourist"
     } catch (error) {
       console.error("Error fetching profile:", error.message);
     }

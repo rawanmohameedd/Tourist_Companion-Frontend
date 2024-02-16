@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView } from 'react-native';
 import server from '../../elserver';
-import Table from './profiletable';
-import { role } from '../Tourist/ProfilePageT';
 
-export default function SearchProfileTG({ route }) {
+export default function SearchProfileT({ route }) {
   const { user } = route.params;
   console.log('Rawan btmot',user)
   return (
@@ -12,38 +10,14 @@ export default function SearchProfileTG({ route }) {
       <ScrollView>
         <View style={styles.container}>
           <Image
-            source={user.profile_phototg ? { uri: `${server}/${user.profile_phototg}` } : require('../../Images/home.png')}
+            source={user.profile_photot ? { uri: `${server}/${user.profile_photot}` } : require('../../Images/home.png')}
             style={styles.profilePicture}
           />
-          <Text style={styles.name}>{user.first_nametg} {user.last_nametg}</Text>
-          <Text style={styles.bio}>{user.emailtg}</Text>
-          <Text style={styles.bio}>{user.tourguide_username}</Text>
-          <Text style={styles.bio}>{user.emailtg}</Text>
-          <Text style={styles.bio}>{user.spoken_langtg}</Text>
+          <Text style={styles.name}>{user.first_namet} {user.last_namet}</Text>
+          <Text style={styles.bio}>{user.emailt}</Text>
+          <Text style={styles.bio}>{user.tour_username}</Text>
+          <Text style={styles.bio}>{user.emailt}</Text>
         </View>
-
-        <View style={styles.Hcontainer}>
-        <ScrollView keyboardDismissMode="on-drag">
-          <Text style={styles.vhistory}>Visit history</Text>
-            <Table style={styles.historytable} />
-          </ScrollView>
-        </View>
-
-        <Text style={styles.avgrating}>Rating: 4.78/5 </Text>
-        {role === 'tourist' && (
-          <View style={styles.buttonContainer}>
-            <Pressable style={styles.button}>
-              <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Connect </Text>
-            </Pressable>
-          </View>
-        )}
-        {role === 'tourist' && (
-          <View style={styles.buttonContainer}>
-            <Pressable style={styles.button}>
-              <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Give a rate </Text>
-            </Pressable>
-          </View>
-        )}
       </ScrollView>
     </View>
   );
@@ -115,7 +89,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 300,
     marginTop: 10,
-    marginBottom: 20,
     textAlign: 'center',
     textAlignVertical: 'center',
     backgroundColor: '#6e706f',
