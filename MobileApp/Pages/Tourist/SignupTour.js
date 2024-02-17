@@ -1,9 +1,14 @@
+
 import React, { useState } from 'react';
 import { Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable, Linking } from 'react-native';
 import server from '../../elserver';
 import axios from 'axios';
 export default function SignupT({ navigation }) {
-    const [Username, onchangeUsername] = useState('');
+import * as SecureStore from "expo-secure-store";
+import { CommonActions, useNavigation } from '@react-navigation/native';
+
+export default function SignupT() {
+    const [Username, onchangeUsername]= useState('');
     const [Email, OnChangeEmail] = useState('');
     const [FirstName, OnChangeFirstName] = useState('');
     const [LastName, OnChangeLastName] = useState('');
@@ -44,30 +49,48 @@ export default function SignupT({ navigation }) {
         if (valid()) {
             OnPending(true);
             fetch(server + "/signupTourist", {
+
+    const navigation = useNavigation();
+
+    const signup = async () => {
+        OnPending(true);
+        try {
+            const response = await fetch(server + "/signupT", {
+
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                tour_username: Username,
-                emailT: Email,
-                first_nameT: FirstName,
-                last_nameT:LastName,
-                nationalityT:Nationality,
-                birthdayT:Birthday,
-                passwordT: Password,
-            }),
-        })
-            .then((response) => {
-                navigation.navigate("Home Tourist")
-                return response.json();
-            })
-            .then((res) => {
-                OnPending(false);
-                alert(res.message);
-            })
-            .catch((error) => {
-                console.log(error);
+                    tour_username: Username,
+                    emailT: Email,
+                    first_nameT: FirstName,
+                    last_nameT:LastName,
+                    nationalityT:Nationality,
+                    birthdayT:Birthday,
+                    passwordT: Password,
+                }),
             });
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+                await SecureStore.setItemAsync("token", data.token);
+                OnPending(false);
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [{ name:'Home Tourist'}]
+                    }), {
+                    token: data.token,
+                });
+            } else {
+                OnPending(false);
+                alert(data.message || "Signup failed");
+            }
+        } catch (error) {
+            console.error("Network request failed:", error);
+            alert("Network request failed. Please try again later.");
+            OnPending(false);
         }
+
     };*/
 
 
@@ -167,6 +190,10 @@ export default function SignupT({ navigation }) {
 
             </ScrollView>
         </View>
+
+    };
+    
+
     );
 }
 

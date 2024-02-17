@@ -4,33 +4,33 @@ import infoPage from "./../infopage"
 
 const data = [
   {
-    id: "1",
-    imageSource: require("../../Images/National-musuem-og-civilization.jpg"),
+    id: "6",
+    imageSource: require("../../Images/Museums_image/National-musuem-og-civilization.jpg"),
     caption: "The National Museum of Egyptian Civilization"
   },
   {
-    id: "2",
-    imageSource: require("../../Images/grand-egyprion-museum.jpg"),
+    id: "5",
+    imageSource: require("../../Images/Museums_image/grand-egyprion-museum.jpg"),
     caption: "The Grand Egyptian Museum"
   },
   {
-    id: "3",
-    imageSource: require("../../Images/Pyramids.jpg"),
+    id: "4",
+    imageSource: require("../../Images/Museums_image/Pyramids.jpg"),
     caption: "Pyramids"
   },
   {
-    id: "4",
-    imageSource: require("../../Images/Egyption-museums.jpg"),
+    id: "3",
+    imageSource: require("../../Images/Museums_image/Egyption-museums.jpg"),
     caption: "The Egyptian museum"
   },
   {
-    id: "5",
-    imageSource: require("../../Images/Nubia-museum.jpg"),
+    id: "2",
+    imageSource: require("../../Images/Museums_image/Nubia-museum.jpg"),
     caption: "Nubian Museum"
   },
   {
-    id: "6",
-    imageSource: require("../../Images/Coptic-museum.jpg"),
+    id: "1",
+    imageSource: require("../../Images/Museums_image/Coptic-museum.jpg"),
     caption: "The Coptic Museum"
   }
 ];
@@ -38,9 +38,12 @@ const data = [
 
 const renderItem = ({ item, navigation }) => {
   return (
-    <Pressable style={styles.item} onPress={() => navigation.navigate('Info page')}>
 
-      <ImageBackground
+
+    <Pressable style={styles.item} onPress={() => navigation.navigate('Info page', {musid: item.id})}>
+      
+      <ImageBackground 
+
         style={styles.image}
         resizeMode={'contain'}
         source={item.imageSource}

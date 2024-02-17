@@ -1,149 +1,152 @@
-import React,{useState} from 'react';
-import { View, Pressable, Text, StyleSheet , Image , ImageBackground, TouchableOpacity, ScrollView} from 'react-native';
-import Table from './ticketstable';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import server from '../elserver';
 
+export default function Infopage({ route }) {
+  const [museum, setMuseum] = useState(null);
+  const [TcontainerVisible, setTContainerVisible] = useState(false);
+  const [IcontainerVisible, setIContainerVisible] = useState(false);
+  const [McontainerVisible, setMContainerVisible] = useState(false);
 
-export default function Infopage({ navigation }) {
+  const { musid } = route.params;
 
-
-    const [TcontainerVisible, setTContainerVisible] = useState(false);
-    const [IcontainerVisible, setIContainerVisible] = useState(false);
-    const [McontainerVisible, setMContainerVisible] = useState(false);
-
-
-    const ThandlePress = () => {
-      // Toggle the visibility of the container
-      setTContainerVisible(!TcontainerVisible);
-    };
-    const IhandlePress = () => {
-      // Toggle the visibility of the container
-      setIContainerVisible(!IcontainerVisible);
-    };
-    const MhandlePress = () => {
-      // Toggle the visibility of the container
-      setMContainerVisible(!McontainerVisible);
-    };
-  
-    return (
-        <>
-        <View style={styles.container}>
-          <View style={styles.imagecontainer}>
-            <ImageBackground 
-                style={styles.image}
-                resizeMode={'contain'}
-                source={require('./../Images/grand-egyprion-museum.jpg')}>
-
-                <Text style={styles.caption}> Grand Egyptian museum </Text>
-            </ImageBackground>  
-          </View>
-
-
-          <View style={{ flex: 1, justifyContent: 'left', alignItems: 'left' , width: 390 }}>
-
-              <TouchableOpacity onPress={ThandlePress}>
-                  <Text style={{ fontSize: 25, color: 'white' , borderBottomColor: 'white' , borderBottomWidth: 2}}>Tickets prices</Text>
-              </TouchableOpacity>
-  
-              {TcontainerVisible && (
-                  <View style={{ marginTop: 10, padding: 10}}>
-                      <Table style={styles.historytable}>
-
-                      </Table>
-                 </View>
-          
-              )}
-          </View>
-
-          <View style={{ flex: 1, justifyContent: 'left', alignItems: 'left' , width: 390 , marginTop: -300}}>
-
-            <TouchableOpacity onPress={IhandlePress}>
-                <Text style={{ fontSize: 25, color: 'white' , borderBottomColor: 'white' , borderBottomWidth: 2}}>Museum info</Text>
-            </TouchableOpacity>
-  
-            {IcontainerVisible && (
-                <View style={{ marginTop: 10, padding: 10}}>
-                    <Text style={{color:'white'}}> The grand Egyptian museum is now open for visitors, it contains hundreds of monuments and rooms, it opens at 9 am and closes at 5 pm </Text>
-                </View>
-          
-            )}
-          </View>
-
-          <View style={{ flex: 1, justifyContent: 'left', alignItems: 'left' , width: 390 , marginTop: -300}}>
-
-            <TouchableOpacity onPress={MhandlePress}>
-                <Text style={{ fontSize: 25, color: 'white' , borderBottomColor: 'white' , borderBottomWidth: 2}}>Map</Text>
-            </TouchableOpacity>
-  
-            {McontainerVisible && (
-                <View style={{ marginTop: 10, padding: 10}}>
-                  <Image source={require('../Images/gemmap.png')} style={{width:400, height: 250}}/>
-                </View>
-          
-            )}
-          </View>
-
-      </View>
-        </>
-    
-
-
-    );
+  const ThandlePress = () => {
+    setTContainerVisible(!TcontainerVisible);
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: '#121212',
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginBottom: 16,
-      textAlign: 'center',
-      color: 'white',
-    },
-    image: {
-      width: 400,
-      height: 200,
-      marginTop: 0,
-      marginBottom: 16,
-      resizeMode: 'contain',
-    },
-    buttonContainer: {
-      height: 200,
-      width: 300,
-      marginBottom: 16,
-    },
-    buttontext: {
-      color: 'black',  
-      textAlign: 'center',
-    },
-    button: {
-      height: 50,
-      width: 250,
-      padding: 10,
-      borderRadius: 300,
-      margin: 10,
-      color:"#E2C07C",
-      backgroundColor: '#E2C07C',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      textAlign: 'center',
-  
-    },
-    buttonSpacer: {
-      height: 16,
-    },
-    caption: {
-        flex: 1,
-        textAlign: 'left',
-        textAlignVertical: 'bottom',
-        fontSize: 33,
-        fontWeight: 'bold',
-        textShadowColor: 'white',
-        textShadowRadius: 10,
+  const IhandlePress = () => {
+    setIContainerVisible(!IcontainerVisible);
+  };
 
-    },
-  });
+  const MhandlePress = () => {
+    setMContainerVisible(!McontainerVisible);
+  };
+
+  useEffect(() => {
+    const fetchMuseum = async () => {
+      try {
+        const response = await fetch(`${server}/museum/${musid}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch museum');
+        }
+        const data = await response.json();
+        setMuseum(data.value);
+        console.log(`${server}/${museum.musuem_image}`)
+        console.log(`${server}/${museum.map}`)
+      } catch (error) {
+        console.error('Error fetching museum:', error.message);
+      }
+    };
+
+    fetchMuseum();
+  }, [musid]);
+
+  return (
+    <>
+      {museum && (
+        <View style={styles.container}>
+        <ScrollView>
+            <View style={styles.imagecontainer}>
+              <ImageBackground
+                style={styles.image}
+                resizeMode={'contain'}
+                source={{ uri: `${server}/${museum.musuem_image}` }}>
+                <Text style={styles.caption}>{museum.museum_name}</Text>
+              </ImageBackground>
+            </View>
+
+            <TouchableOpacity onPress={ThandlePress} style={styles.touchable}>
+              <Text style={styles.heading}>Tickets prices</Text>
+            </TouchableOpacity>
+            <View style={styles.line} />
+            {TcontainerVisible && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoText}>Tourist Ticket: {museum.ticket_tourist}</Text>
+                <Text style={styles.infoText}>Adult Ticket: {museum.ticket_adult}</Text>
+                <Text style={styles.infoText}>Student Ticket: {museum.ticket_student}</Text>
+              </View>
+            )}
+
+            <TouchableOpacity onPress={IhandlePress} style={styles.touchable}>
+              <Text style={styles.heading}>Museum Info</Text>
+            </TouchableOpacity>
+            <View style={styles.line} />
+            {IcontainerVisible && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoText}>{museum.museinfo}</Text>
+              </View>
+            )}
+
+            <TouchableOpacity onPress={MhandlePress} style={styles.touchable}>
+              <Text style={styles.heading}>Map</Text>
+            </TouchableOpacity>
+            <View style={styles.line} />
+            {McontainerVisible && (
+              <View style={styles.infoContainer}>
+                <Image
+                  source={{ uri: `${server}/${museum.map}` }}
+                  style={{ width: '100%', height: 250, resizeMode: 'cover' }}
+                />
+              </View>
+            )}
+            </ScrollView>
+          </View>
+      )}
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#121212',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imagecontainer: {
+    width: '100%',
+    height: 200,
+    marginBottom: 20,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+  },
+  caption: {
+    fontSize: 33,
+    fontWeight: 'bold',
+    color: 'white',
+    padding: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
+  },
+  heading: {
+    fontSize: 30,
+    color: 'white',
+    borderBottomColor: 'white',
+    borderBottomWidth: 2,
+    marginLeft: 5,
+    marginTop: 25,
+  },
+  infoContainer: {
+    marginTop: 10,
+    padding: 10,
+  },
+  infoText: {
+    color: 'white',
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  touchable: {
+    width: '100%',
+    alignItems: 'flex-start',
+  },
+  line: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    marginBottom: 10,
+  },
+});

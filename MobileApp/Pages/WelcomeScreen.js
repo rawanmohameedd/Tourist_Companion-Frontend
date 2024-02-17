@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ImageBackground, Image, Button, View, Pressable, Text} from 'react-native';
+import { StyleSheet, Image, View, Pressable, Text} from 'react-native';
 
 export default function WelcomeApp({ navigation }) {
   return (

@@ -2,9 +2,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-native';
 import * as SecureStore from "expo-secure-store";
-//import server from "../elserver";
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import server from "../../elserver";
 
-export default function SigninTG({navigation}) {
+export default function SigninTG() {
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
     const [pending, OnPending] = useState(false);
@@ -15,39 +16,46 @@ export default function SigninTG({navigation}) {
     function PasswordHandler(vaLue) {
         return OnChangePassword(vaLue);
     }
-  /*  async function signin (){
+
+    const navigation = useNavigation();
+
+    // Fetch Sign in request
+    const signin = async () => {
         OnPending(true);
-        fetch(server+"/signinTourguide", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-            email: Email,
-            password: Password,
-        }),
-        })
-        .then((res) => {
-            return res.json();
-        })
-        .then(async (response) => {
-            if (response.email) {
-                await SecureStore.setItemAsync("token", response.token);
-                OnPending(false);
-                navigation.navigate("Home Tourguide", {
-                token: response.token,
+        try {
+            const response = await fetch(server + "/signinTG", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    emailTG: Email,
+                    passwordTG: Password,
+                }),
             });
+            const data = await response.json();
+            if (data) {
+                console.log(data)
+                await SecureStore.setItemAsync("token", data.token);
+                OnPending(false);
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [{ name:'Home Tourguide'}]
+                    }), {
+                    token: data.token,
+                });
             } else {
                 OnPending(false);
-                alert(response.message);
+                alert(data.message);
             }
-        })
-        .catch((error) => {
-            console.log(response)
-            console.log(error);
-            console.log(server + "/signinTourguide");
+        } catch (error) {
+            console.error("Network request failed:", error);
+            console.log(server + "/signinTG");
             console.log("Received sign-in request:", Email, Password);
             alert("Network request failed. Please try again later.");
-        });
-    }*/
+            OnPending(false);
+        }
+    };
+    
     
     return (
     <View style={styles.container}>
@@ -69,7 +77,7 @@ export default function SigninTG({navigation}) {
         <View style={styles.buttonContainer}>
             
             <Pressable
-            onPress={()=>navigation.navigate('Home Tourguide')}
+            onPress={signin}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign in </Text>
             </Pressable>
