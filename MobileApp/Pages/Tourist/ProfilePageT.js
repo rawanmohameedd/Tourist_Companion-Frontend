@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 
 export let role = "not tourist"
+export let username 
 export default function ProfilePageTG({ navigation }) {
   const [profileData, setProfileData] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -39,12 +40,13 @@ export default function ProfilePageTG({ navigation }) {
       const data = await response.json();
       setProfileData(data);
       console.log(data)
-
+      
       if (data && data.profile_photot) {
         setProfilePhoto(`${server}/${data.profile_photot}`);
         console.log(profilePhoto)
-
+        
       }
+      username = data.tour_username
       role = "tourist"
     } catch (error) {
       console.error("Error fetching profile:", error.message);
@@ -60,14 +62,10 @@ export default function ProfilePageTG({ navigation }) {
           text: "Cancel",
           style: "cancel"
         },
-        { text: "Yes", onPress: () => signOut() }
+        { text: "Yes", onPress: () => navigation.navigate('Welcome') }
       ],
       { cancelable: false }
     );
-  };
-
-  const signOut = () => {
-    navigation.navigate('Welcome');
   };
 
   const handleUploadPhoto = async () => {

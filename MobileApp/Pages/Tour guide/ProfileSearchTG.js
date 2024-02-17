@@ -4,9 +4,16 @@ import server from '../../elserver';
 import Table from './profiletable';
 import { role } from '../Tourist/ProfilePageT';
 
-export default function SearchProfileTG({ route }) {
+export default function SearchProfileTG({ route, navigation }) {
   const { user } = route.params;
   console.log('Rawan btmot',user)
+
+  const handleRatebutton = () => {
+    const name = user
+    navigation.navigate('Rating',{name});
+    console.log('first', name)
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -39,7 +46,8 @@ export default function SearchProfileTG({ route }) {
         )}
         {role === 'tourist' && (
           <View style={styles.buttonContainer}>
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button}
+            onPress= {handleRatebutton}>
               <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Give a rate </Text>
             </Pressable>
           </View>

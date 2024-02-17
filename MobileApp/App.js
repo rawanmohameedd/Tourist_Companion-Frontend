@@ -24,6 +24,8 @@ import Infopage from './Pages/infopage';
 import SearchProfileTG from './Pages/Tour guide/ProfileSearchTG';
 import SearchProfileT from './Pages/Tourist/ProfileSearchT';
 import FindAGuide from './Pages/Tourist/FindAGuide';
+import SubmitRating from './Pages/Tourist/RatingPage';
+
 const Stack = createNativeStackNavigator();
 const Tab= createBottomTabNavigator();
 
@@ -155,10 +157,10 @@ export default function App() {
         <Stack.Screen options={{headerTitle:'Museum visit'}} name="Museum Visit TG" component={VisitTG} />
         <Stack.Screen name="Museum Info" component={GridComponent} />
         <Stack.Screen options={{headerShown: false}} name="Info page" component={Infopage} />
-      <Stack.Screen options={{headerShown: false}}  name="SearchPageT" component={SearchProfileT}/>
-      <Stack.Screen options={{headerShown: false}} name="SearchPageTG" component={SearchProfileTG}/>
-      <Stack.Screen name="Find a guide" component={FindAGuide}/>
-
+        <Stack.Screen options={{headerShown: false}}  name="SearchPageT" component={SearchProfileT}/>
+        <Stack.Screen options={{headerShown: false}} name="SearchPageTG" component={SearchProfileTG}/>
+        <Stack.Screen name="Find a guide" component={FindAGuide}/>
+        <Stack.Screen options={{headerShown: false}} name="Rating" component={SubmitRating} />
         </Stack.Navigator>
     </NavigationContainer>
   );
