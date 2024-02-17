@@ -6,12 +6,10 @@ import { role } from '../Tourist/ProfilePageT';
 
 export default function SearchProfileTG({ route, navigation }) {
   const { user } = route.params;
-  console.log('Rawan btmot',user)
 
   const handleRatebutton = () => {
-    const name = user
-    navigation.navigate('Rating',{name});
-    console.log('first', name)
+    const name = user;
+    navigation.navigate('Rating', { name });
   };
 
   return (
@@ -30,10 +28,8 @@ export default function SearchProfileTG({ route, navigation }) {
         </View>
 
         <View style={styles.Hcontainer}>
-        <ScrollView keyboardDismissMode="on-drag">
           <Text style={styles.vhistory}>Visit history</Text>
-            <Table style={styles.historytable} />
-          </ScrollView>
+          <Table style={styles.historytable} tourguide_username={user.tourguide_username} />
         </View>
 
         <Text style={styles.avgrating}>Rating: 4.78/5 </Text>
@@ -46,8 +42,7 @@ export default function SearchProfileTG({ route, navigation }) {
         )}
         {role === 'tourist' && (
           <View style={styles.buttonContainer}>
-            <Pressable style={styles.button}
-            onPress= {handleRatebutton}>
+            <Pressable style={styles.button} onPress={handleRatebutton}>
               <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Give a rate </Text>
             </Pressable>
           </View>
@@ -132,6 +127,6 @@ const styles = StyleSheet.create({
   },
   historytable: {
     borderColor: 'black',
-    borderWidth: '1',
+    borderWidth: 1,
   },
 });

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
+import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable, Linking} from 'react-native';
 import * as SecureStore from "expo-secure-store";
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from '../../elserver';

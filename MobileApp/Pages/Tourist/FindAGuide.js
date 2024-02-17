@@ -96,7 +96,7 @@ export default function FindAGuide({ navigation }) {
                 <View style={styles.userInfoContainer}>
                   <Image source={tourGuide.profile_phototg ? { uri: `${server}/${tourGuide.profile_phototg}` } : require('../../Images/home.png')} style={styles.profileImage} />  
                   <Text style={styles.resultText}>
-                    {tourGuide.tourguide_username}, Tour guide
+                    {tourGuide.tourguide_username}
                   </Text>
                 </View>
               </Pressable>
