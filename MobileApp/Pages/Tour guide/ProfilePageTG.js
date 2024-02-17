@@ -61,15 +61,10 @@ export default function ProfilePageTG  ({navigation}) {
           text: "Cancel",
           style: "cancel"
         },
-        { text: "Yes", onPress: () => signOut() }
+        { text: "Yes", onPress: () => navigation.navigate('Welcome') }
       ],
       { cancelable: false }
     );
-  };
-
-  const signOut = () => {
-    navigation.navigate('Welcome');
-    console.log("User is out")
   };
 
   const handleUploadPhoto = async () => {

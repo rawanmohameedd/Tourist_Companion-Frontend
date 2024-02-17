@@ -73,8 +73,8 @@ export default function FindAGuide({ navigation }) {
       </View>
       <View style={styles.filterContainer}>
         <Pressable style={[styles.filterButton,
-             activeFilter === 'username' && styles.activeFilter]} 
-             onPress={() => handleFilterPress('username')}>
+              activeFilter === 'username' && styles.activeFilter]} 
+              onPress={() => handleFilterPress('username')}>
           <Text style={styles.filterButtonText}>By Username</Text>
         </Pressable>
         <Pressable style={[styles.filterButton, 
