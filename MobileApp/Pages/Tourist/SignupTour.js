@@ -1,11 +1,8 @@
-
-import React, { useState } from 'react';
-import { Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable, Linking } from 'react-native';
-import server from '../../elserver';
-import axios from 'axios';
-export default function SignupT({ navigation }) {
+import React, {useState} from 'react';
+import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable} from 'react-native';
 import * as SecureStore from "expo-secure-store";
 import { CommonActions, useNavigation } from '@react-navigation/native';
+import server from '../../elserver';
 
 export default function SignupT() {
     const [Username, onchangeUsername]= useState('');
@@ -42,21 +39,12 @@ export default function SignupT() {
         OnChangePassword(value);
     };
 
-    const valid = () => {
-        return true;
-    };
-    /*const signupTour = () => {
-        if (valid()) {
-            OnPending(true);
-            fetch(server + "/signupTourist", {
-
     const navigation = useNavigation();
 
     const signup = async () => {
         OnPending(true);
         try {
             const response = await fetch(server + "/signupT", {
-
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -90,16 +78,14 @@ export default function SignupT() {
             alert("Network request failed. Please try again later.");
             OnPending(false);
         }
-
-    };*/
-
+    };
 
     const handleFacebookLogin = async () => {
         try {
             // const response = await axios.get('http://192.168.1.103:3000/auth/facebook');
             const facebookAuthUrl = 'https://www.facebook.com/v13.0/dialog/oauth?' +
                 'client_id=1128288548204177' +
-                '&redirect_uri=http://192.168.1.103:3000/auth/facebook/callback' +
+                `&redirect_uri=${server}/auth/facebook/callback` +
                 '&scope=email';
             Linking.openURL(facebookAuthUrl);
         } catch (error) {
@@ -113,62 +99,61 @@ export default function SignupT() {
 
     return (
         <View style={styles.container}>
-            <ScrollView keyboardDismissMode="on-drag">
-                <TextInput
-                    style={styles.input}
-                    value={Username}
-                    onChangeText={usernameHandler}
-                    placeholder={'Username'}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={Email}
-                    onChangeText={emailhandler}
-                    placeholder={'Email address'}
-                    keyboardType="email-address"
-                />
-                <TextInput
-                    style={styles.input}
-                    value={FirstName}
-                    onChangeText={first_Namehandler}
-                    placeholder={'First Name'}
-                />
+        <ScrollView keyboardDismissMode="on-drag">
+        <TextInput
+            style={styles.input}
+            value={Username}
+            onChangeText={usernameHandler}
+            placeholder={'Username'}
+        />
+        <TextInput
+            style={styles.input}
+            value={Email}
+            onChangeText={emailhandler}
+            placeholder={'Email address'}
+            keyboardType="email-address"
+        />
+        <TextInput
+            style={styles.input}
+            value={FirstName}
+            onChangeText={first_Namehandler}
+            placeholder={'First Name'}
+        />
 
-                <TextInput
-                    style={styles.input}
-                    value={LastName}
-                    onChangeText={last_Namehandler}
-                    placeholder={'Last Name'}
-                />
+        <TextInput
+            style={styles.input}
+            value={LastName}
+            onChangeText={last_Namehandler}
+            placeholder={'Last Name'}
+        />
 
-                <TextInput
-                    style={styles.input}
-                    value={Nationality}
-                    onChangeText={nationalityhandler}
-                    placeholder={'Nationality'}
-                />
+        <TextInput
+            style={styles.input}
+            value={Nationality}
+            onChangeText={nationalityhandler}
+            placeholder={'Nationality'}
+        />
 
-                <TextInput
-                    style={styles.input}
-                    value={Birthday}
-                    onChangeText={birthdayhandler}
-                    placeholder={'YYYY-MM-DD'}
-                />
+        <TextInput
+            style={styles.input}
+            value={Birthday}
+            onChangeText={birthdayhandler}
+            placeholder={'YYYY-MM-DD'}
+        />
 
-                <TextInput
-                    style={styles.input}
-                    onChangeText={passwordhandler}
-                    placeholder={'Password'}
-                    value={Password}
-                    secureTextEntry={true}
-                />
+        <TextInput
+            style={styles.input}
+            onChangeText={passwordhandler}
+            placeholder={'Password'}
+            value={Password}
+            secureTextEntry={true}
+        />
 
-                <Pressable
-                    onPress={() => navigation.navigate('Home Tourist')}
-                    style={styles.button}>
-                    <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign up </Text>
-                </Pressable>
-
+        <Pressable
+            onPress={signup}
+            style={styles.button}>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
+        </Pressable>
 
                 <Pressable style={styles.button}>
                     <Image
@@ -190,9 +175,6 @@ export default function SignupT() {
 
             </ScrollView>
         </View>
-
-    };
-    
 
     );
 }
