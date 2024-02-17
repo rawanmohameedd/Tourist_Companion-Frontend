@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList, Pressable, Image, Text, StyleSheet,ImageBackground} from "react-native";
+import { View, FlatList, Pressable, Image, Text, StyleSheet, ImageBackground } from "react-native";
 import infoPage from "./../infopage"
 
 const data = [
@@ -35,17 +35,18 @@ const data = [
   }
 ];
 
-const renderItem = ({item, navigation}) => {
+
+const renderItem = ({ item, navigation }) => {
   return (
     <Pressable style={styles.item} onPress={() => navigation.navigate('Info page')}>
-      
-      <ImageBackground 
+
+      <ImageBackground
         style={styles.image}
         resizeMode={'contain'}
         source={item.imageSource}
       >
         <Text style={styles.caption}> {item.caption} </Text>
-      </ImageBackground>  
+      </ImageBackground>
     </Pressable>
   );
 };
@@ -81,7 +82,7 @@ const GridComponent = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     backgroundColor: "#121212"
   },
   contentContainer: {
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 20,
 
   },
-  component:{
+  component: {
     backgroundColor: '#121212',
   },
 
