@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     marginTop: '15%',
     borderRadius: 50,
     paddingHorizontal: 10,
+    
   },
   input: {
     flex: 1,
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: 'black',
+    fontWeight: 'bold',
     fontSize: 16,
   },
   filterContainer: {
@@ -151,6 +153,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
     marginTop: 20,
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
   },
   filterButton: {
     backgroundColor: '#E2C07C',
@@ -159,18 +163,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flex: 1,
     marginHorizontal: 5,
+    textAlignVertical: 'center',
+    verticalAlign: 'middle',
   },
   filterButtonText: {
     color: 'black',
-    fontSize: 10,
+    fontSize: 15,
     textAlign: 'center',
+    fontWeight: 'bold',  
   },
   activeFilter: {
     backgroundColor: '#333',
   },
   resultContainer: {
     marginTop: 20,
-    width: '90%',
+    alignItems: 'center',
+    width: '100%',
+    marginRight: 200,
+    flexDirection: 'column',
     backgroundColor: '#333',
     padding: 10,
     borderRadius: 10,
@@ -181,6 +191,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     backgroundColor: '#555',
+    width: '100%',
   },
   resultText: {
     color: 'white',
@@ -204,5 +215,6 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    
   },
 });
