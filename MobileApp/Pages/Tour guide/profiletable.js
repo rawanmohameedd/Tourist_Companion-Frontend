@@ -1,108 +1,181 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Dimensions, RefreshControl } from 'react-native';
 import server from '../../elserver';
 
-const Table = () => {
-  return (
-    <View style={styles.table}>
-      <View style={styles.header}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Tourist</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Place</Text></View>
-        <View style={{width: '20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Date</Text></View>
-        <View style={{width: '15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Rating</Text></View>
-      </View>
-      <View style={styles.rowe}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Anas</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Egyptian civilization Museum</Text></View>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>11-1-2023</Text></View>
-        <View style={{width:'15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>5/5</Text></View>
-      </View>
-      <View style={styles.rowo}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Hussien</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Nubian Museum</Text></View>
-        <View style={{width: '20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>11-2-2023</Text></View>
-        <View style={{width: '15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>4/5</Text></View>
-      </View>
-      <View style={styles.rowe}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Tawfik</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Idfu temple</Text></View>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>1-4-2023</Text></View>
-        <View style={{width:'15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>1/5</Text></View>
-      </View>
-      <View style={styles.rowo}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Rawan</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Moez street</Text></View>
-        <View style={{width: '20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>21-4-2023</Text></View>
-        <View style={{width: '15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>5/5</Text></View>
-      </View>
-      <View style={styles.rowe}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Toka</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Pyrmids</Text></View>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>21-5-2023</Text></View>
-        <View style={{width:'15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>4/5</Text></View>
-      </View>
-      <View style={styles.rowo}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Daniel</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Pyrmids</Text></View>
-        <View style={{width: '20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>1-6-2023</Text></View>
-        <View style={{width: '15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>5/5</Text></View>
-      </View>
-      <View style={styles.rowe}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Habiba</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Moez street</Text></View>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>1-7-2023</Text></View>
-        <View style={{width:'15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>3/5</Text></View>
-      </View>
-      <View style={styles.rowo}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Norhan</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Pyrmids</Text></View>
-        <View style={{width: '20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>31-8-2023</Text></View>
-        <View style={{width: '15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>2/5</Text></View>
-      </View>
-      <View style={styles.rowe}>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Omar</Text></View>
-        <View style={{width:'45%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>Egyptian civilization Museum</Text></View>
-        <View style={{width:'20%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>6-10-2023</Text></View>
-        <View style={{width:'15%',flexDirection:'row',justifyContent:'center'}}><Text style={styles.tebletext}>2/5</Text></View>
-      </View>
+const Table = ({tourguide_username}) => {
+
+  const [ratings, setRatings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [avgRate, setAvgRate] = useState(0);
+  const [refreshing, setRefreshing] = useState(false); // State for refresh control
+
+  const fetchRatings = async () => {
+    try {
+      const response = await fetch(server + `/showAllRates/${tourguide_username}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch ratings');
+      }
+      const data = await response.json();
+      setRatings(data.allRates || []);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching ratings:', error.message);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRatings();
+  }, [tourguide_username]);
+
+  useEffect(() => {
+    console.log('ratings', ratings);
+    // Calculate average rating when ratings change
+    if (ratings.length > 0) {
+      let totalRate = 0;
+      ratings.forEach((rating) => {
+        totalRate += rating.rate;
+      });
+      const newAvgRate = totalRate / ratings.length;
+      setAvgRate(newAvgRate);
+      console.log(newAvgRate, 'rate');
       
+      // Update the average rating in the database
+      updateAvgRating(newAvgRate);
+    } else {
+      setAvgRate(0); 
+    }
+  }, [ratings]);
+
+  const updateAvgRating = async (newAvgRate) => {
+    try {
+      const response = await fetch(server + '/updateAvgRate/' + tourguide_username, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ avgrating: newAvgRate}),
+      });
+      const data = await response.json();
+      console.log('data', data);
+      console.log('Update Avg Rating Response:', newAvgRate);
+    } catch (error) {
+      console.error('Error updating average rating in the database:', error.message);
+    }
+  };
+
+  // Function to format the date string to YYYY-MM-DD
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    
+    // Add leading zeros if month or day is less than 10
+    if (month < 10) {
+      month = '0' + month;
+    }
+    if (day < 10) {
+      day = '0' + day;
+    }
+    
+    return `${year}-${month}-${day}`;
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    // Implement your refresh logic here
+    fetchRatings();
+
+    // Simulate a delay before setting refreshing to false
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
+        <ScrollView
+          style={styles.scrollView}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#ffffff']} // Android colors for refresh control
+              progressBackgroundColor="#121212" // Android background color
+              tintColor="#ffffff" // iOS spinner color
+            />
+          }
+        >
+          {isLoading ? (
+            <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
+          ) : ratings.length === 0 ? (
+            <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>This tourguide hasn't had any ratings yet.</Text>
+          ) : (
+            <View style={styles.table}>
+              <View style={styles.header}>
+                <Text style={styles.tableText}>Tourist</Text>
+                <Text style={styles.tableText}>Place</Text>
+                <Text style={styles.tableText}>Date</Text>
+                <Text style={styles.tableText}>Rating</Text>
+              </View>
+              
+              {ratings.map((rating, index) => (
+                <View key={index} style={styles.row}>
+                  <Text style={styles.tableText}>{rating.tour_username}</Text>
+                  <Text style={styles.tableText}>{rating.visit}</Text>
+                  <Text style={styles.tableText}>{formatDate(rating.date_of_the_visit)}</Text>
+                  <Text style={styles.tableText}>{rating.rate}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+          {console.log("toot",avgRate)}
+        </ScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  wrapper: {
+    flex: 1,
+  },
+  scrollView: {
+    height: Dimensions.get('window').height * 0.7, // Example: 70% of screen height
+  },
   table: {
     borderWidth: 1,
     borderColor: '#6e706f',
   },
-  rowo: {
-    flexDirection: 'row',
-    backgroundColor: '#505251',
-  },
-  rowe: {
-    flexDirection: 'row',
-    backgroundColor: '#6e706f',
-
-  },
-  cell: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: 2,
-    borderWidth: 0,
-    borderColor: '#000',
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignSelf: 'center',
-  },
-  header:{
+  header: {
     flexDirection: 'row',
     backgroundColor: '#3d3d3d',
-
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    width: "90%"
   },
-  tebletext:{
-    textAlign:'center',
-    textAlignVertical:'center',
-  }
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderColor: '#6e706f',
+  },
+  tableText: {
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'white',
+    fontSize: 12
+  },
 });
 
 export default Table;

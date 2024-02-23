@@ -126,19 +126,15 @@ export default function ProfilePageTG  ({navigation}) {
             <Text style={styles.name}>{profileData.first_nametg} {profileData.last_nametg}</Text>
             <Text style={styles.bio}>{profileData.emailtg}</Text>
             <Text style={styles.bio}>{profileData.tourguide_username}</Text>
-            <Text style={styles.bio}>{profileData.emailtg}</Text>
             </View>
             
             <View style={styles.Hcontainer}>
             <ScrollView keyboardDismissMode="on-drag">
             <Text style={styles.vhistory}>Visit history</Text>
-            <Table style={styles.historytable}>
-            
-            </Table>
+            <Table style={styles.historytable} tourguide_username={profileData.tourguide_username} />
             </ScrollView>
             </View>
             
-            <Text style={styles.avgrating}>Rating: 4.78/5 </Text>
             <View style={styles.buttonContainer}>
             <Pressable
             onPress={handleSignOut}
@@ -198,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#6e706f',
     borderRadius: 10,
     width: 400,
-    height: 200,
+    height: 300,
     marginTop: 70,
   },
   buttontext: {
@@ -216,20 +212,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     backgroundColor: '#E2C07C',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  avgrating:{
-    height: '5%',
-    width: '50%',
-    fontWeight:'bold',
-    fontSize:20,
-    padding: 10,
-    borderRadius: 300,
-    marginTop: 10,
-    textAlign:'center',
-    textAlignVertical: 'center',
-    backgroundColor: '#6e706f',
     flexDirection: 'row',
     justifyContent: 'center',
   },

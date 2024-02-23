@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, Pressable, ScrollView } from 'react-native';
+import React , {useEffect}from 'react';
+import { View, Text, StyleSheet, Image, Pressable, ScrollView, RefreshControl } from 'react-native';
 import server from '../../elserver';
 import Table from './profiletable';
 import { role } from '../Tourist/ProfilePageT';
@@ -7,14 +7,29 @@ import { role } from '../Tourist/ProfilePageT';
 export default function SearchProfileTG({ route, navigation }) {
   const { user } = route.params;
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+const onRefresh = () => { 
+  // Implement the refresh logic here
+  // For example, you can fetch updated data from the server
+  // and update the state accordingly
+  setRefreshing(true);
+
+  // Simulating a delay of 1 second before setting refreshing to false
+  setTimeout(() => {
+    setRefreshing(false);
+  }, 500);
+  };
   const handleRatebutton = () => {
     const name = user;
     navigation.navigate('Rating', { name });
   };
 
+
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing}
+        onRefresh={onRefresh}/>}>
         <View style={styles.container}>
           <Image
             source={user.profile_phototg ? { uri: `${server}/${user.profile_phototg}` } : require('../../Images/home.png')}
@@ -23,16 +38,16 @@ export default function SearchProfileTG({ route, navigation }) {
           <Text style={styles.name}>{user.first_nametg} {user.last_nametg}</Text>
           <Text style={styles.bio}>{user.emailtg}</Text>
           <Text style={styles.bio}>{user.tourguide_username}</Text>
-          <Text style={styles.bio}>{user.emailtg}</Text>
           <Text style={styles.bio}>{user.spoken_langtg}</Text>
         </View>
 
         <View style={styles.Hcontainer}>
           <Text style={styles.vhistory}>Visit history</Text>
           <Table style={styles.historytable} tourguide_username={user.tourguide_username} />
-        </View>
+          </View>
+          {console.log('hena search',user.avgrating)}
+          <Text style={styles.avgrating}>Rating: {user.avgrating}/5 </Text>
 
-        <Text style={styles.avgrating}>Rating: 4.78/5 </Text>
         {role === 'tourist' && (
           <View style={styles.buttonContainer}>
             <Pressable style={styles.button}>
@@ -89,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#6e706f',
     borderRadius: 10,
     width: 400,
-    height: 200,
+    height: 300,
     marginTop: 70,
   },
   buttontext: {
@@ -110,6 +125,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  historytable: {
+    borderColor: 'black',
+    borderWidth: 1,
+  },
   avgrating: {
     height: '5%',
     width: '50%',
@@ -124,9 +143,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#6e706f',
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  historytable: {
-    borderColor: 'black',
-    borderWidth: 1,
   },
 });
