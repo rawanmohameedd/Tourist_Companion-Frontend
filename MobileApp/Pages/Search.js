@@ -129,7 +129,10 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     marginTop: 20,
-    width: '90%',
+    alignItems: 'center',
+    width: '100%',
+    marginRight: 150,
+    flexDirection: 'column',
     backgroundColor: '#333',
     padding: 10,
     borderRadius: 10,
@@ -140,6 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     backgroundColor: '#555',
+    width: '100%',
   },
   resultText: {
     color: 'white',
