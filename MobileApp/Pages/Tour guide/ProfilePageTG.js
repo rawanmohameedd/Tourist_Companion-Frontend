@@ -1,20 +1,19 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image , Pressable , ScrollView, Alert} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, Pressable, ScrollView, Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker'
 import server from '../../elserver';
 import Table from './profiletable';
 
-export default function ProfilePageTG  ({navigation}) {
+export default function ProfilePageTG({ navigation }) {
 
   const [profileData, setProfileData] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [token, setToken] = useState(null);
+  const [isAvailable, setIsAvailable] = useState(false);
 
   useEffect(() => {
     fetchToken();
-    
   }, []);
 
   const fetchToken = async () => {
@@ -42,10 +41,8 @@ export default function ProfilePageTG  ({navigation}) {
       const data = await response.json();
       setProfileData(data);
 
-    
       if (data && data.profile_phototg) {
         setProfilePhoto(`${server}/${data.profile_phototg}`);
-        console.log(profilePhoto)
       }
     } catch (error) {
       console.error("Error fetching profile:", error.message);
@@ -75,7 +72,7 @@ export default function ProfilePageTG  ({navigation}) {
         aspect: [4, 3],
         quality: 1,
       });
-  
+
       if (!result.canceled) {
         const photoUrl = result.uri;
         await fetchProfilePhoto(photoUrl, token);
@@ -86,7 +83,6 @@ export default function ProfilePageTG  ({navigation}) {
       console.error("Error selecting/uploading photo:", error.message);
     }
   };
-  
 
   const fetchProfilePhoto = async (photoUrl, token) => {
     try {
@@ -100,7 +96,7 @@ export default function ProfilePageTG  ({navigation}) {
           image: photoUrl
         })
       });
-  
+
       if (response.ok) {
         const photoData = await response.json();
         setProfilePhoto(photoUrl);
@@ -113,54 +109,82 @@ export default function ProfilePageTG  ({navigation}) {
     }
   };
 
+  const handleAvailability = async () => {
+    try {
+      const response = await fetch(server + "/updateAvailability/" + profileData.tourguide_username, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        setIsAvailable(!isAvailable);
+      } else {
+        console.error("Failed to update availability. Server returned:", response.status);
+      }
+    } catch (error) {
+      console.error("Error updating availability:", error.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
-    <ScrollView>
-    {profileData &&
-      <>
-      <View style={styles.container}>
-      <Image
-            source={profilePhoto ? { uri: profilePhoto } : require('../../Images/home.png')} 
-            style={styles.profilePicture}
-            />
-            <Text style={styles.name}>{profileData.first_nametg} {profileData.last_nametg}</Text>
-            <Text style={styles.bio}>{profileData.emailtg}</Text>
-            <Text style={styles.bio}>{profileData.tourguide_username}</Text>
+      <ScrollView>
+        {profileData &&
+          <>
+            <View style={styles.container}>
+              <Image
+                source={profilePhoto ? { uri: profilePhoto } : require('../../Images/home.png')}
+                style={styles.profilePicture}
+              />
+              <Text style={styles.name}>{profileData.first_nametg} {profileData.last_nametg}</Text>
+              <Text style={styles.bio}>{profileData.emailtg}</Text>
+              <Text style={styles.bio}>{profileData.tourguide_username}</Text>
             </View>
-            
+            <View style={styles.buttonContainer}>
+              <Pressable
+                style={[styles.button, { backgroundColor: isAvailable ? '#E2C07C' : '#3d3d3d' }]}
+                onPress={handleAvailability}>
+                <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}>
+                  {isAvailable ? 'Available' : 'Not Available'}
+                </Text>
+              </Pressable>
+            </View>
+
             <View style={styles.Hcontainer}>
-            <ScrollView keyboardDismissMode="on-drag">
-            <Text style={styles.vhistory}>Visit history</Text>
-            <Table style={styles.historytable} tourguide_username={profileData.tourguide_username} />
-            </ScrollView>
+              <ScrollView keyboardDismissMode="on-drag">
+                <Text style={styles.vhistory}>Visit history</Text>
+                <Table style={styles.historytable} tourguide_username={profileData.tourguide_username} />
+              </ScrollView>
             </View>
-            
+            <Text style={styles.avgrating}>Rating: {profileData.avgrating}/5 </Text>
+
             <View style={styles.buttonContainer}>
-            <Pressable
-            onPress={handleSignOut}
-            style={styles.button}>
-            <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
-            </Pressable>
+              <Pressable
+                onPress={handleSignOut}
+                style={styles.button}>
+                <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
+              </Pressable>
             </View>
             <View style={styles.buttonContainer}>
-            <Pressable
-            style={styles.button}
-            onPress={handleUploadPhoto}>
-            <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Upload Photo </Text>
-            </Pressable>
+              <Pressable
+                style={styles.button}
+                onPress={handleUploadPhoto}>
+                <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Upload Photo </Text>
+              </Pressable>
             </View>
-            
-            </>
-          }
-          </ScrollView>
-          </View>
-          );
-        };
-        
+          </>
+        }
+      </ScrollView>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#121212' ,
+    backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -173,7 +197,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    color:'white',
+    color: 'white',
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -182,13 +206,13 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginBottom: 20,
   },
-  vhistory:{
+  vhistory: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
     alignSelf: 'center',
   },
-  Hcontainer:{
+  Hcontainer: {
     flex: 1,
     padding: 5,
     backgroundColor: '#6e706f',
@@ -200,7 +224,7 @@ const styles = StyleSheet.create({
   buttontext: {
     color: 'black',
   },
-  users:{
+  users: {
     fontSize: 20,
     alignSelf: 'flex-start',
   },
@@ -218,5 +242,33 @@ const styles = StyleSheet.create({
   historytable: {
     borderColor: 'black',
     borderWidth: '1',
+  },
+  avgrating: {
+    height: '5%',
+    width: '50%',
+    fontWeight: 'bold',
+    fontSize: 20,
+    padding: 10,
+    borderRadius: 300,
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    backgroundColor: '#6e706f',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  draggableContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 20,
+    zIndex: 1000,
+  },
+  draggableText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

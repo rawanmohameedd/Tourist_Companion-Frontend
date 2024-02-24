@@ -132,7 +132,6 @@ const Table = ({tourguide_username}) => {
               ))}
             </View>
           )}
-          {console.log("toot",avgRate)}
         </ScrollView>
       </View>
     </View>

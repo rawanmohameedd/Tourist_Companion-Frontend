@@ -7,13 +7,34 @@ import * as ImagePicker from 'expo-image-picker';
 export let role = "not tourist"
 export let username 
 export default function ProfilePageTG({ navigation }) {
+
   const [profileData, setProfileData] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [token, setToken] = useState(null);
+  const [visits , setVisits] = useState([])
+  const [isLoading, setIsLoading]= useState(true)
 
   useEffect(() => {
     fetchToken();
+    fetchPerviousVisits();
   }, []);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    
+    // Add leading zeros if month or day is less than 10
+    if (month < 10) {
+      month = '0' + month;
+    }
+    if (day < 10) {
+      day = '0' + day;
+    }
+    
+    return `${year}-${month}-${day}`;
+  };
 
   const fetchToken = async () => {
     try {
@@ -114,8 +135,24 @@ export default function ProfilePageTG({ navigation }) {
     }
   };
 
+  const fetchPerviousVisits = async ()=>{
+    try {
+    const response = await fetch(server + `/touristVisits/${profileData.tour_username}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch ratings');
+      }
+      const data = await response.json();
+      setVisits(data.visits || []);
+      console.log('visits:',visits)
+      setIsLoading(false)
+    } catch (error) {
+      console.error('Error fetching ratings:', error.message);
+      setIsLoading(false)
+    }
+  }
   return (
     <View style={styles.container}>
+    <ScrollView>
     {profileData && profilePhoto &&
       <>
       <View style={styles.container}>
@@ -128,27 +165,55 @@ export default function ProfilePageTG({ navigation }) {
       <Text style={styles.bio}>{profileData.tour_username}</Text>
       <Text style={styles.bio}>{profileData.emailt}</Text>
       </View>
+      <View style={styles.Hcontainer}>
+      <ScrollView keyboardDismissMode="on-drag">
+      <Text style={styles.vhistory}>Pervious visits</Text>
+      {isLoading ? (
+        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
+      ) : visits.length === 0 ? (
+        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You haven't visited any place yet.</Text>
+      ) : (
+      <View style={styles.table}>
+      <View style={styles.header}>
+      <Text style={styles.tableText}>Place </Text>
+      <Text style={styles.tableText}>tourguide_username</Text>
+      <Text style={styles.tableText}>Date</Text>
+      <Text style={styles.tableText}>Rating</Text>
+      </View>
       
-      <View style={styles.buttonContainer}>
-      <Pressable
-      onPress={handleSignOut}
-      style={styles.button}>
-      <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
-      </Pressable>
+      {visits.map((visits, index) => (
+        <View key={index} style={styles.row}>
+        <Text style={styles.tableText}>{visits.visit}</Text>
+        <Text style={styles.tableText}>{visits.tourguide_username}</Text>
+        <Text style={styles.tableText}>{formatDate(visits.date_of_the_visit)}</Text>
+        <Text style={styles.tableText}>{visits.rate}</Text>
+        </View>
+        ))}
+        </View>
+        )}
+        </ScrollView>
+        </View>
+        <View style={styles.buttonContainer}>
+        <Pressable
+        onPress={handleSignOut}
+        style={styles.button}>
+        <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
+        </Pressable>
+        </View>
+        <View style={styles.buttonContainer}>
+        <Pressable
+        onPress={handleUploadPhoto}
+        style={styles.button}>
+        <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Upload Photo </Text>
+        </Pressable>
+        </View>
+        </>
+      }
+      </ScrollView>
       </View>
-      <View style={styles.buttonContainer}>
-      <Pressable
-      onPress={handleUploadPhoto}
-      style={styles.button}>
-      <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Upload Photo </Text>
-      </Pressable>
-      </View>
-      </>
+      );
     }
-    </View>
-  );
-}
-
+    
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -161,7 +226,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
-    marginTop: 250,
+    marginTop: 400,
     marginBottom: 20,
   },
   name: {
@@ -195,5 +260,47 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 0,
     marginBottom: 20,
+  },
+  vhistory: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    alignSelf: 'center',
+  },
+  Hcontainer: {
+    flex: 1,
+    padding: 5,
+    backgroundColor: '#6e706f',
+    borderRadius: 10,
+    width: 400,
+    height: 300,
+    marginTop: 70,
+  },
+  table: {
+    borderWidth: 1,
+    borderColor: '#6e706f',
+  },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: '#3d3d3d',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    width: "90%"
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderColor: '#6e706f',
+  },
+  tableText: {
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'white',
+    fontSize: 12
   },
 });

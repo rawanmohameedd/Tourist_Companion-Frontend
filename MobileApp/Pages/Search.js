@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Pressable, Text, Image, ScrollView } from 'react-native';
 import server from '../elserver';
-
+import { role } from './Tourist/ProfilePageT';
 export default function Search({ navigation }) {
   
   const [username, setUsername] = useState('');
+  const [nationality, setNationality] = useState('');
   const [searchResult, setSearchResult] = useState(null);
   const [error, setError] = useState('');
 
@@ -29,6 +30,30 @@ export default function Search({ navigation }) {
       setError('Failed to fetch search results');
     }
   };
+  
+const handleNationalitySearch = async () => {
+  try {
+    const response = await fetch(server + `/byNationality/${nationality}`);
+    console.log('Response status:', response.status);
+    console.log('Response status text:', response.statusText);
+
+    console.log('hh',nationality)
+    if (response.status === 400) {
+      // Handle the case when there are no matching users
+      setSearchResult(null); 
+      setError('No matching users found'); 
+    } else if (!response.ok) {
+      throw new Error('Failed to fetch nationality search results');
+    } else {
+      const data = await response.json();
+      setSearchResult(data);
+      setError('');
+    }
+  } catch (error) {
+    console.error('Error fetching search:', error.message);
+    setError('Failed to fetch search results');
+  }
+};
 
   const clearSearchResult = () => {
     setSearchResult(null);
@@ -38,6 +63,7 @@ export default function Search({ navigation }) {
     console.log('Pressed:', user);
     navigation.navigate('SearchPageT', { user: user });
   };
+
   const handleResultPressTourguide = (user) => {
     navigation.navigate('SearchPageTG', { user: user });
     console.log('Pressed:', user);
@@ -48,11 +74,12 @@ export default function Search({ navigation }) {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.input}
-          onChangeText={setUsername}
+          onChangeText={setUsername }
           placeholder="Enter username"
           value={username}
         />
       </View>
+
       <Pressable style={styles.button} onPress={handleSearch}>
         <Text style={[styles.buttontext, { fontSize: 18, fontWeight: 'bold' }]}>Search</Text>
       </Pressable>

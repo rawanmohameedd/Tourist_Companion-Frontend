@@ -1,4 +1,4 @@
-import React , {useEffect}from 'react';
+import React , {useEffect, useState}from 'react';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView, RefreshControl } from 'react-native';
 import server from '../../elserver';
 import Table from './profiletable';
@@ -6,24 +6,29 @@ import { role } from '../Tourist/ProfilePageT';
 
 export default function SearchProfileTG({ route, navigation }) {
   const { user } = route.params;
-
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
 const onRefresh = () => { 
-  // Implement the refresh logic here
-  // For example, you can fetch updated data from the server
-  // and update the state accordingly
   setRefreshing(true);
-
-  // Simulating a delay of 1 second before setting refreshing to false
   setTimeout(() => {
     setRefreshing(false);
   }, 500);
-  };
-  const handleRatebutton = () => {
+};
+
+let tourguideAvailable
+const displayAvailability = (user) =>{
+  if (user.isavailable){
+    tourguideAvailable = 'Available'
+  }
+  else{
+    tourguideAvailable = 'Not Available'
+  }
+  return tourguideAvailable
+}
+const handleRatebutton = () => {
     const name = user;
     navigation.navigate('Rating', { name });
-  };
+};
 
 
   return (
@@ -39,16 +44,16 @@ const onRefresh = () => {
           <Text style={styles.bio}>{user.emailtg}</Text>
           <Text style={styles.bio}>{user.tourguide_username}</Text>
           <Text style={styles.bio}>{user.spoken_langtg}</Text>
-        </View>
+          <Text style={styles.bio}>{displayAvailability(user)}</Text>
+          </View>
 
         <View style={styles.Hcontainer}>
           <Text style={styles.vhistory}>Visit history</Text>
           <Table style={styles.historytable} tourguide_username={user.tourguide_username} />
           </View>
-          {console.log('hena search',user.avgrating)}
           <Text style={styles.avgrating}>Rating: {user.avgrating}/5 </Text>
 
-        {role === 'tourist' && (
+        {role === 'tourist' && tourguideAvailable === 'Available' &&(
           <View style={styles.buttonContainer}>
             <Pressable style={styles.button}>
               <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Connect </Text>
