@@ -31,7 +31,8 @@ const Tab= createBottomTabNavigator();
 
 const HomeTabT =()=>{
   return(
-    <Tab.Navigator style={styles.tabbar}>
+    <Tab.Navigator style={styles.tabbar} swipeEnabled={true}
+    >
       <Tab.Screen 
         name=" HomeT " 
         component={HomeT} 
@@ -81,7 +82,8 @@ const HomeTabT =()=>{
 
 const HomeTabTG =()=>{
   return(
-    <Tab.Navigator style={styles.tabbar}>
+    <Tab.Navigator style={styles.tabbar} swipeEnabled={true}
+    >
       <Tab.Screen 
         name=" HomeTG " 
         component={HomeTG} 
