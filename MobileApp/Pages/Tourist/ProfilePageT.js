@@ -4,7 +4,7 @@ import server from '../../elserver';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 
-export let role = "not tourist"
+export let role = "tourist"
 export let username 
 export default function ProfilePageTG({ navigation }) {
 

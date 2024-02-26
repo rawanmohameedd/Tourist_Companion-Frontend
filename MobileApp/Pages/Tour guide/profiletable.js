@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollView: {
-    height: Dimensions.get('window').height * 0.7, // Example: 70% of screen height
+    height: Dimensions.get('window').height * 0.2, // Example: 70% of screen height
   },
   table: {
     borderWidth: 1,
@@ -156,8 +156,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#3d3d3d',
     paddingVertical: 5,
-    paddingHorizontal: 10,
-    width: "90%"
+    //paddingHorizontal: 10,
+    //alignItems: 'center',
+    //alignContent: 'center',
+    //textAlign: 'center',
+    //alignSelf: 'center',
+    width: "100%",
   },
   row: {
     flexDirection: 'row',
@@ -172,8 +176,11 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     textAlignVertical: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
     color: 'white',
-    fontSize: 12
+    fontSize: 12,
   },
 });
 
