@@ -31,7 +31,8 @@ export default function SubmitRating({navigation,route}) {
 
     function handleDate (propDate) {
       OnChangeDateOfTheVisit(propDate)
-    };
+  };  
+  
  
     
     //tourguide Profile data from search
@@ -44,6 +45,10 @@ export default function SubmitRating({navigation,route}) {
     },[])
     
     const rate = async () =>{
+      if (!DateOfTheVisit) {
+        Alert.alert('Error', 'Please select a date of visit.');
+        return;
+    }
         OnPending(true)
         try {
             const response = await fetch (server + "/singleRate",{
@@ -149,13 +154,13 @@ export default function SubmitRating({navigation,route}) {
 
                 <DatePicker 
                 mode= 'calendar'
-                selected={OnChangeDateOfTheVisit}
+                selected={DateOfTheVisit}
                 maximumDate={endDate}
-                OnChangeDateOfTheVisit={handleDate}
+                onSelectedChange={handleDate} //kont 3amleha onchangevisit w hya el default bta3ha onSelectedChange y dan
                 />
 
                 <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
-                    <Text>close</Text>
+                    <Text>save</Text>
                 </TouchableOpacity>
               </View>
 
