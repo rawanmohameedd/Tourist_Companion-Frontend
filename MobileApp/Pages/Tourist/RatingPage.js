@@ -1,10 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Text, StyleSheet, Alert, TextInput, ScrollView, View, Pressable, FlatList} from 'react-native';
+import {Text, StyleSheet, Alert, Modal, TextInput, ScrollView, View, Pressable, FlatList, TouchableOpacity} from 'react-native';
 import { username } from './ProfilePageT';
 import server from '../../elserver';
+import DatePicker from 'react-native-modern-datepicker'
+import { getToday , getFormatedDate } from 'react-native-modern-datepicker';
+
+//import { TouchableOpacity , GestureHandlerRootView} from 'react-native-gesture-handler';
+//import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function SubmitRating({navigation,route}) {
     //const [Rate, onchangeRate]= useState('');
+    const today = new Date();
+    const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
     const [Visit, OnChangeVisit] = useState('');
     const [tour_username, OnChangetour_username] = useState('');
     const [tourguide_username, OnChangetourguide_username] = useState('');
@@ -14,8 +21,18 @@ export default function SubmitRating({navigation,route}) {
     const ratings = ['1', '2', '3', '4', '5'];
     const [Place, setPlace]= useState('');
     const Places = ['Pyramids','Egyptian museum','Grand Egyptian museum','Museum of civilizations','Nubian museum','Coptic museum']
+    const [open, setOpen] = useState(false);
 
 
+
+    const openhandlePress = () => {
+      setOpen(!open);
+    };
+
+    function handleDate (propDate) {
+      OnChangeDateOfTheVisit(propDate)
+    };
+ 
     
     //tourguide Profile data from search
     const {name}= route.params
@@ -105,23 +122,46 @@ export default function SubmitRating({navigation,route}) {
                 horizontal
                 contentContainerStyle={styles.ratingContainer}
             />
-
             <Text style={styles.text}> Place of visit: </Text>
+            <View style={styles.placesContainer}>
+              
             <FlatList
                 data={Places}
                 renderItem={renderPlace}
                 keyExtractor={(item) => item}
                 horizontal
-                contentContainerStyle={styles.placesContainer}
-            />    
+                contentContainerStyle={[styles.placesContainer]}
+                //style={{ height: 150 }}
+            />
+            </View>
 
-        <TextInput
-            style={styles.input}
-            value={DateOfTheVisit}
-            onChangeText={OnChangeDateOfTheVisit}
-            placeholder={'Enter Date of the visit YYYY-MM-DD'}
-        />
+        <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
+          <Text style={{color:'white',alignSelf: 'center'}}>Open</Text>
+        </TouchableOpacity>
 
+        <Modal
+          animationType='slide'
+          transparent= {true}
+          visible= {open}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+
+                <DatePicker 
+                mode= 'calendar'
+                selected={OnChangeDateOfTheVisit}
+                maximumDate={endDate}
+                OnChangeDateOfTheVisit={handleDate}
+                />
+
+                <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
+                    <Text>close</Text>
+                </TouchableOpacity>
+              </View>
+
+            </View>
+          
+        </Modal>
         <Pressable
             onPress={handleSubmmiting}
             style={styles.button}>
@@ -230,10 +270,11 @@ const styles = StyleSheet.create({
        // justifyContent: 'center',
         flexDirection: 'column',
         flex: 1,
+       // height: 150,
       },
       place: {
-        margin: 10,
-        padding: 10,
+        margin: 5,
+        padding: 5,
         borderRadius: 5,
         borderWidth: 1,
         width: '90%',
@@ -252,8 +293,28 @@ const styles = StyleSheet.create({
       text: {
         fontSize: 15,
         color: 'white',
-
-
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        width: '90%',
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
       },
 });
 
