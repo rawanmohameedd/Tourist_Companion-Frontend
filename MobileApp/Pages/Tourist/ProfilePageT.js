@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import server from '../../elserver';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 
-export let role = "not tourist"
+export let role = "tourist"
 export let username 
 export default function ProfilePageTG({ navigation }) {
 
@@ -13,6 +13,82 @@ export default function ProfilePageTG({ navigation }) {
   const [token, setToken] = useState(null);
   const [visits , setVisits] = useState([])
   const [isLoading, setIsLoading]= useState(true)
+  const [TcontainerVisible, setTContainerVisible] = useState(false);
+  const [CcontainerVisible, setCContainerVisible] = useState(false);
+  const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
+
+
+  const vhistoryhandlePress = () => {
+    setTContainerVisible(!TcontainerVisible);
+  };
+
+  const ConnectedTGhandlePress = () => {
+    setCContainerVisible(!CcontainerVisible);
+  };
+
+  // Function to handle uploading photo from gallery
+  const handleUploadFromGallery = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      if (!result.canceled) {
+        const photoUrl = result.uri;
+        await fetchProfilePhoto(photoUrl, token);
+      } else {
+        console.log("Image selection cancelled");
+      }
+    } catch (error) {
+      console.error("Error selecting/uploading photo:", error.message);
+    }  };
+
+  // Function to handle uploading photo from camera
+  const handleUploadFromCamera = async () => {
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      if (!result.cancelled) {
+        const photoUrl = result.uri;
+        await fetchProfilePhoto(photoUrl, token);
+      } else {
+        console.log("Image capture cancelled");
+      }
+    } catch (error) {
+      console.error("Error capturing/uploading photo:", error.message);
+    }
+  };
+
+  // Function to handle uploading photo from camera
+  const handledelete = async () => {
+  // Implement your logic to upload photo from camera
+   };
+
+  const [uploadOptions, setUploadOptions] = useState([
+    { id: 1, label: 'Upload from Gallery', onPress: handleUploadFromGallery },
+    { id: 2, label: 'Take a photo', onPress: handleUploadFromCamera },
+    { id: 3, label: 'Delete', onPress: handledelete },
+  ]);
+  const toggleUploadOptions = () => {
+    setUploadOptionsVisible(!uploadOptionsVisible);
+  };
+
+  // Function to handle pressing an item in the upload options list
+  const handleUploadOptionPress = (onPress) => {
+    if (onPress) {
+      onPress();
+    }
+  };
+
+  
 
   useEffect(() => {
     fetchToken();
@@ -88,26 +164,11 @@ export default function ProfilePageTG({ navigation }) {
       { cancelable: false }
     );
   };
-
+/*
   const handleUploadPhoto = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-  
-      if (!result.canceled) {
-        const photoUrl = result.uri;
-        await fetchProfilePhoto(photoUrl, token);
-      } else {
-        console.log("Image selection cancelled");
-      }
-    } catch (error) {
-      console.error("Error selecting/uploading photo:", error.message);
-    }
+    
   };
+  */
   
 
   const fetchProfilePhoto = async (photoUrl, token) => {
@@ -134,7 +195,7 @@ export default function ProfilePageTG({ navigation }) {
       console.error("Error uploading photo:", error.message);
     }
   };
-
+  
   const fetchPerviousVisits = async ()=>{
     try {
     const response = await fetch(server + `/touristVisits/${profileData.tour_username}`);
@@ -150,28 +211,63 @@ export default function ProfilePageTG({ navigation }) {
       setIsLoading(false)
     }
   }
+  
+
   return (
     <View style={styles.container}>
     <ScrollView>
-    {profileData && profilePhoto &&
+    { profileData && profilePhoto &&
       <>
       <View style={styles.container}>
       <Image
       source={profilePhoto ? { uri: profilePhoto } : require('../../Images/home.png')} 
       style={styles.profilePicture}
       />
+      
+      <View>
+        <Pressable
+          onPress={toggleUploadOptions}
+          style={styles.uploadphoto}>
+          <Image
+                style={styles.icons}
+                source={require('../../Images/upload.png')}
+          />
+        </Pressable>
+      </View>
+
+      {uploadOptionsVisible && (
+        <FlatList
+          data={uploadOptions}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.uploadOption}
+              onPress={() => handleUploadOptionPress(item.onPress)}
+            >
+              <Text style={styles.uploadOptionText}>{item.label}</Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      )}
+
+    
       <Text style={styles.name}>{profileData.first_namet} {profileData.last_namet}</Text>
       <Text style={styles.bio}>{profileData.nationalityt}</Text>
       <Text style={styles.bio}>{profileData.tour_username}</Text>
-      <Text style={styles.bio}>{profileData.emailt}</Text>
       </View>
-      <View style={styles.Hcontainer}>
+
+
+      <View>
+      <TouchableOpacity onPress={ConnectedTGhandlePress} style={styles.button}>
+              <Text style={styles.buttontext}>Connected tour guides</Text>
+      </TouchableOpacity>
+
+      {CcontainerVisible && (
       <ScrollView keyboardDismissMode="on-drag">
-      <Text style={styles.vhistory}>Pervious visits</Text>
       {isLoading ? (
         <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
       ) : visits.length === 0 ? (
-        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You haven't visited any place yet.</Text>
+        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You're currently not connected to any tour guide</Text>
       ) : (
       <View style={styles.table}>
       <View style={styles.header}>
@@ -180,7 +276,6 @@ export default function ProfilePageTG({ navigation }) {
       <Text style={styles.tableText}>Date</Text>
       <Text style={styles.tableText}>Rating</Text>
       </View>
-      
       {visits.map((visits, index) => (
         <View key={index} style={styles.row}>
         <Text style={styles.tableText}>{visits.visit}</Text>
@@ -192,21 +287,52 @@ export default function ProfilePageTG({ navigation }) {
         </View>
         )}
         </ScrollView>
+        )}
         </View>
+
+      <View>
+      <TouchableOpacity onPress={vhistoryhandlePress} style={styles.button}>
+              <Text style={styles.buttontext}>Previous visits </Text>
+      </TouchableOpacity>
+
+      {TcontainerVisible && (
+      <ScrollView keyboardDismissMode="on-drag">
+      {isLoading ? (
+        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
+      ) : visits.length === 0 ? (
+        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Start surfing Egypt with us to fill this field</Text>
+      ) : (
+      <View style={styles.table}>
+      <View style={styles.header}>
+      <Text style={styles.tableText}>Place </Text>
+      <Text style={styles.tableText}>tourguide_username</Text>
+      <Text style={styles.tableText}>Date</Text>
+      <Text style={styles.tableText}>Rating</Text>
+      </View>
+      {visits.map((visits, index) => (
+        <View key={index} style={styles.row}>
+        <Text style={styles.tableText}>{visits.visit}</Text>
+        <Text style={styles.tableText}>{visits.tourguide_username}</Text>
+        <Text style={styles.tableText}>{formatDate(visits.date_of_the_visit)}</Text>
+        <Text style={styles.tableText}>{visits.rate}</Text>
+        </View>
+        ))}
+        </View>
+        )}
+        </ScrollView>
+        )}
+        </View>
+
+
+
         <View style={styles.buttonContainer}>
         <Pressable
         onPress={handleSignOut}
         style={styles.button}>
-        <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
+        <Text style={[styles.buttontext]}> Sign out </Text>
         </Pressable>
         </View>
-        <View style={styles.buttonContainer}>
-        <Pressable
-        onPress={handleUploadPhoto}
-        style={styles.button}>
-        <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Upload Photo </Text>
-        </Pressable>
-        </View>
+
         </>
       }
       </ScrollView>
@@ -220,13 +346,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -200,
+    marginTop: 0,
   },
   profilePicture: {
     width: 200,
     height: 200,
     borderRadius: 100,
-    marginTop: 400,
+    marginTop: 50,
     marginBottom: 20,
   },
   name: {
@@ -242,6 +368,10 @@ const styles = StyleSheet.create({
   },
   buttontext: {
     color: 'black',
+    fontWeight: 'bold',
+    verticalAlign: 'middle',
+    fontSize: 20,
+    alignSelf: 'center',
   },
   users: {
     fontSize: 20,
@@ -250,16 +380,30 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     width: 250,
-    padding: 10,
+    //padding: 10,
     borderRadius: 300,
     marginTop: 10,
+    marginBottom: 10,
     backgroundColor: '#E2C07C',
     flexDirection: 'row',
     justifyContent: 'center',
+    alignSelf:'center',
+  },
+  uploadphoto: {
+   height: 70,
+   width: 70,
+   borderRadius: 35,
+   marginTop: -80,
+   marginLeft: 100,
+   backgroundColor: '#E2C07C',
+   flexDirection: 'row',
+   justifyContent: 'center',
+   alignSelf:'center',
+   alignItems: 'center',
   },
   buttonContainer: {
-    flex: 0,
-    marginBottom: 20,
+    //marginBottom: 20,
+    //justifyContent: 'center',
   },
   vhistory: {
     fontSize: 20,
@@ -273,9 +417,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#6e706f',
     borderRadius: 10,
     width: 400,
-    height: 300,
     marginTop: 70,
   },
+  
   table: {
     borderWidth: 1,
     borderColor: '#6e706f',
@@ -302,5 +446,27 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     color: 'white',
     fontSize: 12
+  },
+  icons: {
+    flex: 1,
+    //marginTop: 9,
+    //marginLeft: 2,
+    height: 70,
+    resizeMode: 'center',
+  },
+  uploadOption: {
+    height: 35,
+    marginLeft: 100,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E2C07C',
+    marginVertical: 5,
+    borderRadius: 10,
+  },
+  uploadOptionText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
