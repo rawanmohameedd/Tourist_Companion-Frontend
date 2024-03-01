@@ -8,28 +8,37 @@ import { getToday , getFormatedDate } from 'react-native-modern-datepicker';
 //import { TouchableOpacity , GestureHandlerRootView} from 'react-native-gesture-handler';
 //import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-export default function SubmitRating({navigation,route}) {
+export default function ConnectMultipleDays({navigation,route}) {
     //const [Rate, onchangeRate]= useState('');
     const today = new Date();
-    const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
+    const startDate = getFormatedDate(today.setDate(today.getDate() + 1), 'YYYY-MM-DD');
     const [Visit, OnChangeVisit] = useState('');
     const [tour_username, OnChangetour_username] = useState('');
     const [tourguide_username, OnChangetourguide_username] = useState('');
-    const [DateOfTheVisit, OnChangeDateOfTheVisit] = useState('');
+    const [StartDate, OnChangeStartDate] = useState('');
+    const [EndDate, OnChangeEndDate] = useState('');
     const [Pending, OnPending] = useState(false);
     const [Rate, setRate] = useState('');
     const ratings = ['1', '2', '3', '4', '5'];
     const [Place, setPlace]= useState('');
     const Places = ['Pyramids','Egyptian museum','Grand Egyptian museum','Museum of civilizations','Nubian museum','Coptic museum']
-    const [open, setOpen] = useState(false);
+    const [openFrom, setOpenFrom] = useState(false);
+    const [openTo, setOpenTo] = useState(false);
 
-    const openhandlePress = () => {
-      setOpen(!open);
+
+    const openFromhandlePress = () => {
+      setOpenFrom(!openFrom);
+    };
+    const openTohandlePress = () => {
+      setOpenTo(!openTo);
     };
 
-    function handleDate (propDate) {
-      OnChangeDateOfTheVisit(propDate)
+    function handleStartDate (propDate) {
+      OnChangeStartDate(propDate)
   };  
+    function handleEndDate (propDate) {
+      OnChangeEndDate(propDate)
+  };
   
  
     
@@ -42,22 +51,23 @@ export default function SubmitRating({navigation,route}) {
         OnChangetourguide_username(name.tourguide_username)
     },[])
     
-    const rate = async () =>{
-      if (!DateOfTheVisit) {
-        Alert.alert('Error', 'Please select a date of visit.');
+    const ConnectMultipleDays = async () =>{
+      if (!StartDate || !EndDate) {
+        Alert.alert('Error', 'Please fill missing dates');
         return;
     }
-        OnPending(true)
+        OnPending(true) 
         try {
-            const response = await fetch (server + "/singleRate",{
+            const response = await fetch (server + "/sentRequest",{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    tour_username: tour_username,
-                    tourguide_username: tourguide_username,
-                    rate: Rate,
-                    visit: Place,
-                    date_of_the_visit: DateOfTheVisit
+                  tour_username: tour_username,
+                  tourguide_username: tourguide_username,
+                  is_one_visit: false,
+                  start_date: StartDate,
+                  end_date: EndDate,
+                  place: Place
                 })
             })
             const data = await response.json()
@@ -73,8 +83,8 @@ export default function SubmitRating({navigation,route}) {
             }
         } catch (error){
             console.error("Network request failed:", error);
-            console.log(server + "/singleRate");
-            console.log("Received rate request:", Rate, Visit, DateOfTheVisit, tour_username, tourguide_username);
+            console.log(server + "/sentRequest");
+            console.log("Received Multiple days connect request:", Place, StartDate, EndDate , tour_username, tourguide_username);
             alert("Network request failed. Please try again later.");
             OnPending(false);
         }
@@ -82,14 +92,14 @@ export default function SubmitRating({navigation,route}) {
     const handleSubmmiting = () => {
         Alert.alert(
             "Submit",
-            "Are you sure you want to submit this rate?",
+            "Are you sure you want connect for this period?",
             [
             {
                 text: "Cancel",
                 style: "cancel"
             },
             { text: "Yes"
-                , onPress: () => rate() }
+                , onPress: () => ConnectMultipleDays() }
             ],
             { cancelable: false }
         );
@@ -113,18 +123,13 @@ export default function SubmitRating({navigation,route}) {
     return (
         <View style={styles.container}>
 
-        <Text style={styles.text}>Rate tourguide:  
+        <Text style={styles.text}>Connect to tourguide: 
         <Text style={styles.boldText}> {name.tourguide_username}</Text>
         </Text>      
-        
+        <Text style={styles.text}> Multiple days </Text>      
+
         <ScrollView keyboardDismissMode="on-drag">
-            <FlatList
-                data={ratings}
-                renderItem={renderItem}
-                keyExtractor={(item) => item}
-                horizontal
-                contentContainerStyle={styles.ratingContainer}
-            />
+           
             <Text style={styles.text}> Place of visit: </Text>
             <View style={styles.placesContainer}>
               
@@ -139,26 +144,54 @@ export default function SubmitRating({navigation,route}) {
             </View>
         
 
-        <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
-          <Text style={styles.calendarButton}>   Date of visit: {DateOfTheVisit} </Text>
+        <TouchableOpacity onPress={openFromhandlePress} style={styles.Date}>
+          <Text style={styles.calendarButton}>   from: {StartDate} </Text>
         </TouchableOpacity>
 
         <Modal
           animationType='slide'
           transparent= {true}
-          visible= {open}
+          visible= {openFrom}
           >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
 
                 <DatePicker 
                 mode= 'calendar'
-                selected={DateOfTheVisit}
-                maximumDate={endDate}
-                onSelectedChange={handleDate} 
+                selected={StartDate}
+                minimumDate={startDate}
+                onSelectedChange={handleStartDate} 
                 />
 
-                <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
+                <TouchableOpacity onPress={openFromhandlePress} style={styles.Date}>
+                    <Text>save</Text>
+                </TouchableOpacity>
+              </View>
+
+            </View>
+          
+        </Modal>
+
+        <TouchableOpacity onPress={openTohandlePress} style={styles.Date}>
+          <Text style={styles.calendarButton}>   To: {EndDate} </Text>
+        </TouchableOpacity>
+
+        <Modal
+          animationType='slide'
+          transparent= {true}
+          visible= {openTo}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+
+                <DatePicker 
+                mode= 'calendar'
+                selected={EndDate}
+                minimumDate={startDate}
+                onSelectedChange={handleEndDate} 
+                />
+
+                <TouchableOpacity onPress={openTohandlePress} style={styles.Date}>
                     <Text>save</Text>
                 </TouchableOpacity>
               </View>

@@ -25,6 +25,9 @@ import SearchProfileTG from './Pages/Tour guide/ProfileSearchTG';
 import SearchProfileT from './Pages/Tourist/ProfileSearchT';
 import FindAGuide from './Pages/Tourist/FindAGuide';
 import SubmitRating from './Pages/Tourist/RatingPage';
+import Connect from './Pages/Tourist/Connect';
+import ConnectOneTime from './Pages/Tourist/ConnectOneTime';
+import ConnectMultipleDays from './Pages/Tourist/ConnectMultipleDays';
 
 const Stack = createNativeStackNavigator();
 const Tab= createBottomTabNavigator();
@@ -163,6 +166,9 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="SearchPageTG" component={SearchProfileTG}/>
         <Stack.Screen name="Find a guide" component={FindAGuide}/>
         <Stack.Screen options={{headerShown: false}} name="Rating" component={SubmitRating} />
+        <Stack.Screen options={{headerShown: false}} name="Connect" component={Connect} />
+        <Stack.Screen options={{headerShown: false}} name="ConnectOneTime" component={ConnectOneTime} />
+        <Stack.Screen options={{headerShown: false}} name="ConnectMultipleDays" component={ConnectMultipleDays} />
         </Stack.Navigator>
     </NavigationContainer>
   );

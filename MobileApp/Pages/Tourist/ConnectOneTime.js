@@ -8,17 +8,15 @@ import { getToday , getFormatedDate } from 'react-native-modern-datepicker';
 //import { TouchableOpacity , GestureHandlerRootView} from 'react-native-gesture-handler';
 //import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-export default function SubmitRating({navigation,route}) {
+export default function ConnectOneTime({navigation,route}) {
     //const [Rate, onchangeRate]= useState('');
     const today = new Date();
-    const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
+    const startDate = getFormatedDate(today.setDate(today.getDate() + 1), 'YYYY-MM-DD');
     const [Visit, OnChangeVisit] = useState('');
     const [tour_username, OnChangetour_username] = useState('');
     const [tourguide_username, OnChangetourguide_username] = useState('');
     const [DateOfTheVisit, OnChangeDateOfTheVisit] = useState('');
     const [Pending, OnPending] = useState(false);
-    const [Rate, setRate] = useState('');
-    const ratings = ['1', '2', '3', '4', '5'];
     const [Place, setPlace]= useState('');
     const Places = ['Pyramids','Egyptian museum','Grand Egyptian museum','Museum of civilizations','Nubian museum','Coptic museum']
     const [open, setOpen] = useState(false);
@@ -42,22 +40,22 @@ export default function SubmitRating({navigation,route}) {
         OnChangetourguide_username(name.tourguide_username)
     },[])
     
-    const rate = async () =>{
+    const ConnectOneTime = async () =>{
       if (!DateOfTheVisit) {
         Alert.alert('Error', 'Please select a date of visit.');
         return;
     }
         OnPending(true)
         try {
-            const response = await fetch (server + "/singleRate",{
+            const response = await fetch (server + "/sentRequest",{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    tour_username: tour_username,
-                    tourguide_username: tourguide_username,
-                    rate: Rate,
-                    visit: Place,
-                    date_of_the_visit: DateOfTheVisit
+                  tour_username: tour_username,
+                  tourguide_username: tourguide_username,
+                  is_one_visit: true,
+                  visit_date: DateOfTheVisit,
+                  place: Place
                 })
             })
             const data = await response.json()
@@ -73,8 +71,8 @@ export default function SubmitRating({navigation,route}) {
             }
         } catch (error){
             console.error("Network request failed:", error);
-            console.log(server + "/singleRate");
-            console.log("Received rate request:", Rate, Visit, DateOfTheVisit, tour_username, tourguide_username);
+            console.log(server + "/sentRequest");
+            console.log("Received one time connect request:", Place, DateOfTheVisit, tour_username, tourguide_username);
             alert("Network request failed. Please try again later.");
             OnPending(false);
         }
@@ -89,19 +87,12 @@ export default function SubmitRating({navigation,route}) {
                 style: "cancel"
             },
             { text: "Yes"
-                , onPress: () => rate() }
+                , onPress: () => ConnectOneTime() }
             ],
             { cancelable: false }
         );
     };
 
-    const renderItem = ({ item }) => (
-        <Pressable
-          style={[styles.ratingItem, item === Rate && styles.selectedRatingItem]}
-          onPress={() => setRate(item)}>
-          <Text style={styles.ratingText}>{item}</Text>
-        </Pressable>
-      );
 
       const renderPlace = ({ item }) => (
         <Pressable
@@ -113,18 +104,14 @@ export default function SubmitRating({navigation,route}) {
     return (
         <View style={styles.container}>
 
-        <Text style={styles.text}>Rate tourguide:  
+        <Text style={styles.text}>Connect to tourguide: 
         <Text style={styles.boldText}> {name.tourguide_username}</Text>
         </Text>      
+        <Text style={styles.text}> for one day </Text>      
+
         
         <ScrollView keyboardDismissMode="on-drag">
-            <FlatList
-                data={ratings}
-                renderItem={renderItem}
-                keyExtractor={(item) => item}
-                horizontal
-                contentContainerStyle={styles.ratingContainer}
-            />
+           
             <Text style={styles.text}> Place of visit: </Text>
             <View style={styles.placesContainer}>
               
@@ -154,7 +141,7 @@ export default function SubmitRating({navigation,route}) {
                 <DatePicker 
                 mode= 'calendar'
                 selected={DateOfTheVisit}
-                maximumDate={endDate}
+                minimumDate={startDate}
                 onSelectedChange={handleDate} 
                 />
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, ScrollView, Alert, FlatList, TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker'
 import server from '../../elserver';
@@ -11,10 +11,27 @@ export default function ProfilePageTG({ navigation }) {
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [token, setToken] = useState(null);
   const [isAvailable, setIsAvailable] = useState(false);
+  const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
+
+  
+  const toggleUploadOptions = () => {
+    setUploadOptionsVisible(!uploadOptionsVisible);
+  };
+
+  // Function to handle pressing an item in the upload options list
+  const handleUploadOptionPress = (onPress) => {
+    if (onPress) {
+      onPress();
+    }
+  };
+  const handledelete = async () => {
+    // Implement your logic to upload photo from camera
+     };
 
   useEffect(() => {
     fetchToken();
   }, []);
+
 
   const fetchToken = async () => {
     try {
@@ -64,7 +81,7 @@ export default function ProfilePageTG({ navigation }) {
     );
   };
 
-  const handleUploadPhoto = async () => {
+  const handleUploadFromGallery = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -72,7 +89,7 @@ export default function ProfilePageTG({ navigation }) {
         aspect: [4, 3],
         quality: 1,
       });
-
+  
       if (!result.canceled) {
         const photoUrl = result.uri;
         await fetchProfilePhoto(photoUrl, token);
@@ -81,9 +98,37 @@ export default function ProfilePageTG({ navigation }) {
       }
     } catch (error) {
       console.error("Error selecting/uploading photo:", error.message);
+    }  };
+
+
+   // Function to handle uploading photo from camera
+   const handleUploadFromCamera = async () => {
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      if (!result.cancelled) {
+        const photoUrl = result.uri;
+        await fetchProfilePhoto(photoUrl, token);
+      } else {
+        console.log("Image capture cancelled");
+      }
+    } catch (error) {
+      console.error("Error capturing/uploading photo:", error.message);
     }
   };
+  
 
+  const [uploadOptions, setUploadOptions] = useState([
+    { id: 1, label: 'Upload from Gallery', onPress: handleUploadFromGallery },
+    { id: 2, label: 'Take a photo', onPress: handleUploadFromCamera },
+    { id: 3, label: 'Delete', onPress: handledelete },
+  ]);
+  
   const fetchProfilePhoto = async (photoUrl, token) => {
     try {
       const response = await fetch(server + "/uploadTG", {
@@ -131,17 +176,46 @@ export default function ProfilePageTG({ navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        {profileData &&
+        { profileData &&
           <>
             <View style={styles.container}>
-              <Image
-                source={profilePhoto ? { uri: profilePhoto } : require('../../Images/home.png')}
-                style={styles.profilePicture}
+            <Image
+              source={profilePhoto ? { uri: profilePhoto } : require('../../Images/home.png')} 
+              style={styles.profilePicture}
               />
+              
+              <View>
+                <Pressable
+                  onPress={toggleUploadOptions}
+                  style={styles.uploadphoto}>
+                  <Image
+                        style={styles.icons}
+                        source={require('../../Images/upload.png')}
+                  />
+                </Pressable>
+              </View>
+
+              {uploadOptionsVisible && (
+                <FlatList
+                  data={uploadOptions}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={styles.uploadOption}
+                      onPress={() => handleUploadOptionPress(item.onPress)}
+                    >
+                      <Text style={styles.uploadOptionText}>{item.label}</Text>
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item) => item.id.toString()}
+                />
+              )}
               <Text style={styles.name}>{profileData.first_nametg} {profileData.last_nametg}</Text>
               <Text style={styles.bio}>{profileData.emailtg}</Text>
               <Text style={styles.bio}>{profileData.tourguide_username}</Text>
+              
             </View>
+            <Text style={styles.avgrating}>Rating: {profileData.avgrating}/5 </Text>
+
             <View style={styles.buttonContainer}>
               <Pressable
                 style={[styles.button, { backgroundColor: isAvailable ? '#E2C07C' : '#3d3d3d' }]}
@@ -158,7 +232,6 @@ export default function ProfilePageTG({ navigation }) {
                 <Table style={styles.historytable} tourguide_username={profileData.tourguide_username} />
               </ScrollView>
             </View>
-            <Text style={styles.avgrating}>Rating: {profileData.avgrating}/5 </Text>
 
             <View style={styles.buttonContainer}>
               <Pressable
@@ -167,13 +240,7 @@ export default function ProfilePageTG({ navigation }) {
                 <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Sign out </Text>
               </Pressable>
             </View>
-            <View style={styles.buttonContainer}>
-              <Pressable
-                style={styles.button}
-                onPress={handleUploadPhoto}>
-                <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Upload Photo </Text>
-              </Pressable>
-            </View>
+
           </>
         }
       </ScrollView>
@@ -204,7 +271,7 @@ const styles = StyleSheet.create({
   bio: {
     fontSize: 18,
     color: 'gray',
-    marginBottom: 20,
+    marginBottom: 5,
   },
   vhistory: {
     fontSize: 20,
@@ -233,11 +300,13 @@ const styles = StyleSheet.create({
     width: 250,
     padding: 10,
     borderRadius: 300,
-    marginTop: 10,
+   // marginTop: 10,
     marginBottom: 10,
     backgroundColor: '#E2C07C',
     flexDirection: 'row',
     justifyContent: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
   },
   historytable: {
     borderColor: 'black',
@@ -248,13 +317,15 @@ const styles = StyleSheet.create({
     width: '50%',
     fontWeight: 'bold',
     fontSize: 20,
+    color: 'white',
+    alignSelf: 'center',
     padding: 10,
     borderRadius: 300,
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 20,
     textAlign: 'center',
     textAlignVertical: 'center',
-    backgroundColor: '#6e706f',
+   // backgroundColor: '#6e706f',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -271,4 +342,38 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+  uploadOption: {
+    height: 35,
+    marginLeft: 100,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E2C07C',
+    marginVertical: 5,
+    borderRadius: 10,
+  },
+  uploadOptionText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  icons: {
+    flex: 1,
+    //marginTop: 9,
+    //marginLeft: 2,
+    height: 70,
+    resizeMode: 'center',
+  },
+  uploadphoto: {
+    height: 70,
+    width: 70,
+    borderRadius: 35,
+    marginTop: -80,
+    marginLeft: 100,
+    backgroundColor: '#E2C07C',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf:'center',
+    alignItems: 'center',
+   },
 });

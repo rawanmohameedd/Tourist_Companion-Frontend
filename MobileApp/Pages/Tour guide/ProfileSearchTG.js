@@ -36,6 +36,11 @@ const handleRatebutton = () => {
     navigation.navigate('Rating', { name });
 };
 
+const handleConnectbutton = () => {
+  const name = user;
+  navigation.navigate('Connect', { name });
+};
+
 
   return (
     <View style={styles.container}>
@@ -78,7 +83,7 @@ const handleRatebutton = () => {
 
         {role === 'tourist' && tourguideAvailable === 'Available' &&(
           <View style={styles.buttonContainer}>
-            <Pressable style={styles.connect}>
+            <Pressable style={styles.connect} onPress={handleConnectbutton}>
               <Text style={[styles.buttontext]}> Connect </Text>
             </Pressable>
           </View>
