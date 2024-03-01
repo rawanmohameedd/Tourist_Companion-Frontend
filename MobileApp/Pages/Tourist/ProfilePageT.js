@@ -216,7 +216,7 @@ export default function ProfilePageTG({ navigation }) {
   return (
     <View style={styles.container}>
     <ScrollView>
-    { profileData && profilePhoto &&
+    { profileData &&
       <>
       <View style={styles.container}>
       <Image

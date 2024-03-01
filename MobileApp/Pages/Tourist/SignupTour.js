@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
-import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable, Linking} from 'react-native';
+import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable, Linking, TouchableOpacity, Modal} from 'react-native';
 import * as SecureStore from "expo-secure-store";
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from '../../elserver';
+import DatePicker from 'react-native-modern-datepicker'
+import { getToday , getFormatedDate } from 'react-native-modern-datepicker';
 
 export default function SignupT() {
+    const today = new Date();
+    const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
     const [Username, onchangeUsername]= useState('');
     const [Email, OnChangeEmail] = useState('');
     const [FirstName, OnChangeFirstName] = useState('');
@@ -13,9 +17,14 @@ export default function SignupT() {
     const [Birthday, OnChangeBirthday] = useState('');
     const [Password, OnChangePassword] = useState('');
     const [Pending, OnPending] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [webViewVisible, setWebViewVisible] = useState(false);
+
+    const openhandlePress = () => {
+        setOpen(!open);
+      }; 
 
     const usernameHandler = (value) => {
         onchangeUsername(value);
@@ -134,12 +143,33 @@ export default function SignupT() {
             placeholder={'Nationality'}
         />
 
-        <TextInput
-            style={styles.input}
-            value={Birthday}
-            onChangeText={birthdayhandler}
-            placeholder={'YYYY-MM-DD'}
-        />
+        <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
+            <Text style={styles.calendarButton}>    Date of birth: {Birthday} </Text>
+        </TouchableOpacity>
+
+        <Modal
+        animationType='slide'
+        transparent= {true}
+        visible= {open}
+        >
+            <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+
+                <DatePicker 
+                mode= 'calendar'
+                selected={Birthday}
+                maximumDate={endDate}
+                onSelectedChange={birthdayhandler} 
+                />
+
+                <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
+                    <Text>save</Text>
+                </TouchableOpacity>
+            </View>
+
+            </View>
+        
+        </Modal>
 
         <TextInput
             style={styles.input}
@@ -234,5 +264,55 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        width: '90%',
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      calendarButton: {
+        backgroundColor: 'white',
+        color: 'black',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'white',
+        width: '100%',
+        height: 40,
+        alignSelf: 'center',
+        textAlign: 'left',
+        marginBottom: 16,
+        textAlignVertical: 'center',
+      },
+      displayedDate: {
+    //    backgroundColor: 'white',
+        color: 'black',
+        //width: '90%',
+        alignSelf: 'center',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        height: 40,
+        marginTop: 10,
+      },
+      bdtext: {
+        textAlign: 'left',
+        color: 'white',
+        fontSize: 15,
+      },
 });
 
