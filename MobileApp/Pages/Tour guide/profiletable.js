@@ -156,11 +156,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#3d3d3d',
     paddingVertical: 5,
-    //paddingHorizontal: 10,
-    //alignItems: 'center',
-    //alignContent: 'center',
-    //textAlign: 'center',
-    //alignSelf: 'center',
     width: "100%",
   },
   row: {

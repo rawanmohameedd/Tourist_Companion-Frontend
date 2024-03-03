@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import server from '../../elserver';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
@@ -16,11 +16,6 @@ export default function ProfilePageTG({ navigation }) {
   const [TcontainerVisible, setTContainerVisible] = useState(false);
   const [CcontainerVisible, setCContainerVisible] = useState(false);
   const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
-
-
-  const vhistoryhandlePress = () => {
-    setTContainerVisible(!TcontainerVisible);
-  };
 
   const ConnectedTGhandlePress = () => {
     setCContainerVisible(!CcontainerVisible);
@@ -70,7 +65,7 @@ export default function ProfilePageTG({ navigation }) {
   // Function to handle uploading photo from camera
   const handledelete = async () => {
   // Implement your logic to upload photo from camera
-   };
+  };
 
   const [uploadOptions, setUploadOptions] = useState([
     { id: 1, label: 'Upload from Gallery', onPress: handleUploadFromGallery },
@@ -198,6 +193,7 @@ export default function ProfilePageTG({ navigation }) {
   
   const fetchPerviousVisits = async ()=>{
     try {
+      setTContainerVisible(!TcontainerVisible);
     const response = await fetch(server + `/touristVisits/${profileData.tour_username}`);
       if (!response.ok) {
         throw new Error('Failed to fetch ratings');
@@ -212,6 +208,13 @@ export default function ProfilePageTG({ navigation }) {
     }
   }
   
+  const connectedTourguide = async ()=>{
+    try{
+
+    }catch (error){
+      
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -262,41 +265,14 @@ export default function ProfilePageTG({ navigation }) {
               <Text style={styles.buttontext}>Connected tour guides</Text>
       </TouchableOpacity>
 
-      {CcontainerVisible && (
-      <ScrollView keyboardDismissMode="on-drag">
-      {isLoading ? (
-        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
-      ) : visits.length === 0 ? (
-        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You're currently not connected to any tour guide</Text>
-      ) : (
-      <View style={styles.table}>
-      <View style={styles.header}>
-      <Text style={styles.tableText}>Place </Text>
-      <Text style={styles.tableText}>tourguide_username</Text>
-      <Text style={styles.tableText}>Date</Text>
-      <Text style={styles.tableText}>Rating</Text>
-      </View>
-      {visits.map((visits, index) => (
-        <View key={index} style={styles.row}>
-        <Text style={styles.tableText}>{visits.visit}</Text>
-        <Text style={styles.tableText}>{visits.tourguide_username}</Text>
-        <Text style={styles.tableText}>{formatDate(visits.date_of_the_visit)}</Text>
-        <Text style={styles.tableText}>{visits.rate}</Text>
-        </View>
-        ))}
-        </View>
-        )}
-        </ScrollView>
-        )}
-        </View>
-
       <View>
-      <TouchableOpacity onPress={vhistoryhandlePress} style={styles.button}>
+      <TouchableOpacity onPress={fetchPerviousVisits} style={styles.button}>
               <Text style={styles.buttontext}>Previous visits </Text>
       </TouchableOpacity>
-
+      </View>
       {TcontainerVisible && (
-      <ScrollView keyboardDismissMode="on-drag">
+      <ScrollView keyboardDismissMode="on-drag"
+      style={styles.scrollView} >
       {isLoading ? (
         <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
       ) : visits.length === 0 ? (
@@ -405,21 +381,9 @@ const styles = StyleSheet.create({
     //marginBottom: 20,
     //justifyContent: 'center',
   },
-  vhistory: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    alignSelf: 'center',
+  scrollView: {
+    height: Dimensions.get('window').height * 0.2, // Example: 70% of screen height
   },
-  Hcontainer: {
-    flex: 1,
-    padding: 5,
-    backgroundColor: '#6e706f',
-    borderRadius: 10,
-    width: 400,
-    marginTop: 70,
-  },
-  
   table: {
     borderWidth: 1,
     borderColor: '#6e706f',
@@ -428,8 +392,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#3d3d3d',
     paddingVertical: 5,
-    paddingHorizontal: 10,
-    width: "90%"
+    width: "100%",
   },
   row: {
     flexDirection: 'row',
@@ -444,8 +407,11 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     textAlignVertical: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
     color: 'white',
-    fontSize: 12
+    fontSize: 12,
   },
   icons: {
     flex: 1,

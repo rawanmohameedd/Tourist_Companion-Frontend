@@ -23,12 +23,19 @@ export default function FindAGuide({ navigation }) {
         }
 
         // fetch Find a guide by Spoken Language request
-    } else if ( activeFilter === 'language'){
+      } else if ( activeFilter === 'language'){
         const response = await fetch ( server + `/spoken_lang/${username}`)
         if (response.status === 400){
             setSearchResult(null); 
             setError('No matching users found'); 
-        } else {
+        }
+        //fetch Find a guide by sort them in dec order
+      } else if ( activeFilter === 'rating'){
+          const response = await fetch ( server + `/rating`)
+          if (response.status === 400){
+              setSearchResult(null); 
+              setError('No matching users found'); 
+          } else {
             const data = await response.json();
             setSearchResult(data);
             setError('');
