@@ -225,7 +225,6 @@ export default function ProfilePageTG({ navigation }) {
                 </Text>
               </Pressable>
             </View>
-
             <View style={styles.Hcontainer}>
               <ScrollView keyboardDismissMode="on-drag">
                 <Text style={styles.vhistory}>Visit history</Text>
@@ -286,7 +285,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 400,
     height: 300,
-    marginTop: 70,
+    // marginTop: 70,
   },
   buttontext: {
     color: 'black',

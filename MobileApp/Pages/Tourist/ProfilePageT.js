@@ -13,13 +13,11 @@ export default function ProfilePageTG({ navigation }) {
   const [token, setToken] = useState(null);
   const [visits , setVisits] = useState([])
   const [isLoading, setIsLoading]= useState(true)
+  const [isLoadingtourguide, setIsLoadingtourguide]= useState(true)
+  const [tourguide , setTourguide] = useState([])
   const [TcontainerVisible, setTContainerVisible] = useState(false);
   const [CcontainerVisible, setCContainerVisible] = useState(false);
   const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
-
-  const ConnectedTGhandlePress = () => {
-    setCContainerVisible(!CcontainerVisible);
-  };
 
   // Function to handle uploading photo from gallery
   const handleUploadFromGallery = async () => {
@@ -159,12 +157,6 @@ export default function ProfilePageTG({ navigation }) {
       { cancelable: false }
     );
   };
-/*
-  const handleUploadPhoto = async () => {
-    
-  };
-  */
-  
 
   const fetchProfilePhoto = async (photoUrl, token) => {
     try {
@@ -210,9 +202,18 @@ export default function ProfilePageTG({ navigation }) {
   
   const connectedTourguide = async ()=>{
     try{
-
+      setCContainerVisible(!CcontainerVisible);
+      const response = await fetch(server + `/getTourguide/${profileData.tour_username}`)
+      if (!response.ok){
+        throw new error ('Failed to fetch  connected tour guide')
+      }
+      const data = await response.json()
+      console.log('first',data)
+      setTourguide(data.value)
+      setIsLoadingtourguide(false)
     }catch (error){
-      
+      console.error('Error fetching ratings:', error.message);
+      setIsLoadingtourguide(false)
     }
   }
 
@@ -261,10 +262,23 @@ export default function ProfilePageTG({ navigation }) {
 
 
       <View>
-      <TouchableOpacity onPress={ConnectedTGhandlePress} style={styles.button}>
+      <TouchableOpacity onPress={connectedTourguide} style={styles.button}>
               <Text style={styles.buttontext}>Connected tour guides</Text>
       </TouchableOpacity>
-
+      {CcontainerVisible && (
+        <ScrollView keyboardDismissMode="on-drag"
+        style={styles.scrollView} >
+        {isLoadingtourguide ? (
+          <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
+        ) : tourguide.length === 0 ? (
+          <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You have not been connected to any tour guide yet</Text>
+        ) : (
+        <View >
+          <Text style={{fontSize: 25, color: 'white'}}> Tourguide: {tourguide.tourguide_username}</Text>
+        </View>
+          )}
+          </ScrollView>
+          )}
       <View>
       <TouchableOpacity onPress={fetchPerviousVisits} style={styles.button}>
               <Text style={styles.buttontext}>Previous visits </Text>
@@ -297,7 +311,7 @@ export default function ProfilePageTG({ navigation }) {
         )}
         </ScrollView>
         )}
-        </View>
+      </View>
 
 
 

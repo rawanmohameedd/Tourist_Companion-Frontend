@@ -29,6 +29,7 @@ export default function FindAGuide({ navigation }) {
             setSearchResult(null); 
             setError('No matching users found'); 
         }
+        
         //fetch Find a guide by sort them in dec order
       } else if ( activeFilter === 'rating'){
           const response = await fetch ( server + `/rating`)

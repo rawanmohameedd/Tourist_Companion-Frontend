@@ -129,19 +129,6 @@ export default function ConnectMultipleDays({navigation,route}) {
         <Text style={styles.text}> Multiple days </Text>      
 
         <ScrollView keyboardDismissMode="on-drag">
-           
-            <Text style={styles.text}> Place of visit: </Text>
-            <View style={styles.placesContainer}>
-              
-            <FlatList
-                data={Places}
-                renderItem={renderPlace}
-                keyExtractor={(item) => item}
-                horizontal
-                contentContainerStyle={[styles.placesContainer]}
-                //style={{ height: 150 }}
-            />
-            </View>
         
 
         <TouchableOpacity onPress={openFromhandlePress} style={styles.Date}>
