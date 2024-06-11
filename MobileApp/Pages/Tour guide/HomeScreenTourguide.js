@@ -26,7 +26,7 @@ export default function HomeTabTG ({navigation}){
             </Pressable>
 
             <Pressable style={styles.button}
-                onPress={() => navigation.navigate('Museum Visit TG')}>
+                onPress={() => navigation.navigate('Museum List')}>
                 <ImageBackground 
                 style={styles.icons}
                 resizeMode={'contain'}

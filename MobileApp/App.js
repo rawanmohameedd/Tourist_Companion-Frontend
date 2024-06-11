@@ -28,6 +28,7 @@ import SubmitRating from './Pages/Tourist/RatingPage';
 import Connect from './Pages/Tourist/Connect';
 import ConnectOneTime from './Pages/Tourist/ConnectOneTime';
 import ConnectMultipleDays from './Pages/Tourist/ConnectMultipleDays';
+import MuseumList from './Pages/ChooseMuseum';
 
 const Stack = createNativeStackNavigator();
 const Tab= createBottomTabNavigator();
@@ -169,6 +170,7 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="Connect" component={Connect} />
         <Stack.Screen options={{headerShown: false}} name="ConnectOneTime" component={ConnectOneTime} />
         <Stack.Screen options={{headerShown: false}} name="ConnectMultipleDays" component={ConnectMultipleDays} />
+        <Stack.Screen options={{headerShown: false}} name="Museum List" component={MuseumList}/>
         </Stack.Navigator>
     </NavigationContainer>
   );
