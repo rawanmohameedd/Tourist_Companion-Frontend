@@ -5,28 +5,29 @@ import server from '../elserver';
 
 export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
-  const [bssidMap, setBssidMap] = useState([]);
-  const [interval , setIntervalID]= useState(null)
+  const [bssidMap, setBssidMap] = useState({});
+  const [selectedMuseum, setSelectedMuseum] = useState(null);
 
-  //Permission to access user fine location
-  useEffect(()=>{
+  // Permission to access user fine location
+  useEffect(() => {
     Permission();
-  })
+  }, []);
+
   const Permission = async () => {
-      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-        title: 'This app needs location permission.',
-        message: 'Location permission is required to use Track your guide and crowded rooms features',
-        buttonNegative: 'DENY',
-        buttonPositive: 'ALLOW',
-      });
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // Permission granted
-      } else {
-        console.log('Permission not granted');
-      }
+    const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+      title: 'This app needs location permission.',
+      message: 'Location permission is required to use Track your guide and crowded rooms features',
+      buttonNegative: 'DENY',
+      buttonPositive: 'ALLOW',
+    });
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      // Permission granted
+    } else {
+      console.log('Permission not granted');
+    }
   };
 
-  // get museums list
+  // Get museums list
   useEffect(() => {
     const fetchList = async () => {
       try {
@@ -48,57 +49,30 @@ export default function MuseumList({ navigation }) {
     fetchList();
   }, []);
 
-  // Get  museum Bssids
+  // Get museum Bssids
   const museumsBssids = async (museum_name) => {
     try {
       const response = await fetch(`${server}/getBssid/${museum_name}`);
       const data = await response.json();
       console.log('Bssid data:', data);
       setBssidMap(data);
+      
+      // Navigation logic after fetching BSSID data
+      if (Object.keys(data).length === 0) {
+        Alert.alert("This museum doesn't support museum features yet");
+        navigation.replace("Home Tourguide");
+      } else {
+        Alert.alert("You can track your guide and check crowded rooms now.");
+        navigation.replace("Museum Visit TG");
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const sendReadings = async (map) => {
-    try {
-    const data = await WifiReborn.reScanAndLoadWifiList();
-    const filteredDataWithStrength = {};
-  
-    //Make these bssids with default values (-100)
-    Object.keys(map).forEach((bssid) => {
-      filteredDataWithStrength[bssid] = -100; // Default value for missing BSSIDs
-    });
-  
-    // Update them with actual WiFi strength values
-    data.forEach((wifi) => {
-      const bssid = wifi.BSSID;
-      if (filteredDataWithStrength[bssid] !== undefined) {
-        filteredDataWithStrength[bssid] = wifi.level;
-      }
-    });
-  
-      const response = await fetch(`${server}/ConnectWithFlask`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filteredDataWithStrength }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to send WiFi data to server');
-      }
-      console.log('WiFi data sent successfully.');
-    } catch (error) {
-      console.error('Error sending WiFi data:', error);
-      throw error;
-    }
-  };
-  const handlePress = (item) => {
-    museumsBssids(item.title);
-    if(bssidMap){
-      sendReadings(bssidMap)
-    }
-    navigation.replace("Museum Visit TG");
-    Alert.alert(`You pressed: ${item.title}`);
+  const handlePress = async (item) => {
+    setSelectedMuseum(item);
+    await museumsBssids(item.title);
   };
 
   const renderItem = ({ item }) => (
@@ -106,7 +80,6 @@ export default function MuseumList({ navigation }) {
       <Text style={styles.title}>{item.title}</Text>
     </Pressable>
   );
-
 
   return (
     <View style={styles.container}>
