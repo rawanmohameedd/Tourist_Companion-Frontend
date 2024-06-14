@@ -43,9 +43,13 @@ const HomeTabT = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
-        //   tabBarIcon: ({ color, size }) => (
-        //     <Ionicons name="home" color={color} size={size} />
-        //   ),
+          // tabBarIcon: ()=>( 
+            
+          //   <Image 
+          //   source={require('./Images/home.png')}
+          //   style={{width: 25, height: 25}}
+          //   />
+          // ),
         }}
       />
 
@@ -67,8 +71,12 @@ const HomeTabT = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Profile',
-          // tabBarIcon: ({ color, size }) => (
-          //   <Ionicons name="person-outline" color={color} size={size} />
+          // tabBarIcon: ()=>( 
+            
+          //   <Image 
+          //   source={require('./Images/profile.png')}
+          //   style={{width: 25, height: 25}}
+          //   />
           // ),
         }}
       />
@@ -85,8 +93,12 @@ const HomeTabTG = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
-          // tabBarIcon: ({ color, size }) => (
-          //   <Ionicons name="home" color={color} size={size} />
+          // tabBarIcon: ()=>( 
+            
+          //   <Image 
+          //   source={require('./Images/home.png')}
+          //   style={{width: 25, height: 25}}
+          //   />
           // ),
         }}
       />
@@ -109,8 +121,12 @@ const HomeTabTG = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Profile',
-          // tabBarIcon: ({ color, size }) => (
-          //   <Ionicons name="person-outline" color={color} size={size} />
+          // tabBarIcon: ()=>( 
+            
+          //   <Image 
+          //   source={require('./Images/profile.png')}
+          //   style={{width: 25, height: 25}}
+          //   />
           // ),
         }}
       />
