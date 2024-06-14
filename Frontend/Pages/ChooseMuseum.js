@@ -7,6 +7,7 @@ export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
   const [bssidMap, setBssidMap] = useState({});
   const [selectedMuseum, setSelectedMuseum] = useState(null);
+  const [intervalId, setIntervalId] = useState(null);
 
   // Permission to access user fine location
   useEffect(() => {
@@ -76,6 +77,42 @@ export default function MuseumList({ navigation }) {
     setSelectedMuseum(item);
     await museumsBssids(item.title);
   };
+  // start to get a read send it to the server to detect the location every 30 sec 
+const getAread = async()=>{
+  const data= await WifiReborn.reScanAndLoadWifiList()
+  const filteredDataWithStrength = {};
+  Object.keys(bssidMap).forEach((bssid) => {
+    filteredDataWithStrength[bssid] = bssidMap[bssid] ;
+  });
+  data.forEach((wifi) => {
+    const bssid = wifi.BSSID;
+    if (filteredDataWithStrength[bssid]) {
+      filteredDataWithStrength[bssid]= wifi.level;
+    }
+  });
+  return {filteredDataWithStrength}
+}
+const id = setInterval(async () => {
+  try {
+    const dataWithRoomnum = await getAread();
+    
+    //fetch read request
+    fetch(`${server}/ConnectWithFlask`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dataWithRoomnum }),
+    })
+    .catch(error => {
+      console.error('Error making POST request:', error);
+    });
+
+    console.log(dataWithRoomnum);
+
+  } catch (error) {
+    console.error('Error fetching WiFi data:', error);
+  }
+}, 30100);
+setIntervalId(id)
 
   const renderItem = ({ item }) => (
     <Pressable style={styles.item} onPress={() => handlePress(item)}>
