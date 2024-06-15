@@ -4,7 +4,7 @@ import server from '../../elserver';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import ImagePicker from 'react-native-image-picker';
 
-export let role = "tourist"
+export let role 
 export let username 
 export default function ProfilePageTG({ navigation }) {
 
@@ -92,6 +92,7 @@ export default function ProfilePageTG({ navigation }) {
   useEffect(() => {
     fetchToken();
     fetchPerviousVisits();
+    role = "tourist"
   }, []);
 
   const formatDate = (dateString) => {

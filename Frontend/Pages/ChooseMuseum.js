@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Pressable, Text, View, StyleSheet, Alert, PermissionsAndroid } from 'react-native';
 import WifiReborn from 'react-native-wifi-reborn';
 import server from '../elserver';
+import { role } from './Tourist/ProfilePageT';
 
 export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
@@ -25,7 +26,11 @@ export default function MuseumList({ navigation }) {
       console.log('Permission granted');
       // Permission granted
     } else {
-      navigation.replace("Home Tourguide")
+      if(role == "tourist"){
+        navigation.replace("Home Tourist")
+      } else {
+        navigation.replace("Home Tourguide")
+      }
       console.log('Permission not granted');
     }
   };
@@ -63,10 +68,20 @@ export default function MuseumList({ navigation }) {
       // Navigation logic after fetching BSSID data
       if (Object.keys(data).length === 0) {
         Alert.alert("This museum doesn't support museum features yet");
-        navigation.replace("Home Tourguide");
+        if(role == "tourist"){
+          navigation.replace("Home Tourist")
+        } else {
+          navigation.replace("Home Tourguide")
+        }
       } else {
-        Alert.alert("You can track your guide and check crowded rooms now.");
-        navigation.replace("Museum Visit TG");
+        if(role == "tourist"){
+          Alert.alert("You can track your guide and check crowded rooms now.");
+          navigation.replace("Museum Visit");
+        } else {
+          Alert.alert("You can alert your tourists and check crowded rooms now.");
+          navigation.replace("Museum Visit TG");
+        }
+        
       }
     } catch (error) {
       console.error(error);
@@ -78,41 +93,41 @@ export default function MuseumList({ navigation }) {
     await museumsBssids(item.title);
   };
   // start to get a read send it to the server to detect the location every 30 sec 
-const getAread = async()=>{
-  const data= await WifiReborn.reScanAndLoadWifiList()
-  const filteredDataWithStrength = {};
-  Object.keys(bssidMap).forEach((bssid) => {
-    filteredDataWithStrength[bssid] = bssidMap[bssid] ;
-  });
-  data.forEach((wifi) => {
-    const bssid = wifi.BSSID;
-    if (filteredDataWithStrength[bssid]) {
-      filteredDataWithStrength[bssid]= wifi.level;
-    }
-  });
-  return {filteredDataWithStrength}
-}
-const id = setInterval(async () => {
-  try {
-    const dataWithRoomnum = await getAread();
+// const getAread = async()=>{
+//   const data= await WifiReborn.reScanAndLoadWifiList()
+//   const filteredDataWithStrength = {};
+//   Object.keys(bssidMap).forEach((bssid) => {
+//     filteredDataWithStrength[bssid] = bssidMap[bssid] ;
+//   });
+//   data.forEach((wifi) => {
+//     const bssid = wifi.BSSID;
+//     if (filteredDataWithStrength[bssid]) {
+//       filteredDataWithStrength[bssid]= wifi.level;
+//     }
+//   });
+//   return {filteredDataWithStrength}
+// }
+// const id = setInterval(async () => {
+//   try {
+//     const dataWithRoomnum = await getAread();
     
-    //fetch read request
-    fetch(`${server}/ConnectWithFlask`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ dataWithRoomnum }),
-    })
-    .catch(error => {
-      console.error('Error making POST request:', error);
-    });
+//     //fetch read request
+//     fetch(`${server}/ConnectWithFlask`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ dataWithRoomnum }),
+//     })
+//     .catch(error => {
+//       console.error('Error making POST request:', error);
+//     });
 
-    console.log(dataWithRoomnum);
+//     console.log(dataWithRoomnum);
 
-  } catch (error) {
-    console.error('Error fetching WiFi data:', error);
-  }
-}, 30100);
-setIntervalId(id)
+//   } catch (error) {
+//     console.error('Error fetching WiFi data:', error);
+//   }
+// }, 30100);
+// setIntervalId(id)
 
   const renderItem = ({ item }) => (
     <Pressable style={styles.item} onPress={() => handlePress(item)}>
