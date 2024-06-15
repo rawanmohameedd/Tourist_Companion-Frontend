@@ -10,7 +10,7 @@ export default function VisitTour  (){
             <Image source={(require('./../../Images/track.png'))} resizeMode='cover'>
                 
                 </Image> 
-                <Text style={styles.text}>Track your tourists</Text>
+                <Text style={styles.text}>Alert your tourists</Text>
 
             </ImageBackground> 
            

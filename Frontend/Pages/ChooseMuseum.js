@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Pressable, Text, View, StyleSheet, Alert, PermissionsAndroid } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { FlatList, Pressable, Text, View, StyleSheet, Alert, PermissionsAndroid, Button } from 'react-native';
 import WifiReborn from 'react-native-wifi-reborn';
 import server from '../elserver';
 import { role } from './Tourist/ProfilePageT';
@@ -8,7 +8,14 @@ export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
   const [bssidMap, setBssidMap] = useState({});
   const [selectedMuseum, setSelectedMuseum] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
+  const isScanningRef = useRef(isScanning);
+
+  // Update ref whenever isScanning changes
+  useEffect(() => {
+    isScanningRef.current = isScanning;
+  }, [isScanning]);
 
   // Permission to access user fine location
   useEffect(() => {
@@ -26,10 +33,10 @@ export default function MuseumList({ navigation }) {
       console.log('Permission granted');
       // Permission granted
     } else {
-      if(role == "tourist"){
-        navigation.replace("Home Tourist")
+      if (role === "tourist") {
+        navigation.replace("Home Tourist");
       } else {
-        navigation.replace("Home Tourguide")
+        navigation.replace("Home Tourguide");
       }
       console.log('Permission not granted');
     }
@@ -57,80 +64,106 @@ export default function MuseumList({ navigation }) {
     fetchList();
   }, []);
 
-  // Get museum Bssids
+  // Get museum BSSIDs
   const museumsBssids = async (museum_name) => {
     try {
       const response = await fetch(`${server}/getBssid/${museum_name}`);
       const data = await response.json();
-      console.log('Bssid data:', data);
+      console.log('BSSID data:', data);
       setBssidMap(data);
-      
-      // Navigation logic after fetching BSSID data
+
       if (Object.keys(data).length === 0) {
         Alert.alert("This museum doesn't support museum features yet");
-        if(role == "tourist"){
-          navigation.replace("Home Tourist")
+        if (role === "tourist") {
+          navigation.replace("Home Tourist");
         } else {
-          navigation.replace("Home Tourguide")
+          navigation.replace("Home Tourguide");
         }
       } else {
-        if(role == "tourist"){
+        if (role === "tourist") {
           Alert.alert("You can track your guide and check crowded rooms now.");
           navigation.replace("Museum Visit");
         } else {
           Alert.alert("You can alert your tourists and check crowded rooms now.");
           navigation.replace("Museum Visit TG");
         }
-        
+
+        // Start scanning for WiFi networks
+        startWiFiScan(data);
+
+        // Setinterval to repeat the process every 1 minute
+        const id = setInterval(() => {
+          startWiFiScan(data);
+        }, 60000);
+        setIntervalId(id);
+        setIsScanning(true);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handlePress = async (item) => {
-    setSelectedMuseum(item);
-    await museumsBssids(item.title);
+  const startWiFiScan = async (bssidMap) => {
+    try {
+      const wifiList = await WifiReborn.reScanAndLoadWifiList();
+
+      const readings = Object.keys(bssidMap).reduce((acc, bssid) => {
+        const wifi = wifiList.find(wifi => wifi.BSSID === bssid);
+        acc[bssid] = wifi ? wifi.level : -100;
+        return acc;
+      }, {});
+
+      console.log('Filtered readings:', readings);
+
+      // Send readings to Flask server
+      await sendReadingsToFlask(readings);
+    } catch (error) {
+      console.error('Error scanning WiFi networks:', error);
+    }
   };
-  // start to get a read send it to the server to detect the location every 30 sec 
-// const getAread = async()=>{
-//   const data= await WifiReborn.reScanAndLoadWifiList()
-//   const filteredDataWithStrength = {};
-//   Object.keys(bssidMap).forEach((bssid) => {
-//     filteredDataWithStrength[bssid] = bssidMap[bssid] ;
-//   });
-//   data.forEach((wifi) => {
-//     const bssid = wifi.BSSID;
-//     if (filteredDataWithStrength[bssid]) {
-//       filteredDataWithStrength[bssid]= wifi.level;
-//     }
-//   });
-//   return {filteredDataWithStrength}
-// }
-// const id = setInterval(async () => {
-//   try {
-//     const dataWithRoomnum = await getAread();
-    
-//     //fetch read request
-//     fetch(`${server}/ConnectWithFlask`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ dataWithRoomnum }),
-//     })
-//     .catch(error => {
-//       console.error('Error making POST request:', error);
-//     });
 
-//     console.log(dataWithRoomnum);
+  const sendReadingsToFlask = async (readings) => {
+    try {
+      const response = await fetch(`${server}/ConnectWithFlask`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ readings }),
+      });
+      const result = await response.json();
+      console.log('Flask response:', result);
+    } catch (error) {
+      console.error('Error sending data to Flask server:', error);
+    }
+  };
 
-//   } catch (error) {
-//     console.error('Error fetching WiFi data:', error);
-//   }
-// }, 30100);
-// setIntervalId(id)
+  const handlePress = async (item) => {
+    if (!isScanningRef.current) {
+      setSelectedMuseum(item);
+      await museumsBssids(item.title);
+    } else {
+      Alert.alert("Please exit the current museum before selecting another.");
+    }
+  };
+
+  const handleExitMuseum = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+      setIsScanning(false);
+    }
+    setSelectedMuseum(null);
+    setIsScanning(false);
+    Alert.alert("You have exited the museum.");
+  };
 
   const renderItem = ({ item }) => (
-    <Pressable style={styles.item} onPress={() => handlePress(item)}>
+    <Pressable
+      style={styles.item}
+      onPress={() => handlePress(item)}
+      disabled={isScanning && selectedMuseum?.id !== item.id}
+    >
       <Text style={styles.title}>{item.title}</Text>
     </Pressable>
   );
@@ -143,6 +176,9 @@ export default function MuseumList({ navigation }) {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={<Text style={styles.headerText}>Please choose the museum you are in</Text>}
       />
+      {isScanning && (
+        <Button title="I am out of the museum" onPress={handleExitMuseum} />
+      )}
     </View>
   );
 };
