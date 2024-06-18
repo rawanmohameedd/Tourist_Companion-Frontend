@@ -1,180 +1,184 @@
-import React, {useState, useEffect} from 'react';
-import {Text, StyleSheet, Alert, Modal, TextInput, ScrollView, View, Pressable, FlatList, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, StyleSheet, Alert, Modal, ScrollView, View, Pressable, FlatList, TouchableOpacity } from 'react-native';
 import { username } from './ProfilePageT';
 import server from '../../elserver';
-import DatePicker from 'react-native-modern-datepicker'
-import { getToday , getFormatedDate } from 'react-native-modern-datepicker';
+import DatePicker from 'react-native-modern-datepicker';
+import { getFormatedDate } from 'react-native-modern-datepicker';
 
-//import { TouchableOpacity , GestureHandlerRootView} from 'react-native-gesture-handler';
-//import { GestureHandlerRootView } from 'react-native-gesture-handler';
+export default function SubmitRating({ navigation, route }) {
+  const today = new Date();
+  const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
+  const [Visit, OnChangeVisit] = useState('');
+  const [tour_username, OnChangetour_username] = useState('');
+  const [tourguide_username, OnChangetourguide_username] = useState('');
+  const [DateOfTheVisit, OnChangeDateOfTheVisit] = useState('');
+  const [Pending, OnPending] = useState(false);
+  const [Rate, setRate] = useState('');
+  const ratings = ['1', '2', '3', '4', '5'];
+  const [Place, setPlace] = useState('');
+  const [open, setOpen] = useState(false);
+  const [Places, setData] = useState([]);
 
-export default function SubmitRating({navigation,route}) {
-    //const [Rate, onchangeRate]= useState('');
-    const today = new Date();
-    const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
-    const [Visit, OnChangeVisit] = useState('');
-    const [tour_username, OnChangetour_username] = useState('');
-    const [tourguide_username, OnChangetourguide_username] = useState('');
-    const [DateOfTheVisit, OnChangeDateOfTheVisit] = useState('');
-    const [Pending, OnPending] = useState(false);
-    const [Rate, setRate] = useState('');
-    const ratings = ['1', '2', '3', '4', '5'];
-    const [Place, setPlace]= useState('');
-    const Places = ['Pyramids','Egyptian museum','Grand Egyptian museum','Museum of civilizations','Nubian museum','Coptic museum']
-    const [open, setOpen] = useState(false);
+  const openhandlePress = () => {
+    setOpen(!open);
+  };
 
-    const openhandlePress = () => {
-      setOpen(!open);
-    };
+  function handleDate(propDate) {
+    OnChangeDateOfTheVisit(propDate);
+  }
 
-    function handleDate (propDate) {
-      OnChangeDateOfTheVisit(propDate)
-  };  
-  
- 
-    
-    //tourguide Profile data from search
-    const {name}= route.params
-
-    //tourist and tourguide username from the signed in tourist profile and the profile search for tourguide
-    useEffect(()=>{
-        OnChangetour_username(username)
-        OnChangetourguide_username(name.tourguide_username)
-    },[])
-    
-    const rate = async () =>{
-      if (!DateOfTheVisit) {
-        Alert.alert('Error', 'Please select a date of visit.');
-        return;
-    }
-        OnPending(true)
-        try {
-            const response = await fetch (server + "/singleRate",{
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    tour_username: tour_username,
-                    tourguide_username: tourguide_username,
-                    rate: Rate,
-                    visit: Place,
-                    date_of_the_visit: DateOfTheVisit
-                })
-            })
-            const data = await response.json()
-            if (data && !data.message){
-                console.log(data)
-                const user = name
-                console.log('yaraab2',user)
-                navigation.navigate('SearchPageTG',{user: user})
-                OnPending(false)
-            } else {
-                OnPending(false);
-                alert(data.message);
-            }
-        } catch (error){
-            console.error("Network request failed:", error);
-            console.log(server + "/singleRate");
-            console.log("Received rate request:", Rate, Visit, DateOfTheVisit, tour_username, tourguide_username);
-            alert("Network request failed. Please try again later.");
-            OnPending(false);
+  useEffect(() => {
+    const fetchList = async () => {
+      try {
+        const response = await fetch(`${server}/museums`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch list');
         }
-    }
-    const handleSubmmiting = () => {
-        Alert.alert(
-            "Submit",
-            "Are you sure you want to submit this rate?",
-            [
-            {
-                text: "Cancel",
-                style: "cancel"
-            },
-            { text: "Yes"
-                , onPress: () => rate() }
-            ],
-            { cancelable: false }
-        );
+        const data = await response.json();
+        const museumNames = data.map(museum => ({
+          id: museum.musid.toString(),
+          title: museum.museum_name
+        }));
+        setData(museumNames);
+      } catch (error) {
+        console.log(error.message);
+      }
     };
 
-    const renderItem = ({ item }) => (
-        <Pressable
-          style={[styles.ratingItem, item === Rate && styles.selectedRatingItem]}
-          onPress={() => setRate(item)}>
-          <Text style={styles.ratingText}>{item}</Text>
-        </Pressable>
-      );
+    fetchList();
+  }, []);
 
-      const renderPlace = ({ item }) => (
-        <Pressable
-          style={[styles.place, item === Place && styles.selectedplace]}
-          onPress={() => setPlace(item)}>
-          <Text style={styles.placeText}>{item}</Text>
-        </Pressable>
-      );
-    return (
-        <View style={styles.container}>
+  const { name } = route.params;
 
-        <Text style={styles.text}>Rate tourguide:  
+  useEffect(() => {
+    OnChangetour_username(username);
+    OnChangetourguide_username(name.tourguide_username);
+  }, [username, name]);
+
+  const rate = async () => {
+    if (!DateOfTheVisit) {
+      Alert.alert('Error', 'Please select a date of visit.');
+      return;
+    }
+    OnPending(true);
+    try {
+      const response = await fetch(`${server}/singleRate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tour_username: tour_username,
+          tourguide_username: tourguide_username,
+          rate: Rate,
+          visit: Place,
+          date_of_the_visit: DateOfTheVisit
+        })
+      });
+      const data = await response.json();
+      if (data && !data.message) {
+        const user = name;
+        navigation.navigate('SearchPageTG', { user: user });
+        OnPending(false);
+      } else {
+        OnPending(false);
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Network request failed:', error);
+      alert('Network request failed. Please try again later.');
+      OnPending(false);
+    }
+  };
+
+  const handleSubmitting = () => {
+    Alert.alert(
+      'Submit',
+      'Are you sure you want to submit this rate?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Yes',
+          onPress: () => rate()
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const renderItem = ({ item }) => (
+    <Pressable
+      style={[styles.ratingItem, item === Rate && styles.selectedRatingItem]}
+      onPress={() => setRate(item)}
+    >
+      <Text style={styles.ratingText}>{item}</Text>
+    </Pressable>
+  );
+
+  const renderPlace = ({ item }) => (
+    <Pressable
+      style={[styles.place, item.title === Place && styles.selectedplace]}
+      onPress={() => setPlace(item.title)}
+    >
+      <Text style={styles.placeText}>{item.title}</Text>
+    </Pressable>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Rate tour guide:
         <Text style={styles.boldText}> {name.tourguide_username}</Text>
-        </Text>      
-        
-        <ScrollView keyboardDismissMode="on-drag">
-            <FlatList
-                data={ratings}
-                renderItem={renderItem}
-                keyExtractor={(item) => item}
-                horizontal
-                contentContainerStyle={styles.ratingContainer}
-            />
-            <Text style={styles.text}> Place of visit: </Text>
-            <View style={styles.placesContainer}>
-              
-            <FlatList
-                data={Places}
-                renderItem={renderPlace}
-                keyExtractor={(item) => item}
-                horizontal
-                contentContainerStyle={[styles.placesContainer]}
-                //style={{ height: 150 }}
-            />
-            </View>
-        
-
-        <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
-          <Text style={styles.calendarButton}>   Date of visit: {DateOfTheVisit} </Text>
+      </Text>
+      <ScrollView keyboardDismissMode="on-drag">
+        <FlatList
+          data={ratings}
+          renderItem={renderItem}
+          keyExtractor={(item) => item}
+          horizontal
+          contentContainerStyle={styles.ratingContainer}
+        />
+        <Text style={styles.text}> Place of visit: </Text>
+        <View style={styles.placesContainer}>
+          <FlatList
+            data={Places}
+            renderItem={renderPlace}
+            keyExtractor={(item) => item.id}
+            horizontal
+            contentContainerStyle={styles.placesContainer}
+          />
+        </View>
+        <TouchableOpacity onPress={openhandlePress} style={styles.dateButton}>
+          <Text style={styles.calendarButton}>Date of visit: {DateOfTheVisit}</Text>
         </TouchableOpacity>
-
         <Modal
-          animationType='slide'
-          transparent= {true}
-          visible= {open}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-
-                <DatePicker 
-                mode= 'calendar'
+          animationType="slide"
+          transparent={true}
+          visible={open}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <DatePicker
+                mode="calendar"
                 selected={DateOfTheVisit}
                 maximumDate={endDate}
-                onSelectedChange={handleDate} 
-                />
-
-                <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
-                    <Text>save</Text>
-                </TouchableOpacity>
-              </View>
-
+                onSelectedChange={handleDate}
+              />
+              <TouchableOpacity onPress={openhandlePress} style={styles.saveButton}>
+                <Text>Save</Text>
+              </TouchableOpacity>
             </View>
-          
+          </View>
         </Modal>
-
         <Pressable
-            onPress={handleSubmmiting}
-            style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Submit </Text>
+          onPress={handleSubmitting}
+          style={styles.button}
+        >
+          <Text style={[styles.buttonText, { fontSize: 20, fontWeight: 'bold' }]}>Submit</Text>
         </Pressable>
-        </ScrollView>
+      </ScrollView>
     </View>
-    );
+  );
 }
 
 const styles = StyleSheet.create({

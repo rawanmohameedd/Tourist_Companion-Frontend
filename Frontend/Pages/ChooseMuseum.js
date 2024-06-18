@@ -3,19 +3,15 @@ import { FlatList, Pressable, Text, View, StyleSheet, Alert, PermissionsAndroid,
 import WifiReborn from 'react-native-wifi-reborn';
 import server from '../elserver';
 import { role } from './Tourist/ProfilePageT';
+import { usernameT } from './Tourist/SigninT';
+import { usernameTG } from './Tour guide/SigninTG';
 
 export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
   const [bssidMap, setBssidMap] = useState({});
   const [selectedMuseum, setSelectedMuseum] = useState(null);
-  const [isScanning, setIsScanning] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
-  const isScanningRef = useRef(isScanning);
-
-  // Update ref whenever isScanning changes
-  useEffect(() => {
-    isScanningRef.current = isScanning;
-  }, [isScanning]);
+  const [scanning, setScanning] = useState(false);
 
   // Permission to access user fine location
   useEffect(() => {
@@ -66,6 +62,12 @@ export default function MuseumList({ navigation }) {
 
   // Get museum BSSIDs
   const museumsBssids = async (museum_name) => {
+    console.log('Scan State',scanning)
+    if (scanning) {
+      Alert.alert('You cant choose another museum while you are already on one')
+      return;
+    } // Check if scanning is already in progress
+    setScanning(true);
     try {
       const response = await fetch(`${server}/getBssid/${museum_name}`);
       const data = await response.json();
@@ -80,49 +82,63 @@ export default function MuseumList({ navigation }) {
           navigation.replace("Home Tourguide");
         }
       } else {
+        let username , museumRole
         if (role === "tourist") {
           Alert.alert("You can track your guide and check crowded rooms now.");
           navigation.replace("Museum Visit");
+          username= usernameT
+          museumRole = 'Tourist'
         } else {
           Alert.alert("You can alert your tourists and check crowded rooms now.");
           navigation.replace("Museum Visit TG");
+          username= usernameTG
+          museumRole = 'Tour guide'
         }
 
         // Start scanning for WiFi networks
-        startWiFiScan(data);
+        startWiFiScan(data, username);
 
         // Setinterval to repeat the process every 1 minute
         const id = setInterval(() => {
-          startWiFiScan(data);
-        }, 60000);
+          startWiFiScan(data, username);
+        }, 60100);
         setIntervalId(id);
-        setIsScanning(true);
       }
     } catch (error) {
       console.error(error);
     }
+    finally {
+      setScanning(false); // Set scanning back to false when scanning completes
+    }
   };
 
-  const startWiFiScan = async (bssidMap) => {
+  const startWiFiScan = async (bssidMap, username) => {
     try {
+      console.log('BSSID Map:', bssidMap);
       const wifiList = await WifiReborn.reScanAndLoadWifiList();
-
-      const readings = Object.keys(bssidMap).reduce((acc, bssid) => {
+      console.log('Wi-Fi List:', wifiList);
+  
+      const readings = bssidMap.reduce((acc, {bssid}) => {
         const wifi = wifiList.find(wifi => wifi.BSSID === bssid);
+        // if (wifi) {
+        //   console.log('Matched BSSID:', bssid, 'with level:', wifi.level);
+        // } else {
+        //   console.log('No match for BSSID:', bssid);
+        // }
         acc[bssid] = wifi ? wifi.level : -100;
         return acc;
       }, {});
-
+  
       console.log('Filtered readings:', readings);
-
       // Send readings to Flask server
-      await sendReadingsToFlask(readings);
+      await sendReadingsToFlask(readings, username);
     } catch (error) {
       console.error('Error scanning WiFi networks:', error);
     }
   };
+  
 
-  const sendReadingsToFlask = async (readings) => {
+  const sendReadingsToFlask = async (readings, username) => {
     try {
       const response = await fetch(`${server}/ConnectWithFlask`, {
         method: 'POST',
@@ -132,37 +148,21 @@ export default function MuseumList({ navigation }) {
         body: JSON.stringify({ readings }),
       });
       const result = await response.json();
-      console.log('Flask response:', result);
+      console.log(username, 'is currently on', result);
     } catch (error) {
       console.error('Error sending data to Flask server:', error);
     }
   };
 
   const handlePress = async (item) => {
-    if (!isScanningRef.current) {
       setSelectedMuseum(item);
       await museumsBssids(item.title);
-    } else {
-      Alert.alert("Please exit the current museum before selecting another.");
-    }
-  };
-
-  const handleExitMuseum = () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-      setIntervalId(null);
-      setIsScanning(false);
-    }
-    setSelectedMuseum(null);
-    setIsScanning(false);
-    Alert.alert("You have exited the museum.");
   };
 
   const renderItem = ({ item }) => (
     <Pressable
       style={styles.item}
       onPress={() => handlePress(item)}
-      disabled={isScanning && selectedMuseum?.id !== item.id}
     >
       <Text style={styles.title}>{item.title}</Text>
     </Pressable>
@@ -176,9 +176,6 @@ export default function MuseumList({ navigation }) {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={<Text style={styles.headerText}>Please choose the museum you are in</Text>}
       />
-      {isScanning && (
-        <Button title="I am out of the museum" onPress={handleExitMuseum} />
-      )}
     </View>
   );
 };

@@ -4,6 +4,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from "../../elserver";
 
+export let usernameT 
 export default function SigninT() {
     const [Email, OnChangeEmail] = useState('');
     const [Password, OnChangePassword] = useState('');
@@ -30,20 +31,24 @@ export default function SigninT() {
                 }),
             });
             const data = await response.json();
-            if (data) {
-                console.log(data)
+            
+            console.log("Server response:", data); // Log server response for debugging
+    
+            if (response.ok && data.token) {
+                usernameT = data.value.tour_username
+                console.log(usernameT)
                 await EncryptedStorage.setItem("token", data.token);
                 OnPending(false);
                 navigation.dispatch(
                     CommonActions.reset({
                         index: 0,
-                        routes: [{ name:'Home Tourist'}]
+                        routes: [{ name: 'Home Tourist' }]
                     }), {
                     token: data.token,
                 });
             } else {
                 OnPending(false);
-                alert(data.message);
+                alert(data.message || "Sign-in failed. Please check your email and password.");
             }
         } catch (error) {
             console.error("Network request failed:", error);
@@ -53,6 +58,7 @@ export default function SigninT() {
             OnPending(false);
         }
     };
+    
     
     
     return (
