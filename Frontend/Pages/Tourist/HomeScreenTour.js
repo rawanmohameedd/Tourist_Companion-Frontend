@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet , Image , ImageBackground} from 'react-native';
 
+import { fenak } from '../ChooseMuseum';
+
 export default function HomeTabT ({navigation}){
     return (
         <View style={styles.gridContainer}>
@@ -27,7 +29,13 @@ export default function HomeTabT ({navigation}){
             </Pressable>
 
             <Pressable style={styles.button}
-                onPress={() => navigation.navigate('Museum List')}>
+                onPress={() => {
+                    console.log('hwa feen', fenak)
+                    if (!fenak)
+                        navigation.navigate('Museum List')
+                    else 
+                        navigation.navigate('Museum Visit')
+                }}>
                 <ImageBackground 
                 style={styles.icons}
                 resizeMode={'contain'}
