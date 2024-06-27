@@ -37,6 +37,7 @@ export default function SigninTG() {
             
             if (response.ok && data.token) {
                 usernameTG = data.value.tourguide_username;
+                console.log(usernameTG)
                 await AsyncStorage.setItem("token", data.token);
                 OnPending(false);
                 navigation.dispatch(

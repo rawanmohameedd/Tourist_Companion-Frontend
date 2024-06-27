@@ -4,24 +4,25 @@ import { fenak } from '../ChooseMuseum';
 
 export let role;
 
-role = "tourist";
 
 
 export default function HomeTabT ({navigation}){
     return (
         <View style={styles.gridContainer}>
-            <Pressable style={styles.button}
-            onPress ={()=> navigation.navigate('Find a guide')}>
-                <ImageBackground 
-                    style={styles.icons}
-                    resizeMode={'contain'}
-                    source={require('../../Images/findtg.jpg')}>
-                    <Text style={styles.gridText}>Find a guide</Text>
-                    </ImageBackground>
-            </Pressable>
-
-            <Pressable style={styles.button}
-                onPress={() => navigation.navigate('Museum Info')}>
+        <Pressable style={styles.button}
+        onPress ={()=> navigation.navigate('Find a guide')}>
+        <ImageBackground 
+        style={styles.icons}
+        resizeMode={'contain'}
+        source={require('../../Images/findtg.jpg')}>
+        <Text style={styles.gridText}>Find a guide</Text>
+        </ImageBackground>
+        </Pressable>
+        
+        <Pressable style={styles.button}
+        onPress={() => {
+            role = "tourist";
+            navigation.navigate('Museum Info')}}>
                 <ImageBackground 
                     style={styles.icons}
                     resizeMode={'contain'}
