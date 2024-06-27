@@ -6,12 +6,12 @@ import { role } from './Tourist/HomeScreenTour';
 import { usernameT } from './Tourist/SigninT';
 import { usernameTG } from './Tour guide/SigninTG';
 
+export let fenak
 export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
   const [bssidMap, setBssidMap] = useState({});
   const [selectedMuseum, setSelectedMuseum] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
-  const [scanning, setScanning] = useState(false);
 
   // Permission to access user fine location
   useEffect(() => {
@@ -38,6 +38,81 @@ export default function MuseumList({ navigation }) {
     }
   };
 
+  // add user location
+  const addUser = async (username, role, museumName, location) => {
+    const payload = {
+      username: username,
+      role: role,
+      museum_name: museumName,
+      location: location
+    };
+    
+    try {
+      const response = await fetch(`${server}/newUser`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      
+      const result = await response.json();
+      fenak = 1
+      return result;
+    } catch (error) {
+      console.error('Error adding new user:', error);
+    }
+  };
+  
+  //update user location
+  const updateUser = async (username,museum_name, location) => {
+    const payload = {
+      username: username,
+      museum_name: museum_name,
+      location: location
+    };
+    
+    try {
+      
+      const response = await fetch(`${server}/updateUser`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      
+      const result = await response.json();
+      fenak = 1
+      return result;
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+  
+  //delete user location
+  const deleteUser = async (username) => {
+    try {
+      const response = await fetch(`${server}/deleteUser/${username}`, {
+        method: 'DELETE',
+      });
+      
+      const result = await response.json();
+      fenak = 0
+      return result;
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+  
+  //clear interval
+  const stopInterval = async(username)=>{
+    clearInterval(intervalId)
+    await deleteUser(username)
+    Alert.alert("It seems that you are out of the museum")
+    navigation.replace('Museum List')
+    fenak =0 
+  }
   // Get museums list
   useEffect(() => {
     const fetchList = async () => {
@@ -62,16 +137,9 @@ export default function MuseumList({ navigation }) {
 
   // Get museum BSSIDs
   const museumsBssids = async (museum_name) => {
-    console.log('Scan State',scanning)
-    if (scanning) {
-      Alert.alert('You cant choose another museum while you are already on one')
-      return;
-    } // Check if scanning is already in progress
-    setScanning(true);
     try {
       const response = await fetch(`${server}/getBssid/${museum_name}`);
       const data = await response.json();
-      console.log('BSSID data:', data);
       setBssidMap(data);
 
       if (Object.keys(data).length === 0) {
@@ -82,63 +150,82 @@ export default function MuseumList({ navigation }) {
           navigation.replace("Home Tourguide");
         }
       } else {
-        let username , museumRole
+        let username, museumRole;
         if (role === "tourist") {
           Alert.alert("You can track your guide and check crowded rooms now.");
           navigation.replace("Museum Visit");
-          username= usernameT
-          museumRole = 'Tourist'
+          username = usernameT;
+          museumRole = 'Tourist';
         } else {
           Alert.alert("You can alert your tourists and check crowded rooms now.");
           navigation.replace("Museum Visit TG");
-          username= usernameTG
-          museumRole = 'Tour guide'
+          username = usernameTG;
+          museumRole = 'Tour guide';
         }
 
         // Start scanning for WiFi networks
-        startWiFiScan(data, username);
-
-        // Setinterval to repeat the process every 1 minute
-        const id = setInterval(() => {
-          startWiFiScan(data, username);
-        }, 60100);
-        setIntervalId(id);
+        let locationInmuseum = await startWiFiScan(data, username, museumRole);
+      if (!locationInmuseum) {
+        stopInterval(username);
+        return;
       }
-    } catch (error) {
-      console.error(error);
-    }
-    finally {
-      setScanning(false); // Set scanning back to false when scanning completes
-    }
-  };
 
-  const startWiFiScan = async (bssidMap, username) => {
+      await addUser(username, museumRole, museum_name, locationInmuseum);
+      console.log(museum_name);
+
+      let counter = 0;
+
+      const id = setInterval(async () => {
+        const updatedLocation = await startWiFiScan(data, username, museumRole);
+        if (!updatedLocation) {
+          // Clear interval if user is out of the museum
+          stopInterval(username);
+          return;
+        } else {
+          await updateUser(username, museum_name, updatedLocation);
+          counter++;
+          console.log(counter);
+          setIntervalId(id);
+        }
+      }, 60100);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+  const startWiFiScan = async (bssidMap, username, role) => {
     try {
       console.log('BSSID Map:', bssidMap);
       const wifiList = await WifiReborn.reScanAndLoadWifiList();
-      console.log('Wi-Fi List:', wifiList);
+      console.log('WiFi List:', wifiList); // Added debug log to check WiFi list
   
-      const readings = bssidMap.reduce((acc, {bssid}) => {
+      const readings = bssidMap.reduce((acc, { bssid }) => {
         const wifi = wifiList.find(wifi => wifi.BSSID === bssid);
-        // if (wifi) {
-        //   console.log('Matched BSSID:', bssid, 'with level:', wifi.level);
-        // } else {
-        //   console.log('No match for BSSID:', bssid);
-        // }
         acc[bssid] = wifi ? wifi.level : -100;
         return acc;
       }, {});
   
       console.log('Filtered readings:', readings);
-      // Send readings to Flask server
-      await sendReadingsToFlask(readings, username);
+
+      const checkReadings = Object.values(readings).every(value => value === -100);
+      if (checkReadings) {
+        stopInterval(username)
+        return null;
+      } else {
+        // Send readings to Flask server
+        const location = await sendReadingsToFlask(readings, username);
+        console.log(username, 'is a', role, 'and currently on', location);
+        return location;
+      }
     } catch (error) {
       console.error('Error scanning WiFi networks:', error);
     }
   };
+
   
 
-  const sendReadingsToFlask = async (readings, username) => {
+  const sendReadingsToFlask = async (readings) => {
     try {
       const response = await fetch(`${server}/ConnectWithFlask`, {
         method: 'POST',
@@ -147,16 +234,15 @@ export default function MuseumList({ navigation }) {
         },
         body: JSON.stringify({ readings }),
       });
-      const result = await response.json();
-      console.log(username, 'is currently on', result);
+      return await response.json();
     } catch (error) {
       console.error('Error sending data to Flask server:', error);
     }
   };
 
   const handlePress = async (item) => {
-      setSelectedMuseum(item);
-      await museumsBssids(item.title);
+    setSelectedMuseum(item);
+    await museumsBssids(item.title);
   };
 
   const renderItem = ({ item }) => (
