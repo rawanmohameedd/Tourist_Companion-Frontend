@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet , Image , ImageBackground} from 'react-native';
-
 import { fenak } from '../ChooseMuseum';
+
+export let role;
+
+role = "tourist";
+
 
 export default function HomeTabT ({navigation}){
     return (

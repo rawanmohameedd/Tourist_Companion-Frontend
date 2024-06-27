@@ -32,6 +32,8 @@ import Connect from './Pages/Tourist/Connect';
 import ConnectOneTime from './Pages/Tourist/ConnectOneTime';
 import ConnectMultipleDays from './Pages/Tourist/ConnectMultipleDays';
 import MuseumList from './Pages/ChooseMuseum';
+import NfcRead from './Pages/nfcread';
+import NfcReadTG from './Pages/nfcreadTG';
 
 const Stack = createStackNavigator();
 const Tab= createBottomTabNavigator();
@@ -167,6 +169,8 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="ConnectOneTime" component={ConnectOneTime} />
         <Stack.Screen options={{headerShown: false}} name="ConnectMultipleDays" component={ConnectMultipleDays} />
         <Stack.Screen options={{headerShown: false}} name="Museum List" component={MuseumList}/>
+        <Stack.Screen options={{headerShown: false}} name="NFCread" component={NfcRead}/>
+        <Stack.Screen options={{headerShown: false}} name="NFCreadTG" component={NfcReadTG}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

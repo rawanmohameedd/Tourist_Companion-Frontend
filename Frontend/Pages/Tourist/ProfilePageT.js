@@ -3,9 +3,7 @@ import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpa
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import server from '../../elserver';
-//import Table from './profiletable';
 
-export let role;
 export let username;
 
 export default function ProfilePageTG({ navigation }) {
@@ -141,7 +139,6 @@ export default function ProfilePageTG({ navigation }) {
   useEffect(() => {
     fetchToken();
     fetchPerviousVisits();
-    role = "tourist";
   }, []);
 
   const formatDate = (dateString) => {

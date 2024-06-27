@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Pressable, Text, StyleSheet , ImageBackground,Image} from 'react-native';
+import { View, Pressable, Text, StyleSheet , ImageBackground,Image, } from 'react-native';
 
-export default function VisitTour  (){
+export default function VisitTour  ({navigation}){
     return(
     <View style={styles.container}>
     <View style={styles.top}>
@@ -15,18 +15,22 @@ export default function VisitTour  (){
             </ImageBackground> 
            
         </Pressable> 
-        <Pressable style={[styles.item]}> 
-            <ImageBackground source={(require('./../../Images/monumentlabel.jpg'))} resizeMode="cover" style={styles.image}>
-                <Image source={(require('./../../Images/monument.png'))} resizeMode='contain' style={styles.data}>
-                
-                </Image> 
-                <Text style={styles.text}>Read monument labels</Text>
+        <Pressable 
+            style={[styles.item]}
+            onPress={()=> navigation.navigate('NFCread')}> 
+                <ImageBackground source={(require('./../../Images/monumentlabel.jpg'))} resizeMode="cover" style={styles.image}>
+                    <Image source={(require('./../../Images/monument.png'))} resizeMode='contain' style={styles.data}>
+                    
+                    </Image> 
+                    <Text style={styles.text}>Read monument labels</Text>
 
-            </ImageBackground>  
+                </ImageBackground>  
         </Pressable>
     </View>
     <View style={styles.buttom}>
-        <Pressable style={[styles.item]}> 
+        <Pressable 
+            style={[styles.item]}
+            onPress={()=> navigation.navigate('NFCreadTG')}> 
             
 
             <ImageBackground source={(require('./../../Images/data.jpg'))} resizeMode="cover" style={styles.imagelow}>
