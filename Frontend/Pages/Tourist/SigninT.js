@@ -69,12 +69,14 @@ export default function SigninT() {
             value={Email}
             onChangeText={EmailHandler}
             placeholder={'Email'}
+            placeholderTextColor='black'
             keyboardType='email-address'
         />
         <TextInput
             style={styles.input}
             onChangeText={PasswordHandler}
             placeholder={'Password'}
+            placeholderTextColor='black'
             value={Password}
             secureTextEntry={true}
         />
@@ -122,6 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#ffffff',
     textAlign: 'center',
+    color:'black',
     },
     buttonContainer: {
     marginBottom: 16,

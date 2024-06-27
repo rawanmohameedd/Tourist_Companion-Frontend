@@ -76,6 +76,7 @@ const handleNationalitySearch = async () => {
           style={styles.input}
           onChangeText={setUsername }
           placeholder="Enter username"
+          placeholderTextColor='#888'
           value={username}
         />
       </View>
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    color: 'black',
   },
   resultContainer: {
     marginTop: 20,

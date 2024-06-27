@@ -38,12 +38,8 @@ const data = [
 
 const renderItem = ({ item, navigation }) => {
   return (
-
-
     <Pressable style={styles.item} onPress={() => navigation.navigate('Info page', {musid: item.id})}>
-      
       <ImageBackground 
-
         style={styles.image}
         resizeMode={'contain'}
         source={item.imageSource}
@@ -105,7 +101,6 @@ const styles = StyleSheet.create({
     height: 210,
     resizeMode: "contain",
     flex: 1,
-
   },
   caption: {
     //marginTop: 1,

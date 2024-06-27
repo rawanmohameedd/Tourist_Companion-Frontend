@@ -151,7 +151,7 @@ export default function ConnectMultipleDays({navigation,route}) {
                 />
 
                 <TouchableOpacity onPress={openFromhandlePress} style={styles.Date}>
-                    <Text>save</Text>
+                    <Text style={{color: 'black'}}>save</Text>
                 </TouchableOpacity>
               </View>
 

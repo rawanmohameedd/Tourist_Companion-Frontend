@@ -73,6 +73,7 @@ export default function FindAGuide({ navigation }) {
           style={styles.input}
           onChangeText={setUsername}
           placeholder="Enter username"
+          placeholderTextColor='#888'
           value={username}
         />
         <Pressable style={styles.searchButton} onPress={handleSearch}>
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: 10,
     paddingHorizontal: 10,
+    color: 'black',
   },
   searchButton: {
     backgroundColor: '#E2C07C',

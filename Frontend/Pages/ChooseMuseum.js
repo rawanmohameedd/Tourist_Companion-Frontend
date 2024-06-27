@@ -164,6 +164,7 @@ export default function MuseumList({ navigation }) {
       style={styles.item}
       onPress={() => handlePress(item)}
     >
+      
       <Text style={styles.title}>{item.title}</Text>
     </Pressable>
   );
@@ -196,8 +197,16 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 10,
+    alignContent:'center',
+    justifyContent: 'center',
+    alignItems:'center',
   },
   title: {
     fontSize: 32,
+    color: 'black',
+    justifyContent:'center',
+    alignSelf:'center',
+    textAlign: 'center',
   },
 });

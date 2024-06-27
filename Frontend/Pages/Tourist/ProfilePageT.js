@@ -1,74 +1,125 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
-import server from '../../elserver';
+import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView, Dimensions, PermissionsAndroid, Platform } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import ImagePicker from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import server from '../../elserver';
+//import Table from './profiletable';
 
-export let role 
-export let username 
+export let role;
+export let username;
+
 export default function ProfilePageTG({ navigation }) {
-
   const [profileData, setProfileData] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [token, setToken] = useState(null);
-  const [visits , setVisits] = useState([])
-  const [isLoading, setIsLoading]= useState(true)
-  const [isLoadingtourguide, setIsLoadingtourguide]= useState(true)
-  const [tourguide , setTourguide] = useState([])
-  const [TcontainerVisible, setTContainerVisible] = useState(false);
+  const [visits, setVisits] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingtourguide, setIsLoadingtourguide] = useState(true);
+  const [tourguide, setTourguide] = useState([]);
+  const [TcontainerVisible, setTContainerVisible] = useState(true);
   const [CcontainerVisible, setCContainerVisible] = useState(false);
   const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
+/*
+  const requestGalleryPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: 'Gallery Permission',
+            message: 'App needs access to your gallery',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+*/
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs access to your camera',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
 
-  const handleUploadFromGallery = () => {
+  const handleUploadFromGallery = async () => {
+    /*const hasPermission = await requestGalleryPermission();
+    if (!hasPermission) {
+      console.log('Permission to access gallery was denied');
+      return;
+    }
+    */
     const options = {
       mediaType: 'photo',
       maxWidth: 300,
       maxHeight: 300,
       quality: 1,
-      includeBase64: false,
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
     };
-  
-    ImagePicker.launchImageLibrary(options, async (response) => {
-      if (!response.didCancel) {
-        const photoUrl = response.uri;
-        await fetchProfilePhoto(photoUrl, token);
-      } else {
+
+    launchImageLibrary(options, async (response) => {
+      if (response.didCancel) {
         console.log("Image selection cancelled");
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else {
+        const photoUrl = response.assets[0].uri;
+        await fetchProfilePhoto(photoUrl, token);
       }
     });
   };
-  
-  const handleUploadFromCamera = () => {
+
+  const handleUploadFromCamera = async () => {
+    const hasPermission = await requestCameraPermission();
+    if (!hasPermission) {
+      console.log('Permission to access camera was denied');
+      return;
+    }
+
     const options = {
       mediaType: 'photo',
       maxWidth: 300,
       maxHeight: 300,
       quality: 1,
-      includeBase64: false,
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
     };
-  
-    ImagePicker.launchCamera(options, async (response) => {
-      if (!response.didCancel) {
-        const photoUrl = response.uri;
-        await fetchProfilePhoto(photoUrl, token);
-      } else {
+
+    launchCamera(options, async (response) => {
+      if (response.didCancel) {
         console.log("Image capture cancelled");
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else {
+        const photoUrl = response.assets[0].uri;
+        await fetchProfilePhoto(photoUrl, token);
       }
     });
   };
-  
 
-  // Function to handle uploading photo from camera
   const handledelete = async () => {
-  // Implement your logic to upload photo from camera
+    // Implement your logic to upload photo from camera
   };
 
   const [uploadOptions, setUploadOptions] = useState([
@@ -76,23 +127,21 @@ export default function ProfilePageTG({ navigation }) {
     { id: 2, label: 'Take a photo', onPress: handleUploadFromCamera },
     { id: 3, label: 'Delete', onPress: handledelete },
   ]);
+
   const toggleUploadOptions = () => {
     setUploadOptionsVisible(!uploadOptionsVisible);
   };
 
-  // Function to handle pressing an item in the upload options list
   const handleUploadOptionPress = (onPress) => {
     if (onPress) {
       onPress();
     }
   };
 
-  
-
   useEffect(() => {
     fetchToken();
     fetchPerviousVisits();
-    role = "tourist"
+    role = "tourist";
   }, []);
 
   const formatDate = (dateString) => {
@@ -101,7 +150,6 @@ export default function ProfilePageTG({ navigation }) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
     
-    // Add leading zeros if month or day is less than 10
     if (month < 10) {
       month = '0' + month;
     }
@@ -136,15 +184,14 @@ export default function ProfilePageTG({ navigation }) {
       });
       const data = await response.json();
       setProfileData(data);
-      console.log(data)
+      console.log(data);
       
       if (data && data.profile_photot) {
         setProfilePhoto(`${server}/${data.profile_photot}`);
-        console.log(profilePhoto)
-        
+        console.log(profilePhoto);
       }
-      username = data.tour_username
-      role = "tourist"
+      username = data.tour_username;
+      role = "tourist";
     } catch (error) {
       console.error("Error fetching profile:", error.message);
     }
@@ -177,7 +224,7 @@ export default function ProfilePageTG({ navigation }) {
           image: photoUrl
         })
       });
-  
+
       if (response.ok) {
         const photoData = await response.json();
         setProfilePhoto(photoUrl);
@@ -189,154 +236,149 @@ export default function ProfilePageTG({ navigation }) {
       console.error("Error uploading photo:", error.message);
     }
   };
-  
-  const fetchPerviousVisits = async ()=>{
+
+  const fetchPerviousVisits = async () => {
     try {
       setTContainerVisible(!TcontainerVisible);
-    const response = await fetch(server + `/touristVisits/${profileData.tour_username}`);
+      const response = await fetch(server + `/touristVisits/${profileData.tour_username}`);
       if (!response.ok) {
         throw new Error('Failed to fetch ratings');
       }
       const data = await response.json();
       setVisits(data.visits || []);
-      console.log('visits:',visits)
-      setIsLoading(false)
+      console.log('visits:', visits);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching ratings:', error.message);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
-  
-  const connectedTourguide = async ()=>{
-    try{
+
+  const connectedTourguide = async () => {
+    try {
       setCContainerVisible(!CcontainerVisible);
-      const response = await fetch(server + `/getTourguide/${profileData.tour_username}`)
-      if (!response.ok){
-        throw new error ('Failed to fetch  connected tour guide')
+      const response = await fetch(server + `/getTourguide/${profileData.tour_username}`);
+      if (!response.ok) {
+        throw new error ('Failed to fetch connected tour guide');
       }
-      const data = await response.json()
-      console.log('first',data)
-      setTourguide(data.value)
-      setIsLoadingtourguide(false)
-    }catch (error){
+      const data = await response.json();
+      console.log('first', data);
+      setTourguide(data.value);
+      setIsLoadingtourguide(false);
+    } catch (error) {
       console.error('Error fetching ratings:', error.message);
-      setIsLoadingtourguide(false)
+      setIsLoadingtourguide(false);
     }
   }
 
   return (
     <View style={styles.container}>
-    <ScrollView>
-    { profileData &&
-      <>
-      <View style={styles.container}>
-      <Image
-      source={profilePhoto ? { uri: profilePhoto } : require('../../Images/home.png')} 
-      style={styles.profilePicture}
-      />
-      
-      <View>
-        <Pressable
-          onPress={toggleUploadOptions}
-          style={styles.uploadphoto}>
-          <Image
-                style={styles.icons}
-                source={require('../../Images/upload.png')}
-          />
-        </Pressable>
-      </View>
+      <ScrollView>
+        {profileData &&
+          <>
+            <View style={styles.container}>
+              <Image
+                source={profilePhoto ? { uri: profilePhoto } : require('../../Images/home.png')}
+                style={styles.profilePicture}
+              />
 
-      {uploadOptionsVisible && (
-        <FlatList
-          data={uploadOptions}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.uploadOption}
-              onPress={() => handleUploadOptionPress(item.onPress)}
-            >
-              <Text style={styles.uploadOptionText}>{item.label}</Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      )}
+              <View>
+                <Pressable
+                  onPress={toggleUploadOptions}
+                  style={styles.uploadphoto}>
+                  <Image
+                    style={styles.icons}
+                    source={require('../../Images/upload.png')}
+                  />
+                </Pressable>
+              </View>
 
-    
-      <Text style={styles.name}>{profileData.first_namet} {profileData.last_namet}</Text>
-      <Text style={styles.bio}>{profileData.nationalityt}</Text>
-      <Text style={styles.bio}>{profileData.tour_username}</Text>
-      </View>
+              {uploadOptionsVisible && (
+                <FlatList
+                  data={uploadOptions}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={styles.uploadOption}
+                      onPress={() => handleUploadOptionPress(item.onPress)}
+                    >
+                      <Text style={styles.uploadOptionText}>{item.label}</Text>
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item) => item.id.toString()}
+                />
+              )}
 
+              <Text style={styles.name}>{profileData.first_namet} {profileData.last_namet}</Text>
+              <Text style={styles.bio}>{profileData.nationalityt}</Text>
+              <Text style={styles.bio}>{profileData.tour_username}</Text>
+            </View>
 
-      <View>
-      <TouchableOpacity onPress={connectedTourguide} style={styles.button}>
-              <Text style={styles.buttontext}>Connected tour guides</Text>
-      </TouchableOpacity>
-      {CcontainerVisible && (
-        <ScrollView keyboardDismissMode="on-drag"
-        style={styles.scrollView} >
-        {isLoadingtourguide ? (
-          <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
-        ) : tourguide.length === 0 ? (
-          <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You have not been connected to any tour guide yet</Text>
-        ) : (
-        <View >
-          <Text style={{fontSize: 25, color: 'white'}}> Tourguide: {tourguide.tourguide_username}</Text>
-        </View>
-          )}
-          </ScrollView>
-          )}
-      <View>
-      <TouchableOpacity onPress={fetchPerviousVisits} style={styles.button}>
-              <Text style={styles.buttontext}>Previous visits </Text>
-      </TouchableOpacity>
-      </View>
-      {TcontainerVisible && (
-      <ScrollView keyboardDismissMode="on-drag"
-      style={styles.scrollView} >
-      {isLoading ? (
-        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
-      ) : visits.length === 0 ? (
-        <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Start surfing Egypt with us to fill this field</Text>
-      ) : (
-      <View style={styles.table}>
-      <View style={styles.header}>
-      <Text style={styles.tableText}>Place </Text>
-      <Text style={styles.tableText}>tourguide_username</Text>
-      <Text style={styles.tableText}>Date</Text>
-      <Text style={styles.tableText}>Rating</Text>
-      </View>
-      {visits.map((visits, index) => (
-        <View key={index} style={styles.row}>
-        <Text style={styles.tableText}>{visits.visit}</Text>
-        <Text style={styles.tableText}>{visits.tourguide_username}</Text>
-        <Text style={styles.tableText}>{formatDate(visits.date_of_the_visit)}</Text>
-        <Text style={styles.tableText}>{visits.rate}</Text>
-        </View>
-        ))}
-        </View>
-        )}
-        </ScrollView>
-        )}
-      </View>
+            <View>
+              <TouchableOpacity onPress={connectedTourguide} style={styles.button}>
+                <Text style={styles.buttontext}>Connected tour guides</Text>
+              </TouchableOpacity>
+              {CcontainerVisible && (
+                <ScrollView keyboardDismissMode="on-drag"
+                  style={styles.scrollView} >
+                  {isLoadingtourguide ? (
+                    <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
+                  ) : tourguide.length === 0 ? (
+                    <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You have not been connected to any tour guide yet</Text>
+                  ) : (
+                    <View >
+                      <Text style={{ fontSize: 25, color: 'white' }}> Tourguide: {tourguide.tourguide_username}</Text>
+                    </View>
+                  )}
+                </ScrollView>
+              )}
+              <View>
+                <TouchableOpacity onPress={fetchPerviousVisits} style={styles.button}>
+                  <Text style={styles.buttontext}>Previous visits </Text>
+                </TouchableOpacity>
+              </View>
+              {TcontainerVisible && (
+                <ScrollView keyboardDismissMode="on-drag"
+                  style={styles.scrollView} >
+                  {isLoading ? (
+                    <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
+                  ) : visits.length === 0 ? (
+                    <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Start surfing Egypt with us to fill this field</Text>
+                  ) : (
+                    <View style={styles.table}>
+                      <View style={styles.header}>
+                        <Text style={styles.tableText}>Place </Text>
+                        <Text style={styles.tableText}>tourguide_username</Text>
+                        <Text style={styles.tableText}>Date</Text>
+                        <Text style={styles.tableText}>Rating</Text>
+                      </View>
+                      {visits.map((visits, index) => (
+                        <View key={index} style={styles.row}>
+                          <Text style={styles.tableText}>{visits.visit}</Text>
+                          <Text style={styles.tableText}>{visits.tourguide_username}</Text>
+                          <Text style={styles.tableText}>{formatDate(visits.date_of_the_visit)}</Text>
+                          <Text style={styles.tableText}>{visits.rate}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </ScrollView>
+              )}
+            </View>
 
-
-
-        <View style={styles.buttonContainer}>
-        <Pressable
-        onPress={handleSignOut}
-        style={styles.button}>
-        <Text style={[styles.buttontext]}> Sign out </Text>
-        </Pressable>
-        </View>
-
-        </>
-      }
+            <View style={styles.buttonContainer}>
+              <Pressable
+                onPress={handleSignOut}
+                style={styles.button}>
+                <Text style={[styles.buttontext]}> Sign out </Text>
+              </Pressable>
+            </View>
+          </>
+        }
       </ScrollView>
-      </View>
-      );
-    }
-    
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -377,33 +419,29 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     width: 250,
-    //padding: 10,
     borderRadius: 300,
     marginTop: 10,
     marginBottom: 10,
     backgroundColor: '#E2C07C',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignSelf:'center',
+    alignSelf: 'center',
   },
   uploadphoto: {
-   height: 70,
-   width: 70,
-   borderRadius: 35,
-   marginTop: -80,
-   marginLeft: 100,
-   backgroundColor: '#E2C07C',
-   flexDirection: 'row',
-   justifyContent: 'center',
-   alignSelf:'center',
-   alignItems: 'center',
+    height: 70,
+    width: 70,
+    borderRadius: 35,
+    marginTop: -80,
+    marginLeft: 100,
+    backgroundColor: '#E2C07C',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
   },
-  buttonContainer: {
-    //marginBottom: 20,
-    //justifyContent: 'center',
-  },
+  buttonContainer: {},
   scrollView: {
-    height: Dimensions.get('window').height * 0.2, // Example: 70% of screen height
+    height: Dimensions.get('window').height * 0.2,
   },
   table: {
     borderWidth: 1,
@@ -436,8 +474,6 @@ const styles = StyleSheet.create({
   },
   icons: {
     flex: 1,
-    //marginTop: 9,
-    //marginLeft: 2,
     height: 70,
     resizeMode: 'center',
   },

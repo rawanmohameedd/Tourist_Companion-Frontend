@@ -102,12 +102,14 @@ export default function SignupTG() {
             value={Username}
             onChangeText={usernameHandler}
             placeholder={'Username'}
+            placeholderTextColor="#888"
         />
         <TextInput
             style={styles.input}
             value={Email}
             onChangeText={emailhandler}
             placeholder={'Email address'}
+            placeholderTextColor="#888"
             keyboardType="email-address"
         />
         <TextInput
@@ -115,24 +117,28 @@ export default function SignupTG() {
             value={FirstName}
             onChangeText={first_Namehandler}
             placeholder={'First Name'}
+            placeholderTextColor="#888"
         />
         <TextInput
             style={styles.input}
             value={LastName}
             onChangeText={last_Namehandler}
             placeholder={'Last Name'}
+            placeholderTextColor="#888"
         />
         <TextInput
             style={styles.input}
             value={NationalID}
             onChangeText={nationalidhandler}
             placeholder={'National ID'}
+            placeholderTextColor="#888"
         />
         <TextInput
             style={styles.input}
             value={SpokenLanguages}
             onChangeText={spokenlanghandler}
             placeholder={'Spoken Languages (use commas between languages)'}
+            placeholderTextColor="#888"
         />
 
         <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
@@ -155,7 +161,7 @@ export default function SignupTG() {
                 />
 
                 <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
-                    <Text>save</Text>
+                    <Text style={{color:'black'}}>save</Text>
                 </TouchableOpacity>
             </View>
 
@@ -168,6 +174,7 @@ export default function SignupTG() {
             style={styles.input}
             onChangeText={passwordhandler}
             placeholder={'Password'}
+            placeholderTextColor="#888"
             value={Password}
             secureTextEntry={true}
         />
@@ -215,6 +222,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
+    color:'black',
     backgroundColor: '#ffffff',
     },
     buttonContainer: {

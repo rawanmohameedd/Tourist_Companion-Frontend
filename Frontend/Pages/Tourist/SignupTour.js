@@ -114,12 +114,14 @@ export default function SignupT() {
             value={Username}
             onChangeText={usernameHandler}
             placeholder={'Username'}
+            placeholderTextColor="#888"
         />
         <TextInput
             style={styles.input}
             value={Email}
             onChangeText={emailhandler}
             placeholder={'Email address'}
+            placeholderTextColor="#888"
             keyboardType="email-address"
         />
         <TextInput
@@ -127,6 +129,7 @@ export default function SignupT() {
             value={FirstName}
             onChangeText={first_Namehandler}
             placeholder={'First Name'}
+            placeholderTextColor="#888"
         />
 
         <TextInput
@@ -134,6 +137,7 @@ export default function SignupT() {
             value={LastName}
             onChangeText={last_Namehandler}
             placeholder={'Last Name'}
+            placeholderTextColor="#888"
         />
 
         <TextInput
@@ -141,6 +145,7 @@ export default function SignupT() {
             value={Nationality}
             onChangeText={nationalityhandler}
             placeholder={'Nationality'}
+            placeholderTextColor="#888"
         />
 
         <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
@@ -163,7 +168,7 @@ export default function SignupT() {
                 />
 
                 <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
-                    <Text>save</Text>
+                    <Text style={{color:'black'}}>save</Text>
                 </TouchableOpacity>
             </View>
 
@@ -175,6 +180,7 @@ export default function SignupT() {
             style={styles.input}
             onChangeText={passwordhandler}
             placeholder={'Password'}
+            placeholderTextColor="#888"
             value={Password}
             secureTextEntry={true}
         />
@@ -223,6 +229,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         borderRadius: 8,
         backgroundColor: '#ffffff',
+        color: 'black',
     },
     buttonContainer: {
         margin: 16,
@@ -239,6 +246,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
+        color: 'black',
     },
 
     icons:
