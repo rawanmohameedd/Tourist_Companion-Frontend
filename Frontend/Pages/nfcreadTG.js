@@ -3,7 +3,7 @@ import { StyleSheet, ImageBackground, Image, Button, View, Pressable, Text, Text
 import NfcManager, { NfcTech } from 'react-native-nfc-manager';
 
 
-export default function NfcRead ({ navigation }) {
+export default function NfcReadTG ({ navigation }) {
   /*useEffect(() => {
     NfcManager.start();
     return () => {
@@ -34,8 +34,8 @@ export default function NfcRead ({ navigation }) {
         <Text style={styles.text}> Scan nfc to read info </Text>
         <Image style={styles.image} source={require('../Images/NFC.png')} />
         <View style={styles.instructionContainer}>
-          <Text style={styles.instructions}> - an NFC card is placed besides each monument </Text>
-          <Text style={styles.instructions}> - Scan the card and read the monuement label on your own screen </Text>
+          <Text style={styles.instructions}> - Scan the name tag of your tour guide for his Information </Text>
+          <Text style={styles.instructions}> - This will take you to the tour guide profile </Text>
         </View>
 
 

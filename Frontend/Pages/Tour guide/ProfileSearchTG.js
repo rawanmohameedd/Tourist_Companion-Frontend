@@ -2,7 +2,7 @@ import React , {useEffect, useState}from 'react';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView, RefreshControl, TouchableOpacity, Dimensions, ScrollViewBase} from 'react-native';
 import server from '../../elserver';
 import Table from './profiletable';
-import { role } from '../Tourist/ProfilePageT';
+import { role } from '../Tourist/HomeScreenTour';
 
 export default function SearchProfileTG({ route, navigation }) {
   const { user } = route.params;

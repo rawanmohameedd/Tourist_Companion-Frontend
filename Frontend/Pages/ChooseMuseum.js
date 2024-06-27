@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { FlatList, Pressable, Text, View, StyleSheet, Alert, PermissionsAndroid, Button } from 'react-native';
 import WifiReborn from 'react-native-wifi-reborn';
 import server from '../elserver';
-import { role } from './Tourist/ProfilePageT';
+import { role } from './Tourist/HomeScreenTour';
 import { usernameT } from './Tourist/SigninT';
 import { usernameTG } from './Tour guide/SigninTG';
 

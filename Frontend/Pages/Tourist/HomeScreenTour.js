@@ -1,6 +1,10 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet , Image , ImageBackground} from 'react-native';
 
+export let role;
+
+role = "tourist";
+
 export default function HomeTabT ({navigation}){
     return (
         <View style={styles.gridContainer}>
