@@ -146,7 +146,7 @@ export default function ConnectOneTime({navigation,route}) {
                 />
 
                 <TouchableOpacity onPress={openhandlePress} style={styles.Date}>
-                    <Text>save</Text>
+                    <Text style={{color: 'black'}}>save</Text>
                 </TouchableOpacity>
               </View>
 

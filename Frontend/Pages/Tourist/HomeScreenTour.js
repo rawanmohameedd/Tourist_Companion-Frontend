@@ -67,6 +67,7 @@ export default function HomeTabT ({navigation}){
         },
         gridText: {
         //flex: 1,
+        color: 'black',
         fontSize: 30,
         textAlignVertical:'center',
         textAlign: 'center',

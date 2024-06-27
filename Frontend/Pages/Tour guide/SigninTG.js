@@ -68,12 +68,14 @@ export default function SigninTG() {
             value={Email}
             onChangeText={EmailHandler}
             placeholder={'Email'}
+            placeholderTextColor='#888'
             keyboardType='email-address'
         />
         <TextInput
             style={styles.input}
             onChangeText={PasswordHandler}
             placeholder={'Password'}
+            placeholderTextColor='#888'
             value={Password}
             secureTextEntry={true}
         />
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     },
     input: {
+    color: 'black',
     marginBottom: 16,
     paddingHorizontal: 16,
     paddingVertical: 8,

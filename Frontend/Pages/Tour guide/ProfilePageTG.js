@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, ScrollView, Alert, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView, Dimensions, PermissionsAndroid, Platform } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import ImagePicker from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import server from '../../elserver';
 import Table from './profiletable';
 
@@ -13,7 +13,29 @@ export default function ProfilePageTG({ navigation }) {
   const [isAvailable, setIsAvailable] = useState(false);
   const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
 
-  
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs access to your camera',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
   const toggleUploadOptions = () => {
     setUploadOptionsVisible(!uploadOptionsVisible);
   };
@@ -82,23 +104,47 @@ export default function ProfilePageTG({ navigation }) {
   };
 
   const handleUploadFromGallery = () => {
-    ImagePicker.launchImageLibrary({ mediaType: 'photo' }, async (response) => {
-      if (!response.didCancel) {
-        const photoUrl = response.uri;
-        await fetchProfilePhoto(photoUrl, token);
-      } else {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 300,
+      quality: 1,
+    };
+
+    launchImageLibrary(options, async (response) => {
+      if (response.didCancel) {
         console.log("Image selection cancelled");
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else {
+        const photoUrl = response.assets[0].uri;
+        await fetchProfilePhoto(photoUrl, token);
       }
     });
   };
   
-  const handleUploadFromCamera = () => {
-    ImagePicker.launchCamera({ mediaType: 'photo' }, async (response) => {
-      if (!response.didCancel) {
-        const photoUrl = response.uri;
-        await fetchProfilePhoto(photoUrl, token);
-      } else {
+  const handleUploadFromCamera = async () => {
+    const hasPermission = await requestCameraPermission();
+    if (!hasPermission) {
+      console.log('Permission to access camera was denied');
+      return;
+    }
+
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 300,
+      quality: 1,
+    };
+
+    launchCamera(options, async (response) => {
+      if (response.didCancel) {
         console.log("Image capture cancelled");
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else {
+        const photoUrl = response.assets[0].uri;
+        await fetchProfilePhoto(photoUrl, token);
       }
     });
   };

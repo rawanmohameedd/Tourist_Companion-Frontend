@@ -165,7 +165,7 @@ export default function SubmitRating({ navigation, route }) {
                 onSelectedChange={handleDate}
               />
               <TouchableOpacity onPress={openhandlePress} style={styles.saveButton}>
-                <Text>Save</Text>
+                <Text style={{color:'black'}}>Save</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -174,7 +174,7 @@ export default function SubmitRating({ navigation, route }) {
           onPress={handleSubmitting}
           style={styles.button}
         >
-          <Text style={[styles.buttonText, { fontSize: 20, fontWeight: 'bold' }]}>Submit</Text>
+          <Text style={styles.buttontext}>Submit</Text>
         </Pressable>
       </ScrollView>
     </View>
@@ -195,6 +195,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     backgroundColor: '#ffffff',
+    },
+    dateButton:{
+      paddingLeft: 10,
     },
     buttonContainer: {
     margin: 16,
@@ -222,6 +225,8 @@ const styles = StyleSheet.create({
     buttontext: 
     {
         color: 'black',  
+        fontSize: 20, 
+        fontWeight: 'bold',
     },
 
     button: 
@@ -336,6 +341,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         textAlign: 'left',
         marginBottom: 15,
+        paddingLeft: 10,
         textAlignVertical: 'center',
       },
       displayedDate: {

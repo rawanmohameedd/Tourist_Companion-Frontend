@@ -1,10 +1,12 @@
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet } from 'react-native';
+import { Header, createStackNavigator } from '@react-navigation/stack';
+import { StyleSheet,Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from 'react-native-vector-icons';
+//import { Ionicons } from 'react-native-vector-icons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 
 import WelcomeApp from './Pages/WelcomeScreen';
@@ -43,13 +45,13 @@ const HomeTabT = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
-          // tabBarIcon: ()=>( 
+           tabBarIcon: ()=>( 
             
-          //   <Image 
-          //   source={require('./Images/home.png')}
-          //   style={{width: 25, height: 25}}
-          //   />
-          // ),
+             <Image 
+             source={require('./Images/home.png')}
+             style={{width: 25, height: 25}}
+             />
+           ),
         }}
       />
 
@@ -59,9 +61,12 @@ const HomeTabT = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Search',
-          // tabBarIcon: ({ color, size }) => (
-          //   <Ionicons name="search" color={color} size={size} />
-          // ),
+          tabBarIcon: () => (
+            <Image 
+             source={require('./Images/search.png')}
+             style={{width: 45, height: 25}}
+             />
+          ),
         }}
       />
 
@@ -71,13 +76,13 @@ const HomeTabT = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Profile',
-          // tabBarIcon: ()=>( 
+           tabBarIcon: ()=>( 
             
-          //   <Image 
-          //   source={require('./Images/profile.png')}
-          //   style={{width: 25, height: 25}}
-          //   />
-          // ),
+             <Image 
+             source={require('./Images/profile.png')}
+             style={{width: 25, height: 25}}
+             />
+           ),
         }}
       />
     </Tab.Navigator>
@@ -93,13 +98,13 @@ const HomeTabTG = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
-          // tabBarIcon: ()=>( 
+           tabBarIcon: ()=>( 
             
-          //   <Image 
-          //   source={require('./Images/home.png')}
-          //   style={{width: 25, height: 25}}
-          //   />
-          // ),
+             <Image 
+             source={require('./Images/home.png')}
+             style={{width: 25, height: 25}}
+             />
+           ),
         }}
       />
 
@@ -109,9 +114,12 @@ const HomeTabTG = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Search',
-          // tabBarIcon: ({ color, size }) => (
-          //   <Ionicons name="search" color={color} size={size} />
-          // ),
+          tabBarIcon: () => (
+            <Image 
+             source={require('./Images/search.png')}
+             style={{width: 45, height: 25}}
+             />
+          ),
         }}
       />
 
@@ -121,13 +129,13 @@ const HomeTabTG = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Profile',
-          // tabBarIcon: ()=>( 
+           tabBarIcon: ()=>( 
             
-          //   <Image 
-          //   source={require('./Images/profile.png')}
-          //   style={{width: 25, height: 25}}
-          //   />
-          // ),
+             <Image 
+             source={require('./Images/profile.png')}
+             style={{width: 25, height: 25}}
+             />
+           ),
         }}
       />
     </Tab.Navigator>
@@ -139,7 +147,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen name="Welcome" component={WelcomeApp} options={{ headerShown: false }} />
-        <Stack.Screen name="Sign in as a tourist" component={signinT} options={{ title: 'Sign in as a Tourist' }} />
+        <Stack.Screen name="Sign in as a tourist" component={signinT} options={{ title: 'Sign in as a Tourist'}} />
         <Stack.Screen name="Sign in as a tourguide" component={signinTG} options={{ title: 'Sign in as a Tour Guide' }} />
         <Stack.Screen name="Sign up as a tourist" component={signupT} />
         <Stack.Screen name="Sign up as a tour guide" component={signupTG} />
@@ -168,4 +176,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
+  Header: {
+    backgroundColor: 'black',
+  }
 });
