@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Text, StyleSheet, Image, TextInput, ScrollView, View, Pressable, TouchableOpacity, Modal} from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from '../../elserver'
 import DatePicker from 'react-native-modern-datepicker'
@@ -72,7 +72,7 @@ export default function SignupTG() {
             const data = await response.json();
             console.log(data);
             if (response.ok) {
-                await EncryptedStorage.setItem("token", data.token);
+                await AsyncStorage.setItem("token", data.token);
                 OnPending(false);
                 navigation.dispatch(
                     CommonActions.reset({

@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from "../../elserver";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export let usernameTG
 export default function SigninTG() {
@@ -37,7 +37,7 @@ export default function SigninTG() {
             
             if (response.ok && data.token) {
                 usernameTG = data.value.tourguide_username;
-                await EncryptedStorage.setItem("token", data.token);
+                await AsyncStorage.setItem("token", data.token);
                 OnPending(false);
                 navigation.dispatch(
                     CommonActions.reset({

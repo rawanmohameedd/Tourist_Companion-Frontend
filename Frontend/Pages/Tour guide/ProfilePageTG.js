@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView, Dimensions, PermissionsAndroid, Platform } from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import { View, Text, StyleSheet, Image, Pressable, FlatList, Alert, TouchableOpacity, ScrollView, Dimensions, PermissionsAndroid, Platform, RefreshControl } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import server from '../../elserver';
 import Table from './profiletable';
@@ -12,7 +12,15 @@ export default function ProfilePageTG({ navigation }) {
   const [token, setToken] = useState(null);
   const [isAvailable, setIsAvailable] = useState(false);
   const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async () => { 
+    setRefreshing(true);
+    await fetchProfileData(token)
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 500);
+  };
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -57,7 +65,7 @@ export default function ProfilePageTG({ navigation }) {
 
   const fetchToken = async () => {
     try {
-      const token = await EncryptedStorage.getItem("token");
+      const token = await AsyncStorage.getItem("token");
       setToken(token);
       fetchProfileData(token);
     } catch (error) {
@@ -118,7 +126,7 @@ export default function ProfilePageTG({ navigation }) {
         console.log('ImagePicker Error: ', response.errorMessage);
       } else {
         const photoUrl = response.assets[0].uri;
-        await fetchProfilePhoto(photoUrl, token);
+        await fetchProfilePhoto(photoUrl);
       }
     });
   };
@@ -144,38 +152,45 @@ export default function ProfilePageTG({ navigation }) {
         console.log('ImagePicker Error: ', response.errorMessage);
       } else {
         const photoUrl = response.assets[0].uri;
-        await fetchProfilePhoto(photoUrl, token);
+        await fetchProfilePhoto(photoUrl);
       }
     });
   };
   
-  
-
   const [uploadOptions, setUploadOptions] = useState([
     { id: 1, label: 'Upload from Gallery', onPress: handleUploadFromGallery },
     { id: 2, label: 'Take a photo', onPress: handleUploadFromCamera },
     { id: 3, label: 'Delete', onPress: handledelete },
   ]);
   
-  const fetchProfilePhoto = async (photoUrl, token) => {
+  const fetchProfilePhoto = async (photoUrl) => {
     try {
-      const response = await fetch(server + "/uploadTG", {
+      const token = await AsyncStorage.getItem("token");
+      console.log("Token", token);
+      console.log("Uploaded photo", photoUrl);
+  
+      const formData = new FormData();
+      formData.append('image', {
+        uri: photoUrl,
+        type: 'image/jpeg', 
+        name: 'photo.jpg'   
+      });
+  
+      const response = await fetch(`${server}/uploadTG`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "multipart/form-data",
         },
-        body: JSON.stringify({
-          image: photoUrl
-        })
+        body: formData,
       });
-
+  
       if (response.ok) {
         const photoData = await response.json();
         setProfilePhoto(photoUrl);
         console.log("Photo uploaded successfully:", photoData);
       } else {
-        console.error("Failed to upload photo. Server returned:", response.status, response.statusText);
+        console.error("Failed to upload photo.", response.status, response.statusText);
       }
     } catch (error) {
       console.error("Error uploading photo:", error.message);
@@ -203,7 +218,7 @@ export default function ProfilePageTG({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
         { profileData &&
           <>
             <View style={styles.container}>

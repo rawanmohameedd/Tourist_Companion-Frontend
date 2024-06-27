@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView, View, Pressable ,Text} from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from "../../elserver";
 
@@ -33,12 +33,12 @@ export default function SigninT() {
             });
             const data = await response.json();
             
-            console.log("Server response:", data); // Log server response for debugging
+            console.log("Server response:", data); 
     
             if (response.ok && data.token) {
                 usernameT = data.value.tour_username
                 console.log(usernameT)
-                await EncryptedStorage.setItem("token", data.token);
+                await AsyncStorage.setItem("token", data.token);
                 OnPending(false);
                 navigation.dispatch(
                     CommonActions.reset({
