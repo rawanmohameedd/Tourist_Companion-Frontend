@@ -14,7 +14,7 @@ export default function ProfilePageTG({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingtourguide, setIsLoadingtourguide] = useState(true);
   const [tourguide, setTourguide] = useState([]);
-  const [TcontainerVisible, setTContainerVisible] = useState(true);
+  const [TcontainerVisible, setTContainerVisible] = useState(false);
   const [CcontainerVisible, setCContainerVisible] = useState(false);
   const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);

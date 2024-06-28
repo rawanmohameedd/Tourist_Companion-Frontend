@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import { FlatList, Pressable, Text, View, StyleSheet, Alert, PermissionsAndroid, Button } from 'react-native';
 import WifiReborn from 'react-native-wifi-reborn';
 import server from '../elserver';
-import { role } from './Tourist/HomeScreenTour';
+import { roleIn } from './Tourist/SigninT';
+import { roleUp } from './Tourist/SignupTour';
 import { usernameT } from './Tourist/SigninT';
 import { usernameTG } from './Tour guide/SigninTG';
 
 export let fenak
+
 export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
   const [bssidMap, setBssidMap] = useState({});
@@ -29,7 +31,7 @@ export default function MuseumList({ navigation }) {
       console.log('Permission granted');
       // Permission granted
     } else {
-      if (role === "tourist") {
+      if (roleIn === "tourist" || roleUp === "tourist") {
         navigation.replace("Home Tourist");
       } else {
         navigation.replace("Home Tourguide");
@@ -40,11 +42,20 @@ export default function MuseumList({ navigation }) {
 
   // add user location
   const addUser = async (username, role, museumName, location) => {
-    const payload = {
-      username: username,
-      role: role,
-      museum_name: museumName,
-      location: location
+    if (roleIn === "tourist" || roleUp === "tourist") {
+      const payload = {
+        username: username,
+        role: "tourist",
+        museum_name: museumName,
+        location: location
+    }
+    } else {
+      const payload = {
+        username: username,
+        role: "tour guide",
+        museum_name: museumName,
+        location: location
+      }
     };
     
     try {
@@ -106,13 +117,13 @@ export default function MuseumList({ navigation }) {
   };
   
   //clear interval
-  const stopInterval = async(username)=>{
+  /*const stopInterval = async(username)=>{
     clearInterval(intervalId)
     await deleteUser(username)
     Alert.alert("It seems that you are out of the museum")
     navigation.replace('Museum List')
     fenak =0 
-  }
+  }*/
   // Get museums list
   useEffect(() => {
     const fetchList = async () => {
@@ -144,14 +155,14 @@ export default function MuseumList({ navigation }) {
 
       if (Object.keys(data).length === 0) {
         Alert.alert("This museum doesn't support museum features yet");
-        if (role === "tourist") {
+        if (roleIn === "tourist" || roleUp === "tourist") {
           navigation.replace("Home Tourist");
         } else {
           navigation.replace("Home Tourguide");
         }
       } else {
         let username, museumRole;
-        if (role === "tourist") {
+        if (roleIn === "tourist" || roleUp === "tourist") {
           Alert.alert("You can track your guide and check crowded rooms now.");
           navigation.replace("Museum Visit");
           username = usernameT;
@@ -168,7 +179,7 @@ export default function MuseumList({ navigation }) {
       if (!locationInmuseum) {
         stopInterval(username);
         return;
-      }
+      } 
 
       await addUser(username, museumRole, museum_name, locationInmuseum);
       console.log(museum_name);

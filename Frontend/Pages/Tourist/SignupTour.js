@@ -6,6 +6,8 @@ import server from '../../elserver';
 import DatePicker from 'react-native-modern-datepicker'
 import { getToday , getFormatedDate } from 'react-native-modern-datepicker';
 
+export let roleUp
+
 export default function SignupT() {
     const today = new Date();
     const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
@@ -70,6 +72,8 @@ export default function SignupT() {
             console.log(data);
             if (response.ok) {
                 await AsyncStorage.setItem("token", data.token);
+                roleUp = "tourist";
+                console.log(roleUp)
                 OnPending(false);
                 navigation.dispatch(
                     CommonActions.reset({

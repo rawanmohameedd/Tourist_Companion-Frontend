@@ -2,9 +2,6 @@ import React from 'react';
 import { View, Pressable, Text, StyleSheet , Image , ImageBackground} from 'react-native';
 import { fenak } from '../ChooseMuseum';
 
-export let role;
-
-
 
 export default function HomeTabT ({navigation}){
     return (
@@ -21,7 +18,6 @@ export default function HomeTabT ({navigation}){
         
         <Pressable style={styles.button}
         onPress={() => {
-            role = "tourist";
             navigation.navigate('Museum Info')}}>
                 <ImageBackground 
                     style={styles.icons}

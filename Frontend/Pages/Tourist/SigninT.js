@@ -5,6 +5,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import server from "../../elserver";
 
 export let usernameT 
+export let roleIn
 
 export default function SigninT() {
     const [Email, OnChangeEmail] = useState('');
@@ -36,8 +37,10 @@ export default function SigninT() {
             console.log("Server response:", data); 
     
             if (response.ok && data.token) {
+                roleIn = "tourist";
                 usernameT = data.value.tour_username
                 console.log(usernameT)
+                console.log(roleIn)
                 await AsyncStorage.setItem("token", data.token);
                 OnPending(false);
                 navigation.dispatch(

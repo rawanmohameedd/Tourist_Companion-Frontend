@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet , ImageBackground,Image} from 'react-native';
 
+export let NFC;
+
 export default function VisitTour  (){
     return(
     <View style={styles.container}>
