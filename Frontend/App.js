@@ -34,6 +34,7 @@ import ConnectMultipleDays from './Pages/Tourist/ConnectMultipleDays';
 import MuseumList from './Pages/ChooseMuseum';
 import NfcRead from './Pages/nfcread';
 import NfcReadTG from './Pages/nfcreadTG';
+import DisplayCrowdedRooms from './Pages/CrowdManagement';
 
 const Stack = createStackNavigator();
 const Tab= createBottomTabNavigator();
@@ -47,13 +48,13 @@ const HomeTabT = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
-           tabBarIcon: ()=>( 
+          tabBarIcon: ()=>( 
             
-             <Image 
-             source={require('./Images/home.png')}
-             style={{width: 25, height: 25}}
-             />
-           ),
+            <Image 
+            source={require('./Images/home.png')}
+            style={{width: 25, height: 25}}
+            />
+          ),
         }}
       />
 
@@ -65,9 +66,9 @@ const HomeTabT = () => {
           tabBarLabel: 'Search',
           tabBarIcon: () => (
             <Image 
-             source={require('./Images/search.png')}
-             style={{width: 45, height: 25}}
-             />
+            source={require('./Images/search.png')}
+            style={{width: 45, height: 25}}
+            />
           ),
         }}
       />
@@ -78,13 +79,13 @@ const HomeTabT = () => {
         options={{
           headerShown: false,
           tabBarLabel: 'Profile',
-           tabBarIcon: ()=>( 
+          tabBarIcon: ()=>( 
             
-             <Image 
-             source={require('./Images/profile.png')}
-             style={{width: 25, height: 25}}
-             />
-           ),
+          <Image 
+            source={require('./Images/profile.png')}
+            style={{width: 25, height: 25}}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -171,6 +172,7 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="Museum List" component={MuseumList}/>
         <Stack.Screen options={{headerShown: false}} name="NFCread" component={NfcRead}/>
         <Stack.Screen options={{headerShown: false}} name="NFCreadTG" component={NfcReadTG}/>
+        <Stack.Screen options={{headerShown: false}} name="Crowd Rooms" component={DisplayCrowdedRooms} />
         </Stack.Navigator>
     </NavigationContainer>
   );

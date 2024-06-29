@@ -28,7 +28,9 @@ export default function VisitTour  (){
     <View style={styles.buttom}>
 
 
-        <Pressable style={[styles.item]}> 
+    <Pressable style={[styles.item]} onPress={()=>{
+        navigation.navigate("Crowd Rooms")
+    }}> 
 
         <ImageBackground source={(require('./../../Images/room.jpg')) } resizeMode='cover' style={styles.imagelow}>
             <Image source={(require('./../../Images/crowd.png'))} resizeMode='center' style={styles.data}>

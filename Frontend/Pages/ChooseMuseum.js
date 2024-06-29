@@ -6,7 +6,7 @@ import { role } from './Tourist/HomeScreenTour';
 import { usernameT } from './Tourist/SigninT';
 import { usernameTG } from './Tour guide/SigninTG';
 
-export let fenak
+export let fenak , museumName
 export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
   const [bssidMap, setBssidMap] = useState({});
@@ -113,6 +113,7 @@ export default function MuseumList({ navigation }) {
     navigation.replace('Museum List')
     fenak =0 
   }
+
   // Get museums list
   useEffect(() => {
     const fetchList = async () => {
@@ -242,6 +243,8 @@ export default function MuseumList({ navigation }) {
 
   const handlePress = async (item) => {
     setSelectedMuseum(item);
+    museumName = item.title
+    console.log('hena fel handle press',museumName)
     await museumsBssids(item.title);
   };
 
