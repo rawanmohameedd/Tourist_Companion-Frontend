@@ -19,19 +19,20 @@ export default function HomeTabT ({navigation}){
         <Pressable style={styles.button}
         onPress={() => {
             navigation.navigate('Museum Info')}}>
-                <ImageBackground 
-                    style={styles.icons}
-                    resizeMode={'contain'}
-                    source={require('../../Images/info.jpg')}>
-                    <Text style={styles.gridText}>Museums Information</Text>
-                </ImageBackground>
-                    
-                
+            <ImageBackground 
+            style={styles.icons}
+            resizeMode={'contain'}
+            source={require('../../Images/info.jpg')}>
+            <Text style={styles.gridText}>Museums Information</Text>
+            </ImageBackground>
+            
+            
             </Pressable>
-
+            
             <Pressable style={styles.button}
-                onPress={() => {
-                    console.log('hwa feen', fenak)
+            onPress={() => {
+                role = "tourist";
+                console.log('hwa feen', fenak)
                     if (!fenak)
                         navigation.navigate('Museum List')
                     else 

@@ -7,8 +7,7 @@ import { roleUp } from './Tourist/SignupTour';
 import { usernameT } from './Tourist/SigninT';
 import { usernameTG } from './Tour guide/SigninTG';
 
-export let fenak
-
+export let fenak , museumName
 export default function MuseumList({ navigation }) {
   const [data, setData] = useState([]);
   const [bssidMap, setBssidMap] = useState({});
@@ -117,13 +116,14 @@ export default function MuseumList({ navigation }) {
   };
   
   //clear interval
-  /*const stopInterval = async(username)=>{
+  const stopInterval = async(username)=>{
     clearInterval(intervalId)
     await deleteUser(username)
     Alert.alert("It seems that you are out of the museum")
     navigation.replace('Museum List')
     fenak =0 
-  }*/
+  }
+
   // Get museums list
   useEffect(() => {
     const fetchList = async () => {
@@ -253,6 +253,8 @@ export default function MuseumList({ navigation }) {
 
   const handlePress = async (item) => {
     setSelectedMuseum(item);
+    museumName = item.title
+    console.log('hena fel handle press',museumName)
     await museumsBssids(item.title);
   };
 
