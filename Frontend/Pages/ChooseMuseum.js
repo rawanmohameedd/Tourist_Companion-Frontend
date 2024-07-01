@@ -114,7 +114,7 @@ export default function MuseumList({ navigation }) {
       console.error('Error deleting user:', error);
     }
   };
-  
+   /*
   //clear interval
   const stopInterval = async(username)=>{
     clearInterval(intervalId)
@@ -123,7 +123,7 @@ export default function MuseumList({ navigation }) {
     navigation.replace('Museum List')
     fenak =0 
   }
-
+*/
   // Get museums list
   useEffect(() => {
     const fetchList = async () => {

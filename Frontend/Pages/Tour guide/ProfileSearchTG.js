@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image, Pressable, ScrollView, RefreshControl, T
 import server from '../../elserver';
 import Table from './profiletable';
 import { role } from '../Tourist/HomeScreenTour';
+import { roleIn } from '../Tourist/SigninT';
+import { roleUp } from '../Tourist/SignupTour';
 
 export default function SearchProfileTG({ route, navigation }) {
   const { user } = route.params;
@@ -73,21 +75,27 @@ const handleConnectbutton = () => {
               </View>
             )}
         <View style={styles.bottomButtonsContainer}>
-        {role === 'tourist' && (
+        {roleIn === 'tourist' || roleUp=== 'tourist' ? (
           <View style={styles.buttonContainer}>
             <Pressable style={styles.givaARate} onPress={handleRatebutton}>
               <Text style={[styles.buttontext]}> Give a rate </Text>
             </Pressable>
           </View>
+        ):(
+          <View>
+          </View>
         )}
 
-        {role === 'tourist' && tourguideAvailable === 'Available' &&(
+        {roleIn === 'tourist' || roleUp=== 'tourist' && tourguideAvailable === 'Available' ? (
           <View style={styles.buttonContainer}>
             <Pressable style={styles.connect} onPress={handleConnectbutton}>
               <Text style={[styles.buttontext]}> Connect </Text>
             </Pressable>
           </View>
-        )}
+          ): (
+            <View>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>

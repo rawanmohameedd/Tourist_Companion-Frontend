@@ -77,7 +77,7 @@ export default function SignupTG() {
                 navigation.dispatch(
                     CommonActions.reset({
                         index: 0,
-                        routes: [{ name:'Home Tourguide'}]
+                        routes: [{ name:'UploadLicense'}]
                     }), {
                     token: data.token,
                 })
