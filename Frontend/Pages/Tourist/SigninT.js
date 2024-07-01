@@ -95,17 +95,9 @@ export default function SigninT() {
             <Pressable
             onPress={()=> navigation.navigate('Sign up as a tourist')}
             style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Don't have an account yet? </Text>
+            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Create account </Text>
             </Pressable>
 
-            <Pressable
-            onPress={()=> navigation.navigate('Forget your Password')}
-            style={styles.button}>
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Forgot your password? </Text>
-            </Pressable>
-            
-
-            
         </View>
         </ScrollView>
         

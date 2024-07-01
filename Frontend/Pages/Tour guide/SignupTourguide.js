@@ -185,25 +185,6 @@ export default function SignupTG() {
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>
 
-
-        <Pressable style={styles.button}>
-            <Image
-                style={styles.icons}
-                resizeMode={'contain'}
-                source={require('../../Images/Google-Logo.png')}
-            />
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Google </Text>
-        </Pressable>
-        
-        <Pressable style={styles.button}>
-            <Image
-                style={styles.icons}
-                resizeMode={'contain'}
-                source={require('../../Images/facebook-logo.png')}
-            />
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Facebook </Text>
-        </Pressable>
-
         </ScrollView>
     </View>
     );

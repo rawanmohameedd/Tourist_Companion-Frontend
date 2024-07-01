@@ -93,21 +93,6 @@ export default function SignupT() {
         }
     };
 
-    const handleFacebookLogin = async () => {
-        try {
-            // const response = await axios.get('http://192.168.1.103:3000/auth/facebook');
-            const facebookAuthUrl = 'https://www.facebook.com/v13.0/dialog/oauth?' +
-                'client_id=1128288548204177' +
-                `&redirect_uri=${server}/auth/facebook/callback` +
-                '&scope=email';
-            Linking.openURL(facebookAuthUrl);
-        } catch (error) {
-            console.error('Error:', error);
-            // Handle error
-        }
-
-    }
-
 
 
     return (
@@ -194,24 +179,6 @@ export default function SignupT() {
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>
-
-                <Pressable style={styles.button}>
-                    <Image
-                        style={styles.icons}
-                        resizeMode={'contain'}
-                        source={require('../../Images/Google-Logo.png')}
-                    />
-                    <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Continue with Google </Text>
-                </Pressable>
-
-                <Pressable style={styles.button} onPress={handleFacebookLogin}>
-                    <Image
-                        style={styles.icons}
-                        resizeMode={'contain'}
-                        source={require('../../Images/facebook-logo.png')}
-                    />
-                    <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Continue with Facebook </Text>
-                </Pressable>
 
             </ScrollView>
         </View>

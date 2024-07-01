@@ -80,7 +80,7 @@ export default function ConnectOneTime({navigation,route}) {
     const handleSubmmiting = () => {
         Alert.alert(
             "Submit",
-            "Are you sure you want to submit this rate?",
+            "Are you sure you want to submit this one day connection?",
             [
             {
                 text: "Cancel",

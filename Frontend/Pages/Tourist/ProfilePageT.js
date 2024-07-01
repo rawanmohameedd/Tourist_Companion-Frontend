@@ -303,7 +303,7 @@ export default function ProfilePageTG({ navigation }) {
 
             <View>
               <TouchableOpacity onPress={connectedTourguide} style={styles.button}>
-                <Text style={styles.buttontext}>Connected tour guides</Text>
+                <Text style={styles.buttontext}>Connected tour guide</Text>
               </TouchableOpacity>
               {CcontainerVisible && (
                 <ScrollView keyboardDismissMode="on-drag"
@@ -326,7 +326,7 @@ export default function ProfilePageTG({ navigation }) {
               </View>
               {TcontainerVisible && (
                 <ScrollView keyboardDismissMode="on-drag"
-                  style={styles.scrollView} >
+                  style={styles.scrollViewTable} >
                   {isLoading ? (
                     <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
                   ) : visits.length === 0 ? (
@@ -429,7 +429,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {},
   scrollView: {
-    height: Dimensions.get('window').height * 0.2,
+    height: Dimensions.get('window').height * 0.05,
+    alignSelf: 'center',
+  },
+  scrollViewTable: {
+    height: Dimensions.get('window').height * 0.15,
+    width: Dimensions.get('window').width * 0.7,
   },
   table: {
     borderWidth: 1,

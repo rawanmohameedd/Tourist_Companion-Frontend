@@ -327,8 +327,9 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#6e706f',
     borderRadius: 10,
-    width: 400,
-    height: 300,
+    width: 350,
+    height: 200,
+    marginBottom: 10,
     // marginTop: 70,
   },
   buttontext: {
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
     borderWidth: '1',
   },
   avgrating: {
-    height: '5%',
+    height: '8%',
     width: '50%',
     fontWeight: 'bold',
     fontSize: 20,
