@@ -33,8 +33,8 @@ import ConnectOneTime from './Pages/Tourist/ConnectOneTime';
 import ConnectMultipleDays from './Pages/Tourist/ConnectMultipleDays';
 import MuseumList from './Pages/ChooseMuseum';
 import NfcRead from './Pages/nfcread';
-import NfcReadTG from './Pages/nfcreadTG';
 import DisplayCrowdedRooms from './Pages/CrowdManagement';
+import UploadLicense from './Pages/Tour guide/UploadLicense';
 
 const Stack = createStackNavigator();
 const Tab= createBottomTabNavigator();
@@ -171,8 +171,8 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="ConnectMultipleDays" component={ConnectMultipleDays} />
         <Stack.Screen options={{headerShown: false}} name="Museum List" component={MuseumList}/>
         <Stack.Screen options={{headerShown: false}} name="NFCread" component={NfcRead}/>
-        <Stack.Screen options={{headerShown: false}} name="NFCreadTG" component={NfcReadTG}/>
         <Stack.Screen options={{headerShown: false}} name="Crowd Rooms" component={DisplayCrowdedRooms} />
+        <Stack.Screen options={{headerShown: false}} name="UploadLicense" component={UploadLicense} />
         </Stack.Navigator>
     </NavigationContainer>
   );

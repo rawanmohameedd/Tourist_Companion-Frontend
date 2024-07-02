@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView } from 'react-native';
 import server from '../../elserver';
 
+
 export default function SearchProfileT({ route }) {
   const { user } = route.params;
   console.log('Rawan btmot',user)

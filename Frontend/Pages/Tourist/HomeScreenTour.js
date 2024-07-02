@@ -4,8 +4,6 @@ import { fenak } from '../ChooseMuseum';
 
 export let role;
 
-
-
 export default function HomeTabT ({navigation}){
     return (
         <View style={styles.gridContainer}>

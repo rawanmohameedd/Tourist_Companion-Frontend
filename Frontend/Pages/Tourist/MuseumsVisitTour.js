@@ -1,7 +1,17 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet , ImageBackground,Image, } from 'react-native';
 
+export let NFC;
+
 export default function VisitTour  ({navigation}){
+    const handleMonLabel = () => {
+        NFC=1;
+        navigation.navigate("NFCread")
+    };
+    const handleTGData = () => {
+        NFC=0;
+        navigation.navigate("NFCread")
+    };
     return(
     <View style={styles.container}>
     <View style={styles.top}>
@@ -17,7 +27,7 @@ export default function VisitTour  ({navigation}){
         </Pressable> 
         <Pressable 
             style={[styles.item]}
-            onPress={()=> navigation.navigate('NFCread')}> 
+            onPress={handleMonLabel}> 
                 <ImageBackground source={(require('./../../Images/monumentlabel.jpg'))} resizeMode="cover" style={styles.image}>
                     <Image source={(require('./../../Images/monument.png'))} resizeMode='contain' style={styles.data}>
                     
@@ -30,9 +40,7 @@ export default function VisitTour  ({navigation}){
     <View style={styles.buttom}>
         <Pressable 
             style={[styles.item]}
-            onPress={()=> navigation.navigate('NFCreadTG')}> 
-            
-
+            onPress={handleTGData}> 
             <ImageBackground source={(require('./../../Images/data.jpg'))} resizeMode="cover" style={styles.imagelow}>
                 <Image source={(require('./../../Images/tgdata.png'))} resizeMode='center' style={styles.data}>
                 

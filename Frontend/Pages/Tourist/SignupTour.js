@@ -6,6 +6,8 @@ import server from '../../elserver';
 import DatePicker from 'react-native-modern-datepicker'
 import { getToday , getFormatedDate } from 'react-native-modern-datepicker';
 
+export let roleUp
+
 export default function SignupT() {
     const today = new Date();
     const endDate = getFormatedDate(today.setDate(today.getDate() - 1), 'YYYY-MM-DD');
@@ -70,6 +72,8 @@ export default function SignupT() {
             console.log(data);
             if (response.ok) {
                 await AsyncStorage.setItem("token", data.token);
+                roleUp = "tourist";
+                console.log(roleUp)
                 OnPending(false);
                 navigation.dispatch(
                     CommonActions.reset({
@@ -88,21 +92,6 @@ export default function SignupT() {
             OnPending(false);
         }
     };
-
-    const handleFacebookLogin = async () => {
-        try {
-            // const response = await axios.get('http://192.168.1.103:3000/auth/facebook');
-            const facebookAuthUrl = 'https://www.facebook.com/v13.0/dialog/oauth?' +
-                'client_id=1128288548204177' +
-                `&redirect_uri=${server}/auth/facebook/callback` +
-                '&scope=email';
-            Linking.openURL(facebookAuthUrl);
-        } catch (error) {
-            console.error('Error:', error);
-            // Handle error
-        }
-
-    }
 
 
 
@@ -190,24 +179,6 @@ export default function SignupT() {
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
         </Pressable>
-
-                <Pressable style={styles.button}>
-                    <Image
-                        style={styles.icons}
-                        resizeMode={'contain'}
-                        source={require('../../Images/Google-Logo.png')}
-                    />
-                    <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Continue with Google </Text>
-                </Pressable>
-
-                <Pressable style={styles.button} onPress={handleFacebookLogin}>
-                    <Image
-                        style={styles.icons}
-                        resizeMode={'contain'}
-                        source={require('../../Images/facebook-logo.png')}
-                    />
-                    <Text style={[styles.buttontext, { fontSize: 20, fontWeight: 'bold' }]}> Continue with Facebook </Text>
-                </Pressable>
 
             </ScrollView>
         </View>

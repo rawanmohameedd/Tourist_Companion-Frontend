@@ -77,7 +77,7 @@ export default function SignupTG() {
                 navigation.dispatch(
                     CommonActions.reset({
                         index: 0,
-                        routes: [{ name:'Home Tourguide'}]
+                        routes: [{ name:'UploadLicense'}]
                     }), {
                     token: data.token,
                 })
@@ -183,25 +183,6 @@ export default function SignupTG() {
             onPress={signup}
             style={styles.button}>
             <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Sign up </Text>
-        </Pressable>
-
-
-        <Pressable style={styles.button}>
-            <Image
-                style={styles.icons}
-                resizeMode={'contain'}
-                source={require('../../Images/Google-Logo.png')}
-            />
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Google </Text>
-        </Pressable>
-        
-        <Pressable style={styles.button}>
-            <Image
-                style={styles.icons}
-                resizeMode={'contain'}
-                source={require('../../Images/facebook-logo.png')}
-            />
-            <Text style={[styles.buttontext, {fontSize: 20,fontWeight: 'bold'}]}> Continue with Facebook </Text>
         </Pressable>
 
         </ScrollView>

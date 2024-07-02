@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import server from '../../elserver';
 import Table from './profiletable';
+import UploadLicense from './UploadLicense';
 
 export default function ProfilePageTG({ navigation }) {
 
@@ -55,8 +56,7 @@ export default function ProfilePageTG({ navigation }) {
     }
   };
   const handledelete = async () => {
-    // Implement your logic to upload photo from camera
-     };
+  };
 
   useEffect(() => {
     fetchToken();
@@ -161,6 +161,7 @@ export default function ProfilePageTG({ navigation }) {
     { id: 1, label: 'Upload from Gallery', onPress: handleUploadFromGallery },
     { id: 2, label: 'Take a photo', onPress: handleUploadFromCamera },
     { id: 3, label: 'Delete', onPress: handledelete },
+    { id: 4, label: 'Upload license', onPress: ()=>navigation.navigate(UploadLicense)}
   ]);
   
   const fetchProfilePhoto = async (photoUrl) => {
@@ -326,8 +327,9 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#6e706f',
     borderRadius: 10,
-    width: 400,
-    height: 300,
+    width: 350,
+    height: 200,
+    marginBottom: 10,
     // marginTop: 70,
   },
   buttontext: {
@@ -355,7 +357,7 @@ const styles = StyleSheet.create({
     borderWidth: '1',
   },
   avgrating: {
-    height: '5%',
+    height: '8%',
     width: '50%',
     fontWeight: 'bold',
     fontSize: 20,

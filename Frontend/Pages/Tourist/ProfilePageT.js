@@ -14,21 +14,21 @@ export default function ProfilePageTG({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingtourguide, setIsLoadingtourguide] = useState(true);
   const [tourguide, setTourguide] = useState([]);
-  const [TcontainerVisible, setTContainerVisible] = useState(true);
+  const [TcontainerVisible, setTContainerVisible] = useState(false);
   const [CcontainerVisible, setCContainerVisible] = useState(false);
   const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = async () => { 
+  const onRefresh = async () => {
     setRefreshing(true);
-    await fetchProfileData(token)
-    await fetchPerviousVisits()
-    await connectedTourguide()
+    await fetchProfileData(token);
+    await fetchPerviousVisits();
+    await connectedTourguide();
     setTimeout(() => {
       setRefreshing(false);
     }, 500);
   };
-  
+
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -99,7 +99,7 @@ export default function ProfilePageTG({ navigation }) {
   };
 
   const handledelete = async () => {
-    // Implement your logic to upload photo from camera
+
   };
 
   const [uploadOptions, setUploadOptions] = useState([
@@ -128,14 +128,14 @@ export default function ProfilePageTG({ navigation }) {
     const year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();
-    
+
     if (month < 10) {
       month = '0' + month;
     }
     if (day < 10) {
       day = '0' + day;
     }
-    
+
     return `${year}-${month}-${day}`;
   };
 
@@ -164,7 +164,7 @@ export default function ProfilePageTG({ navigation }) {
       const data = await response.json();
       setProfileData(data);
       console.log(data);
-      
+
       if (data && data.profile_photot) {
         setProfilePhoto(`${server}/${data.profile_photot}`);
         console.log(profilePhoto);
@@ -196,14 +196,14 @@ export default function ProfilePageTG({ navigation }) {
       const token = await AsyncStorage.getItem("token");
       console.log("Token", token);
       console.log("Uploaded photo", photoUrl);
-  
+
       const formData = new FormData();
       formData.append('image', {
         uri: photoUrl,
         type: 'image/jpeg', 
         name: 'photo.jpg'   
       });
-  
+
       const response = await fetch(`${server}/uploadT`, {
         method: "PUT",
         headers: {
@@ -212,7 +212,7 @@ export default function ProfilePageTG({ navigation }) {
         },
         body: formData,
       });
-  
+
       if (response.ok) {
         const photoData = await response.json();
         setProfilePhoto(photoUrl);
@@ -224,7 +224,6 @@ export default function ProfilePageTG({ navigation }) {
       console.error("Error uploading photo:", error.message);
     }
   };
-  
 
   const fetchPerviousVisits = async () => {
     try {
@@ -304,7 +303,7 @@ export default function ProfilePageTG({ navigation }) {
 
             <View>
               <TouchableOpacity onPress={connectedTourguide} style={styles.button}>
-                <Text style={styles.buttontext}>Connected tour guides</Text>
+                <Text style={styles.buttontext}>Connected tour guide</Text>
               </TouchableOpacity>
               {CcontainerVisible && (
                 <ScrollView keyboardDismissMode="on-drag"
@@ -327,7 +326,7 @@ export default function ProfilePageTG({ navigation }) {
               </View>
               {TcontainerVisible && (
                 <ScrollView keyboardDismissMode="on-drag"
-                  style={styles.scrollView} >
+                  style={styles.scrollViewTable} >
                   {isLoading ? (
                     <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>Loading...</Text>
                   ) : visits.length === 0 ? (
@@ -430,7 +429,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {},
   scrollView: {
-    height: Dimensions.get('window').height * 0.2,
+    height: Dimensions.get('window').height * 0.05,
+    alignSelf: 'center',
+  },
+  scrollViewTable: {
+    height: Dimensions.get('window').height * 0.15,
+    width: Dimensions.get('window').width * 0.7,
   },
   table: {
     borderWidth: 1,
