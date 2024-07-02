@@ -108,13 +108,13 @@ export default function MuseumList({ navigation }) {
   };
    
   //clear interval
-  const stopInterval = async(username)=>{
-    clearInterval(intervalId)
-    await deleteUser(username)
-    Alert.alert("It seems that you are out of the museum")
-    navigation.replace('Museum List')
-    fenak =0 
-  }
+  // const stopInterval = async(username)=>{
+  //   clearInterval(intervalId)
+  //   await deleteUser(username)
+  //   Alert.alert("It seems that you are out of the museum")
+  //   navigation.replace('Museum List')
+  //   fenak =0 
+  // }
 
   // Get museums list
   useEffect(() => {
