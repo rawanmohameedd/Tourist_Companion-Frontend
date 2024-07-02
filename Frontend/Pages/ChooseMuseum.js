@@ -4,6 +4,7 @@ import WifiReborn from 'react-native-wifi-reborn';
 import server from '../elserver';
 import { roleIn } from './Tourist/SigninT';
 import { roleUp } from './Tourist/SignupTour';
+import { role } from './Tourist/HomeScreenTour';
 import { usernameT } from './Tourist/SigninT';
 import { usernameTG } from './Tour guide/SigninTG';
 
@@ -41,20 +42,11 @@ export default function MuseumList({ navigation }) {
 
   // add user location
   const addUser = async (username, role, museumName, location) => {
-    if (roleIn === "tourist" || roleUp === "tourist") {
       const payload = {
         username: username,
-        role: "tourist",
+        role: role,
         museum_name: museumName,
         location: location
-    }
-    } else {
-      const payload = {
-        username: username,
-        role: "tour guide",
-        museum_name: museumName,
-        location: location
-      }
     };
     
     try {
@@ -114,7 +106,7 @@ export default function MuseumList({ navigation }) {
       console.error('Error deleting user:', error);
     }
   };
-   /*
+   
   //clear interval
   const stopInterval = async(username)=>{
     clearInterval(intervalId)
@@ -123,7 +115,7 @@ export default function MuseumList({ navigation }) {
     navigation.replace('Museum List')
     fenak =0 
   }
-*/
+
   // Get museums list
   useEffect(() => {
     const fetchList = async () => {
