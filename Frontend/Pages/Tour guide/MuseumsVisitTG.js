@@ -1,15 +1,19 @@
 import React from 'react';
-import { View, Pressable, Text, StyleSheet , ImageBackground,Image} from 'react-native';
+import { View, Pressable, Text, StyleSheet , ImageBackground,Image, Alert} from 'react-native';
 
 
 export let NFC;
 
+
 export default function VisitTour  ({navigation}){
+    const handleAlert = async ()=>{
+        Alert.alert('Yout Tourists have been notified')
+    }
 
     return(
     <View style={styles.container}>
     <View style={styles.top}>
-        <Pressable style={[styles.item]}> 
+        <Pressable style={[styles.item]}  onPress={()=>{handleAlert()}}> 
             <ImageBackground source={(require('./../../Images/track.jpg'))} resizeMode="cover" style={styles.image}>
             <Image source={(require('./../../Images/track.png'))} resizeMode='cover'>
                 

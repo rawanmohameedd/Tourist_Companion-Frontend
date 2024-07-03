@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100010596535",
+    "project_id": "touristcompanion-2f8b6",
+    "storage_bucket": "touristcompanion-2f8b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100010596535:android:484b8711da8c5dde9ed532",
+        "android_client_info": {
+          "package_name": "com.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK11OabrNcGUy8EamPIF_TfF6jeJWLKp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -35,6 +35,7 @@ import MuseumList from './Pages/ChooseMuseum';
 import NfcRead from './Pages/nfcread';
 import DisplayCrowdedRooms from './Pages/CrowdManagement';
 import UploadLicense from './Pages/Tour guide/UploadLicense';
+import TrackGuide from './Pages/Tourist/TrackmyGuide';
 
 const Stack = createStackNavigator();
 const Tab= createBottomTabNavigator();
@@ -173,6 +174,7 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="NFCread" component={NfcRead}/>
         <Stack.Screen options={{headerShown: false}} name="Crowd Rooms" component={DisplayCrowdedRooms} />
         <Stack.Screen options={{headerShown: false}} name="UploadLicense" component={UploadLicense} />
+        <Stack.Screen options={{headerShown: false}} name="Track my guide" component={TrackGuide} />
         </Stack.Navigator>
     </NavigationContainer>
   );

@@ -251,7 +251,9 @@ export default function ProfilePageTG({ navigation }) {
       }
       const data = await response.json();
       console.log('first', data);
-      setTourguide(data.value);
+      
+        setTourguide(data.value);
+
       setIsLoadingtourguide(false);
     } catch (error) {
       console.error('Error fetching ratings:', error.message);
@@ -314,7 +316,7 @@ export default function ProfilePageTG({ navigation }) {
                     <Text style={{ color: 'white', textAlign: 'center', margin: 10 }}>You have not been connected to any tour guide yet</Text>
                   ) : (
                     <View >
-                      <Text style={{ fontSize: 25, color: 'white' }}> Tourguide: {tourguide.tourguide_username}</Text>
+                      <Text style={{ fontSize: 25, color: 'white' }}> {tourguide.tourguide_username}</Text>
                     </View>
                   )}
                 </ScrollView>

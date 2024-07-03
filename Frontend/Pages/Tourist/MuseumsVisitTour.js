@@ -15,7 +15,7 @@ export default function VisitTour  ({navigation}){
     return(
     <View style={styles.container}>
     <View style={styles.top}>
-        <Pressable style={[styles.item]}> 
+        <Pressable style={[styles.item]} onPress={()=>{navigation.navigate("Track my guide")}}> 
             <ImageBackground source={(require('./../../Images/track.jpg'))} resizeMode="cover" style={styles.image}>
             <Image source={(require('./../../Images/track.png'))} resizeMode='cover'>
                 

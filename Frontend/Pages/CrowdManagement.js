@@ -37,7 +37,6 @@ export default function DisplayCrowdedRooms() {
             const currentCapacities = await currentCapacity();
             const roomColorMap = await colorMap();
 
-            // Map through roomsData and add current_capacity from currentCapacities
             const roomsWithCapacity = data.map(room => ({
                 room_name: room.room_name,
                 avg_capacity: room.avg_capacity,
@@ -70,7 +69,10 @@ export default function DisplayCrowdedRooms() {
     return (
         <View style={styles.container}>
             <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                <Text style={{color: 'white' , fontWeight:'bold'}}>Rooms in {museumName}</Text>
+            <View style={styles.headerContainer}>
+            <Text style={styles.header}>Rooms in</Text>
+            <Text style={styles.header}>{museumName}</Text>
+        </View>
                 {rooms.length > 0 ? (
                     rooms.map((room) => (
                         <View
@@ -102,22 +104,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#121212',
     },
     text: {
-        color: 'black',
+        color: 'white',
         marginBottom: 8,
+    },
+    headerContainer:{
+        marginVertical: 15,
+    },
+    header:{
+        alignSelf: 'center',
+        fontSize: 20,
+        color: 'white',
+        fontWeight:'bold'
+      //  marginTop: 10,
     },
     roomContainer: {
         marginVertical: 10,
         padding: 10,
         borderRadius: 5,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#333',
     },
     green: {
-        backgroundColor: 'green',
+        borderColor: 'green',
+        borderRightWidth: 20,
+        borderWidth: 1,
     },
     yellow: {
-        backgroundColor: 'yellow',
+        borderColor: 'yellow',
+        borderRightWidth: 60,
+        borderWidth: 1,
     },
     red: {
-        backgroundColor: 'red',
+        borderColor: 'red',
+        borderRightWidth: 100,
+        borderWidth: 1,
     },
 });
