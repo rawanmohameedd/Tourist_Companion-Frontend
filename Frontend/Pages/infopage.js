@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import server from '../elserver';
 
 export default function Infopage({ route }) {
@@ -7,6 +7,7 @@ export default function Infopage({ route }) {
   const [TcontainerVisible, setTContainerVisible] = useState(false);
   const [IcontainerVisible, setIContainerVisible] = useState(false);
   const [McontainerVisible, setMContainerVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { musid } = route.params;
 
@@ -22,30 +23,37 @@ export default function Infopage({ route }) {
     setMContainerVisible(!McontainerVisible);
   };
 
-  useEffect(() => {
-    const fetchMuseum = async () => {
-      try {
-        const response = await fetch(`${server}/museum/${musid}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch museum');
-        }
-        const data = await response.json();
-        setMuseum(data.value);
-        console.log(`${server}/${museum.musuem_image}`)
-        console.log(`${server}/${museum.map}`)
-      } catch (error) {
-        console.error('Error fetching museum:', error.message);
-      }
-    };
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchMuseum();
+    setRefreshing(false);
+  }, [musid]);
 
+  useEffect(() => {
     fetchMuseum();
   }, [musid]);
+
+  const fetchMuseum = async () => {
+    try {
+      const response = await fetch(`${server}/museum/${musid}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch museum');
+      }
+      const data = await response.json();
+      setMuseum(data.value);
+    } catch (error) {
+      console.error('Error fetching museum:', error.message);
+    }
+  };
 
   return (
     <>
       {museum && (
         <View style={styles.container}>
-        <ScrollView>
+          <ScrollView
+            style={styles.scrollView}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          >
             <View style={styles.imagecontainer}>
               <ImageBackground
                 style={styles.image}
@@ -89,8 +97,8 @@ export default function Infopage({ route }) {
                 />
               </View>
             )}
-            </ScrollView>
-          </View>
+          </ScrollView>
+        </View>
       )}
     </>
   );
@@ -100,9 +108,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#121212',
     flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'center',
     width: '100%',
+  },
+  scrollView: {
+    flex: 1,
   },
   imagecontainer: {
     width: '100%',
@@ -115,7 +124,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'flex-end',
-    //alignItems: 'flex-start',
   },
   caption: {
     fontSize: 33,
@@ -150,11 +158,10 @@ const styles = StyleSheet.create({
   touchable: {
     width: '100%',
     alignItems: 'flex-start',
-    //width: '100%',
   },
   line: {
-    //borderBottomWidth: 1,
     borderBottomColor: 'white',
+    borderBottomWidth: 1,
     marginBottom: 10,
     width: '100%',
   },
