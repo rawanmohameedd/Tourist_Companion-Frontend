@@ -6,7 +6,7 @@ import { View, Pressable, Text, StyleSheet , Image , ImageBackground} from 'reac
 export default function HomeTabTG ({navigation}){
     return (
         <View style={styles.gridContainer}>
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPress={()=> navigation.navigate("Tourists Requests")}>
                 <ImageBackground 
                     style={styles.icons}
                     resizeMode={'contain'}
